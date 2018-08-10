@@ -64,7 +64,7 @@ import {
   FriendshipPayload,
 }                                 from './schemas/friendship'
 import {
-  MessagePayload,
+  LinkPayload, MessagePayload,
 }                                 from './schemas/message'
 import {
   RoomMemberPayload,
@@ -752,6 +752,7 @@ export abstract class Puppet extends EventEmitter {
   public abstract async messageSendText (receiver: Receiver, text: string)         : Promise<void>
   public abstract async messageSendContact (receiver: Receiver, contactId: string) : Promise<void>
   public abstract async messageSendFile (receiver: Receiver, file: FileBox)        : Promise<void>
+  public abstract async messageSendLink (receiver: Receiver, link: LinkPayload)    : Promise<void>
 
   protected abstract async messageRawPayload (messageId: string)     : Promise<any>
   protected abstract async messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload>

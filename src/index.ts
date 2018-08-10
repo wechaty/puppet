@@ -11,6 +11,8 @@ export {
 export {
   MessagePayload,
   MessageType,
+  LinkPayload,
+  AppType,
 }                         from './schemas/message'
 export {
   RoomPayload,

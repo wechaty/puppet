@@ -26,7 +26,7 @@ import {
   FriendshipPayload,
 }                                 from './schemas/friendship'
 import {
-  MessagePayload,
+  LinkPayload, MessagePayload,
 }                                 from './schemas/message'
 import {
   RoomMemberPayload,
@@ -102,6 +102,7 @@ class PuppetTest extends Puppet {
   public async messageSendContact (receiver: Receiver, contactId: string) : Promise<void> { return { receiver, contactId } as any }
   public async messageSendFile (to: Receiver, file: FileBox)              : Promise<void> { return { to, file } as any }
   public async messageSendText (to: Receiver, text: string)               : Promise<void> { return { to, text } as any }
+  public async messageSendLink (to: Receiver, link: LinkPayload)          : Promise<void> { return { to, link } as any }
 
   public async messageRawPayload (id: string)            : Promise<any> { return { id } as any }
   public async messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload> { return { rawPayload } as any }

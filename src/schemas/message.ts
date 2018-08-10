@@ -7,6 +7,7 @@ export enum MessageType {
   Image,
   Text,
   Video,
+  Link,
 }
 
 /** @hidden */
@@ -17,6 +18,7 @@ export interface MessagePayloadBase {
   text?         : string,
   timestamp     : number,        // Unix Timestamp(in seconds)
   type          : MessageType,
+  linkPayload?  : LinkPayload,
 }
 
 /** @hidden */
@@ -32,6 +34,20 @@ export interface MessagePayloadTo {
   fromId  : string,
   roomId? : string,
   toId    : string,   // if to is not set, then room must be set
+}
+
+export enum AppType {
+  Link = 5,
+  File = 6,
+  ChatHistory = 19,
+  MiniProgram = 33,
+}
+
+export interface LinkPayload {
+  des?: string,
+  thumburl?: string
+  title: string,
+  url: string,
 }
 
 export type MessagePayload = MessagePayloadBase
