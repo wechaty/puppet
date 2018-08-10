@@ -92,13 +92,6 @@ export interface MessagePayloadTo {
   toId    : string,   // if to is not set, then room must be set
 }
 
-export interface LinkPayload {
-  des?: string,
-  thumburl?: string
-  title: string,
-  url: string,
-}
-
 export type MessagePayload = MessagePayloadBase
                             & (
                                 MessagePayloadRoom

@@ -11,8 +11,6 @@ export {
 export {
   MessagePayload,
   MessageType,
-  LinkPayload,
-  AppType,
 }                         from './schemas/message'
 export {
   RoomPayload,
@@ -23,6 +21,9 @@ export {
 export {
   RoomInvitationPayload,
 }                         from './schemas/room-invitation'
+export {
+  UrlPayload,
+}                         from './schemas/url'
 
 export {
   PuppetOptions,
