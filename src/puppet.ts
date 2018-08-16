@@ -1116,6 +1116,7 @@ export abstract class Puppet extends EventEmitter {
   public async roomPayloadDirty (roomId: string): Promise<void> {
     log.verbose('Puppet', 'roomPayloadDirty(%s)', roomId)
     this.cacheRoomPayload.del(roomId)
+    await this.roomMemberPayloadDirty(roomId)
   }
 
   public async roomPayload (
