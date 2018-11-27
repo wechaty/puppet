@@ -66,7 +66,7 @@ export enum WechatMessageType {
 }
 
 /** @hidden */
-export interface MessagePayloadBase {
+export interface MessagePayload {
   id            : string,
 
   // use message id to get rawPayload to get those informations when needed
@@ -76,28 +76,11 @@ export interface MessagePayloadBase {
   text?         : string,
   timestamp     : number,        // Unix Timestamp(in seconds)
   type          : MessageType,
-}
-
-/** @hidden */
-export interface MessagePayloadRoom {
   fromId?        : string,
   mentionIdList? : string[],   // Mentioned Contacts' Ids
-  roomId         : string,
+  roomId?        : string,
   toId?          : string,     // if to is not set, then room must be set
 }
-
-/** @hidden */
-export interface MessagePayloadTo {
-  fromId  : string,
-  roomId? : string,
-  toId    : string,   // if to is not set, then room must be set
-}
-
-export type MessagePayload = MessagePayloadBase
-                            & (
-                                MessagePayloadRoom
-                              | MessagePayloadTo
-                            )
 
 export interface MessageQueryFilter {
   fromId? : string,
