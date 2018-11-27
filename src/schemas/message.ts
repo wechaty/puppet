@@ -71,6 +71,7 @@ export interface MessagePayloadBase {
 
   // use message id to get rawPayload to get those informations when needed
   // contactId?    : string,        // Contact ShareCard
+  mentionIdList?: string[],   // Mentioned Contacts' Ids
 
   filename?     : string,
   text?         : string,
@@ -81,14 +82,12 @@ export interface MessagePayloadBase {
 /** @hidden */
 export interface MessagePayloadRoom {
   fromId?       : string,
-  mentionIdList?: string[],   // Mentioned Contacts' Ids
   roomId        : string,
   toId?         : string,   // if to is not set, then room must be set
 }
 /** @hidden */
 export interface MessagePayloadTo {
   fromId        : string,
-  mentionIdList?: string[],   // Mentioned Contacts' Ids
   roomId?       : string,
   toId          : string,   // if to is not set, then room must be set
 }
