@@ -52,7 +52,7 @@ import {
   Puppet,
 }                                 from './puppet'
 import {
-  TagPayload
+  TagPayload,
 }                                 from './schemas/tag'
 
 class PuppetTest extends Puppet {

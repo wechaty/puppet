@@ -82,7 +82,7 @@ import {
   YOU,
 }                                 from './schemas/puppet'
 import {
-  TagPayload
+  TagPayload,
 }                                 from './schemas/tag'
 
 const DEFAULT_WATCHDOG_TIMEOUT = 60
