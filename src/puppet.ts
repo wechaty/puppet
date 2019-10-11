@@ -81,6 +81,9 @@ import {
 
   YOU,
 }                                 from './schemas/puppet'
+import {
+  TagPayload
+}                                 from './schemas/tag'
 
 const DEFAULT_WATCHDOG_TIMEOUT = 60
 let   PUPPET_COUNTER           = 0
@@ -462,6 +465,16 @@ export abstract class Puppet extends EventEmitter {
 
   /**
    *
+   * Tag
+   *
+   */
+  public abstract async newTag (tag: string)    : Promise<string>
+  public abstract async tagList ()              : Promise<TagPayload []>
+  public abstract async allTags ()              : Promise<TagPayload []>
+  public abstract async searchTag (tag: string) : Promise<TagPayload>
+
+  /**
+   *
    * Contact
    *
    */
@@ -472,6 +485,9 @@ export abstract class Puppet extends EventEmitter {
   public abstract async contactAvatar (contactId: string, file: FileBox) : Promise<void>
 
   public abstract async contactList ()                   : Promise<string[]>
+
+  public abstract async contactAddTag (contactId: string, tag: string) : Promise<void>
+  public abstract async contactTags (contactId: string) : Promise<TagPayload []>
 
   protected abstract async contactRawPayload (contactId: string)     : Promise<any>
   protected abstract async contactRawPayloadParser (rawPayload: any) : Promise<ContactPayload>

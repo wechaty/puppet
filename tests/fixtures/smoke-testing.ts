@@ -38,6 +38,9 @@ import {
 import {
   MemoryCard,
 }                       from 'memory-card'
+import {
+  TagPayload
+}                            from './schemas/tag'
 
 class PuppetTest extends Puppet {
   public async start () : Promise<void> { return {} as any }
@@ -57,6 +60,16 @@ class PuppetTest extends Puppet {
 
   /**
    *
+   * Tag
+   *
+   */
+  public async newTag (tag: string) : Promise<string> { return { tag } as any }
+  public async tagList () : Promise<TagPayload []> { return {} as any }
+  public async allTags () : Promise<TagPayload []> { return {} as any }
+  public async searchTag (tag: string) : Promise<TagPayload> { return { tag } as any }
+
+  /**
+   *
    * Contact
    *
    */
@@ -69,6 +82,9 @@ class PuppetTest extends Puppet {
   public async contactAvatar (contactId: string, file?: FileBox) : Promise<void | FileBox> { return { contactId, file } as any }
 
   public async contactList () : Promise<string[]> { return {} as any }
+
+  public async contactAddTag (contactId: string, tag: string) : Promise<void> { return { contactId, tag } as any }
+  public async contactTags (contactId: string) : Promise<TagPayload []> { return { contactId } as any }
 
   public async contactRawPayload (id: string)            : Promise<any> { return { id } as any }
   public async contactRawPayloadParser (rawPayload: any) : Promise<ContactPayload> { return { rawPayload } as any }
