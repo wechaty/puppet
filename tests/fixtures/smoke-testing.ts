@@ -13,6 +13,8 @@ import {
   ContactQueryFilter,
   ContactType,
 
+  TagPayload,
+
   FriendshipPayload,
   MessagePayload,
 
@@ -38,9 +40,6 @@ import {
 import {
   MemoryCard,
 }                       from 'memory-card'
-import {
-  TagPayload
-}                            from '../../src/schemas/tag'
 
 class PuppetTest extends Puppet {
   public async start () : Promise<void> { return {} as any }
