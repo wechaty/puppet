@@ -40,7 +40,7 @@ import {
 }                       from 'memory-card'
 import {
   TagPayload
-}                            from './schemas/tag'
+}                            from '../../src/schemas/tag'
 
 class PuppetTest extends Puppet {
   public async start () : Promise<void> { return {} as any }
