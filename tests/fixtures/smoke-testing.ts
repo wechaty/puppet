@@ -13,6 +13,8 @@ import {
   ContactQueryFilter,
   ContactType,
 
+  TagPayload,
+
   FriendshipPayload,
   MessagePayload,
 
@@ -57,6 +59,15 @@ class PuppetTest extends Puppet {
 
   /**
    *
+   * Tag
+   *
+   */
+  public async createTag (tag: string)           : Promise<TagPayload> { return { tag } as any }
+  public async addTag (to: string)               : Promise<void> { return { to } as any }
+  public async deleteTag (from: string)          : Promise<void> { return { from } as any }
+
+  /**
+   *
    * Contact
    *
    */
@@ -69,6 +80,7 @@ class PuppetTest extends Puppet {
   public async contactAvatar (contactId: string, file?: FileBox) : Promise<void | FileBox> { return { contactId, file } as any }
 
   public async contactList () : Promise<string[]> { return {} as any }
+  public async contactTags (contactId: string)   : Promise<string[]> { return { contactId } as any }
 
   public async contactRawPayload (id: string)            : Promise<any> { return { id } as any }
   public async contactRawPayloadParser (rawPayload: any) : Promise<ContactPayload> { return { rawPayload } as any }
