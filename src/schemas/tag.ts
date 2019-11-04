@@ -1,4 +1,4 @@
 export interface TagPayload {
   id: string,
-  tag: string,
+  name: string,
 }

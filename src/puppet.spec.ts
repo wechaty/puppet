@@ -76,9 +76,10 @@ class PuppetTest extends Puppet {
    * Tag
    *
    */
-  public async createTag (tag: string)           : Promise<TagPayload> { return { tag } as any }
-  public async addTag (to: string)               : Promise<void> { return { to } as any }
-  public async deleteTag (from: string)          : Promise<void> { return { from } as any }
+  public async createTag (name: string)           : Promise<TagPayload> { return { name } as any }
+  public async addTag (_to: string)               : Promise<void> { }
+  public async deleteTag (_from: string)          : Promise<void> { }
+  public async tagPayload (id: string)            : Promise<TagPayload> { return { id } as any }
 
   /**
    *
@@ -94,7 +95,7 @@ class PuppetTest extends Puppet {
   public async contactAvatar (contactId: string, file?: FileBox) : Promise<void | FileBox> { return { contactId, file } as any }
 
   public async contactList ()                    : Promise<string[]> { return {} as any }
-  public async contactTags (contactId: string)   : Promise<string[]> { return { contactId } as any }
+  public async contactTagIdList (contactId: string)   : Promise<string[]> { return { contactId } as any }
 
   public async contactRawPayload (id: string)            : Promise<any> { return { id } as any }
   public async contactRawPayloadParser (rawPayload: any) : Promise<ContactPayload> { return { rawPayload } as any }

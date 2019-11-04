@@ -468,9 +468,10 @@ export abstract class Puppet extends EventEmitter {
    * Tag
    *
    */
-  public abstract async createTag (tag: string)           : Promise<TagPayload>
+  public abstract async createTag (name: string)          : Promise<TagPayload>
   public abstract async addTag (to: string)               : Promise<void>
   public abstract async deleteTag (from: string)          : Promise<void>
+  public abstract async tagPayload (id: string)           : Promise<TagPayload>
 
   /**
    *
@@ -484,7 +485,7 @@ export abstract class Puppet extends EventEmitter {
   public abstract async contactAvatar (contactId: string, file: FileBox) : Promise<void>
 
   public abstract async contactList ()                   : Promise<string[]>
-  public abstract async contactTags (contactId: string)  : Promise<string[]>
+  public abstract async contactTagIdList (contactId: string)  : Promise<string[]>
 
   protected abstract async contactRawPayload (contactId: string)     : Promise<any>
   protected abstract async contactRawPayloadParser (rawPayload: any) : Promise<ContactPayload>
