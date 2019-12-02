@@ -76,10 +76,11 @@ class PuppetTest extends Puppet {
    * Tag
    *
    */
-  public async createTag (name: string)           : Promise<TagPayload> { return { name } as any }
-  public async addTag (_to: string)               : Promise<void> { }
-  public async deleteTag (_from: string)          : Promise<void> { }
-  public async tagPayload (id: string)            : Promise<TagPayload> { return { id } as any }
+  public async allTags ()                              : Promise<TagPayload[]> { return [] }
+  public async createTag (_name: string)                : Promise<TagPayload> { return { } as any }
+  public async addTag (_tagId: string, _to: string)      : Promise<void> { }
+  public async modifyTag (_tagId: string, _name: string) : Promise<void>  { }
+  public async deleteTag (_tagId: string)                : Promise<void> { }
 
   /**
    *
