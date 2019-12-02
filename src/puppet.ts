@@ -469,7 +469,7 @@ export abstract class Puppet extends EventEmitter {
    *
    */
   public abstract async allTags ()                              : Promise<TagPayload[]>
-  public abstract async createTag (name: string)                : Promise<TagPayload>
+  public abstract async getOrCreateTag (name: string)                : Promise<TagPayload>
   public abstract async addTag (tagId: string, to: string)      : Promise<void>
   public abstract async modifyTag (tagId: string, name: string) : Promise<void>
   public abstract async deleteTag (tagId: string)                : Promise<void>
