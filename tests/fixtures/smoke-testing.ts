@@ -101,6 +101,7 @@ class PuppetTest extends Puppet {
   public async messageSendUrl (to: Receiver, urlLinkPayload: UrlLinkPayload) : Promise<void | string> { return { to, urlLinkPayload } as any }
   public async messageSendMiniProgram (to: Receiver, miniProgramPayload: MiniProgramPayload) : Promise<void> { return { miniProgramPayload, to } as any }
 
+  public async messageRecall (receiver: Receiver, svrMsgId: string) : Promise<boolean> { return {receiver, svrMsgId} as any }
   public async messageRawPayload (id: string)            : Promise<any> { return { id } as any }
   public async messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload> { return { rawPayload } as any }
 
