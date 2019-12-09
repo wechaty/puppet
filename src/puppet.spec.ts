@@ -119,7 +119,7 @@ class PuppetTest extends Puppet {
   public async messageRawPayload (id: string)            : Promise<any> { return { id } as any }
   public async messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload> { return { rawPayload } as any }
 
-  public async messageRecall (to: Receiver, svrMsgId: string)                : Promise<boolean> { return { svrMsgId, to } as any }
+  public async messageRecall (to: Receiver, messageId: string)                : Promise<boolean> { return { messageId, to } as any }
 
   public messageQueryFilterFactory (
     query: MessageQueryFilter,
