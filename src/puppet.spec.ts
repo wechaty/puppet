@@ -98,6 +98,7 @@ class PuppetTest extends Puppet {
 
   public async friendshipAdd (contactId: string, hello?: string) : Promise<void> { return { contactId, hello } as any }
   public async friendshipAccept (friendshipId: string)           : Promise<void> { return { friendshipId } as any }
+  public async friendshipPayloadSave (friendshipPayload: any)    : Promise<FriendshipPayload | void> { return friendshipPayload }
 
   /**
    *

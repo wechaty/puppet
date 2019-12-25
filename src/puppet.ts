@@ -694,6 +694,7 @@ export abstract class Puppet extends EventEmitter {
 
   protected abstract async friendshipRawPayload (friendshipId: string)   : Promise<any>
   protected abstract async friendshipRawPayloadParser (rawPayload: any)  : Promise<FriendshipPayload>
+  protected abstract async friendshipPayloadSave (payload: any)  : Promise<FriendshipPayload | void>
 
   protected friendshipPayloadCache (friendshipId: string): undefined | FriendshipPayload {
     // log.silly('Puppet', 'friendshipPayloadCache(id=%s) @ %s', friendshipId, this)
@@ -740,6 +741,21 @@ export abstract class Puppet extends EventEmitter {
     const payload    = await this.friendshipRawPayloadParser(rawPayload)
 
     this.cacheFriendshipPayload.set(friendshipId, payload)
+
+    return payload
+  }
+
+  public async friendshipSave (
+    friendshipPayload: FriendshipPayload,
+  ): Promise<FriendshipPayload | void> {
+    log.verbose('Puppet', 'friendshipPayloadCacheSave(%s)', JSON.stringify(friendshipPayload))
+
+    const payload = await this.friendshipPayloadSave(friendshipPayload)
+    if (!payload) {
+      return
+    }
+
+    this.cacheFriendshipPayload.set(payload.id, payload)
 
     return payload
   }
