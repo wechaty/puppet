@@ -51,7 +51,6 @@ import {
 import {
   Puppet,
 }                                 from './puppet'
-import { TagPayload } from './schemas/tag'
 
 class PuppetTest extends Puppet {
 
@@ -68,19 +67,17 @@ class PuppetTest extends Puppet {
    *
    */
   public async contactSelfQrcode ()                     : Promise<string> { return '' }
-  public async contactSelfName (_: string)           : Promise<void> { }
-  public async contactSelfSignature (_: string) : Promise<void> { }
+  public async contactSelfName (name: string)           : Promise<void> { return void name }
+  public async contactSelfSignature (signature: string) : Promise<void> { return void signature }
 
   /**
    *
    * Tag
    *
    */
-  public async allTags ()                                : Promise<TagPayload[]> { return [] }
-  public async getOrCreateTag (_name: string)            : Promise<TagPayload> { return { } as any }
-  public async addTag (_tagId: string, _to: string)      : Promise<void> { }
-  public async modifyTag (_tagId: string, _name: string) : Promise<void> { }
-  public async deleteTag (_tagId: string)                : Promise<void> { }
+  public async tagAddContact (id: string, contactId: string) : Promise<void> { return void { contactId, id } }
+  public async tagDelContact (id: string, contactId: string) : Promise<void> { return void { contactId, id } }
+  public async tagListContact (contactId: string) : Promise<string[]> { return [contactId] }
 
   /**
    *
@@ -96,7 +93,6 @@ class PuppetTest extends Puppet {
   public async contactAvatar (contactId: string, file?: FileBox) : Promise<void | FileBox> { return { contactId, file } as any }
 
   public async contactList ()                    : Promise<string[]> { return {} as any }
-  public async contactTagIdList (contactId: string)   : Promise<string[]> { return { contactId } as any }
 
   public async contactRawPayload (id: string)            : Promise<any> { return { id } as any }
   public async contactRawPayloadParser (rawPayload: any) : Promise<ContactPayload> { return { rawPayload } as any }

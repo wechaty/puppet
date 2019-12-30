@@ -5,9 +5,6 @@ export {
   ContactQueryFilter,
 }                             from './schemas/contact'
 export {
-  TagPayload,
-}                             from './schemas/tag'
-export {
   ScanStatus,
 }                             from './schemas/event'
 export {

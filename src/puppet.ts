@@ -26,7 +26,7 @@ import QuickLru, {
 import {
   Watchdog,
   WatchdogFood,
-}                        from 'watchdog'
+}                         from 'watchdog'
 import { Constructor }    from 'clone-class'
 import { FileBox }        from 'file-box'
 import { MemoryCard }     from 'memory-card'
@@ -46,9 +46,6 @@ import {
   ContactPayloadFilterFunction,
   ContactQueryFilter,
 }                                 from './schemas/contact'
-import {
-  TagPayload,
-}                                 from './schemas/tag'
 import {
   ScanStatus,
 }                                 from './schemas/event'
@@ -468,11 +465,9 @@ export abstract class Puppet extends EventEmitter {
    * Tag
    *
    */
-  public abstract async allTags ()                              : Promise<TagPayload[]>
-  public abstract async getOrCreateTag (name: string)                : Promise<TagPayload>
-  public abstract async addTag (tagId: string, to: string)      : Promise<void>
-  public abstract async modifyTag (tagId: string, name: string) : Promise<void>
-  public abstract async deleteTag (tagId: string)                : Promise<void>
+  public abstract async tagAddContact (id: string, contactId: string) : Promise<void>
+  public abstract async tagDelContact (id: string, contactId: string) : Promise<void>
+  public abstract async tagListContact (contactId: string) : Promise<string[]>
 
   /**
    *
@@ -486,7 +481,6 @@ export abstract class Puppet extends EventEmitter {
   public abstract async contactAvatar (contactId: string, file: FileBox) : Promise<void>
 
   public abstract async contactList ()                   : Promise<string[]>
-  public abstract async contactTagIdList (contactId: string)  : Promise<string[]>
 
   protected abstract async contactRawPayload (contactId: string)     : Promise<any>
   protected abstract async contactRawPayloadParser (rawPayload: any) : Promise<ContactPayload>
