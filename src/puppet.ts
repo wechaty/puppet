@@ -689,7 +689,7 @@ export abstract class Puppet extends EventEmitter {
    * Friendship
    *
    */
-  public abstract async friendshipSearch (contactId: string) : Promise<void>
+  public abstract async friendshipSearch (searchId: string) : Promise<void>
   public abstract async friendshipAdd (contactId: string, hello?: string) : Promise<void>
   public abstract async friendshipAccept (friendshipId: string)           : Promise<void>
 

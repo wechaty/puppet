@@ -34,3 +34,8 @@ export type FriendshipPayloadVerify = FriendshipPayloadBase & {
 export type FriendshipPayload = FriendshipPayloadConfirm
                                   | FriendshipPayloadReceive
                                   | FriendshipPayloadVerify
+
+export interface FriendshipSearchCondition {
+  phone?: string,
+  weixin?: string,
+}
