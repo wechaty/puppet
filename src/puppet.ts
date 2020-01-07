@@ -261,7 +261,7 @@ export abstract class Puppet extends EventEmitter {
   public emit (event: 'error',        error: Error)                                                                  : boolean
   public emit (event: 'friendship',   friendshipId: string)                                                          : boolean
   public emit (event: 'login',        contactId: string)                                                             : boolean
-  public emit (event: 'logout',       contactId: string)                                                             : boolean
+  public emit (event: 'logout',       contactId: string, reason?: string)                                            : boolean
   public emit (event: 'message',      messageId: string)                                                             : boolean
   public emit (event: 'reset',        reason: string)                                                                : boolean
   public emit (event: 'room-join',    roomId: string, inviteeIdList:  string[], inviterId: string, timestamp: number)                    : boolean
@@ -293,7 +293,7 @@ export abstract class Puppet extends EventEmitter {
   public on (event: 'error',        listener: (error: string) => void)                                                                  : this
   public on (event: 'friendship',   listener: (friendshipId: string) => void)                                                           : this
   public on (event: 'login',        listener: (contactId: string) => void)                                                              : this
-  public on (event: 'logout',       listener: (contactId: string) => void)                                                              : this
+  public on (event: 'logout',       listener: (contactId: string, reason?: string) => void)                                             : this
   public on (event: 'message',      listener: (messageId: string) => void)                                                              : this
   public on (event: 'reset',        listener: (reason: string) => void)                                                                 : this
   public on (event: 'room-join',    listener: (roomId: string, inviteeIdList: string[], inviterId:  string, timestamp: number) => void)                    : this
@@ -761,6 +761,7 @@ export abstract class Puppet extends EventEmitter {
   public abstract async messageSendFile (receiver: Receiver, file: FileBox)                          : Promise<void | string>
   public abstract async messageSendUrl (receiver: Receiver, urlLinkPayload: UrlLinkPayload)          : Promise<void | string>
   public abstract async messageSendMiniProgram (receiver: Receiver, miniProgramPayload: MiniProgramPayload)          : Promise<void | string>
+  public abstract async messageRecall (messageId: string) : Promise<boolean>
 
   protected abstract async messageRawPayload (messageId: string)     : Promise<any>
   protected abstract async messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload>
