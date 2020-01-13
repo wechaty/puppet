@@ -930,7 +930,7 @@ export abstract class Puppet extends EventEmitter {
   protected abstract async roomMemberRawPayloadParser (rawPayload: any)             : Promise<RoomMemberPayload>
 
   public abstract async roomAnnounce (roomId: string)               : Promise<string>
-  public abstract async roomAnnounce (roomId: string, text: string) : Promise<void>
+  public abstract async roomAnnounce (roomId: string, text: string | null) : Promise<void>
 
   public async roomMemberSearch (
     roomId : string,
