@@ -61,8 +61,9 @@ class PuppetTest extends Puppet {
    *
    */
   public async tagAddContact (id: string, contactId: string) : Promise<void> { return void { id, contactId } }
-  public async tagDelContact (id: string, contactId: string) : Promise<void> { return void { id, contactId } }
-  public async tagListContact (contactId: string) : Promise<string[]> { return [contactId] }
+  public async tagRemoveContact (id: string, contactId: string) : Promise<void> { return void { id, contactId } }
+  public async tagDeleteContact (id: string) : Promise<void> { return void { id } }
+  public async tagListContact (contactId?: string) : Promise<string[]> { return [contactId || ''] }
 
   /**
    *
