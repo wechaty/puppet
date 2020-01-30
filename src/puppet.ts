@@ -26,7 +26,7 @@ import QuickLru, {
 import {
   Watchdog,
   WatchdogFood,
-}                        from 'watchdog'
+}                         from 'watchdog'
 import { Constructor }    from 'clone-class'
 import { FileBox }        from 'file-box'
 import { MemoryCard }     from 'memory-card'
@@ -51,6 +51,7 @@ import {
 }                                 from './schemas/event'
 import {
   FriendshipPayload,
+  FriendshipSearchQueryFilter,
 }                                 from './schemas/friendship'
 import {
   MessagePayload,
@@ -81,6 +82,7 @@ import {
 
   YOU,
 }                                 from './schemas/puppet'
+import { throwUnsupportedError }   from './throw-unsupported-error'
 
 const DEFAULT_WATCHDOG_TIMEOUT = 60
 let   PUPPET_COUNTER           = 0
@@ -261,7 +263,7 @@ export abstract class Puppet extends EventEmitter {
   public emit (event: 'error',        error: Error)                                                                  : boolean
   public emit (event: 'friendship',   friendshipId: string)                                                          : boolean
   public emit (event: 'login',        contactId: string)                                                             : boolean
-  public emit (event: 'logout',       contactId: string)                                                             : boolean
+  public emit (event: 'logout',       contactId: string, reason?: string)                                            : boolean
   public emit (event: 'message',      messageId: string)                                                             : boolean
   public emit (event: 'reset',        reason: string)                                                                : boolean
   public emit (event: 'room-join',    roomId: string, inviteeIdList:  string[], inviterId: string, timestamp: number)                    : boolean
@@ -293,7 +295,7 @@ export abstract class Puppet extends EventEmitter {
   public on (event: 'error',        listener: (error: string) => void)                                                                  : this
   public on (event: 'friendship',   listener: (friendshipId: string) => void)                                                           : this
   public on (event: 'login',        listener: (contactId: string) => void)                                                              : this
-  public on (event: 'logout',       listener: (contactId: string) => void)                                                              : this
+  public on (event: 'logout',       listener: (contactId: string, reason?: string) => void)                                             : this
   public on (event: 'message',      listener: (messageId: string) => void)                                                              : this
   public on (event: 'reset',        listener: (reason: string) => void)                                                                 : this
   public on (event: 'room-join',    listener: (roomId: string, inviteeIdList: string[], inviterId:  string, timestamp: number) => void)                    : this
@@ -459,6 +461,22 @@ export abstract class Puppet extends EventEmitter {
   public abstract async contactSelfQrcode ()                     : Promise<string /* QR Code Value */>
   public abstract async contactSelfName (name: string)           : Promise<void>
   public abstract async contactSelfSignature (signature: string) : Promise<void>
+
+  /**
+   *
+   * Tag
+   *
+   */
+  // add a tag for a Contact. Create it first if it not exist.
+  public abstract async tagContactAdd (id: string, contactId: string) : Promise<void>
+  // remove a tag from the Contact
+  public abstract async tagContactRemove (id: string, contactId: string) : Promise<void>
+  // delete a tag from Wechat
+  public abstract async tagContactDelete (id: string) : Promise<void>
+  // get tags from a specific Contact
+  public abstract async tagContactList (contactId: string) : Promise<string[]>
+  // get tags from all Contacts
+  public abstract async tagContactList (): Promise<string[]>
 
   /**
    *
@@ -689,6 +707,27 @@ export abstract class Puppet extends EventEmitter {
    * Friendship
    *
    */
+  // return contact id by phone number
+  public abstract async friendshipSearchPhone (phone: string) : Promise<string | null>
+  // return contact id by weixin id
+  public abstract async friendshipSearchWeixin (weixin: string) : Promise<string | null>
+
+  public async friendshipSearch (searchQueryFilter: FriendshipSearchQueryFilter): Promise<string | null> {
+    log.verbose('Puppet', 'friendshipSearch("%s")', JSON.stringify(searchQueryFilter))
+
+    if (Object.keys(searchQueryFilter).length !== 1) {
+      throw new Error('searchQueryFilter should only include one key for query!')
+    }
+
+    if (searchQueryFilter.phone) {
+      return this.friendshipSearchPhone(searchQueryFilter.phone)
+    } else if (searchQueryFilter.weixin) {
+      return this.friendshipSearchWeixin(searchQueryFilter.weixin)
+    }
+
+    throw new Error(`unknown key from searchQueryFilter: ${Object.keys(searchQueryFilter).join('')}`)
+  }
+
   public abstract async friendshipAdd (contactId: string, hello?: string) : Promise<void>
   public abstract async friendshipAccept (friendshipId: string)           : Promise<void>
 
@@ -761,17 +800,18 @@ export abstract class Puppet extends EventEmitter {
    * Message
    *
    */
-  public abstract async messageFile (messageId: string) : Promise<FileBox>
   public abstract async messageContact (messageId: string)  : Promise<string>
-  public abstract async messageUrl (messageId: string)  : Promise<UrlLinkPayload>
+  public abstract async messageFile (messageId: string) : Promise<FileBox>
   public abstract async messageMiniProgram (messageId: string)  : Promise<MiniProgramPayload>
+  public abstract async messageUrl (messageId: string)  : Promise<UrlLinkPayload>
 
-  public abstract async messageForward (receiver: Receiver, messageId: string)                       : Promise<void | string>
-  public abstract async messageSendText (receiver: Receiver, text: string, mentionIdList?: string[]) : Promise<void | string>
   public abstract async messageSendContact (receiver: Receiver, contactId: string)                   : Promise<void | string>
   public abstract async messageSendFile (receiver: Receiver, file: FileBox)                          : Promise<void | string>
-  public abstract async messageSendUrl (receiver: Receiver, urlLinkPayload: UrlLinkPayload)          : Promise<void | string>
+  public abstract async messageSendText (receiver: Receiver, text: string, mentionIdList?: string[]) : Promise<void | string>
   public abstract async messageSendMiniProgram (receiver: Receiver, miniProgramPayload: MiniProgramPayload)          : Promise<void | string>
+  public abstract async messageSendUrl (receiver: Receiver, urlLinkPayload: UrlLinkPayload)          : Promise<void | string>
+
+  public abstract async messageRecall (messageId: string) : Promise<boolean>
 
   protected abstract async messageRawPayload (messageId: string)     : Promise<any>
   protected abstract async messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload>
@@ -895,6 +935,79 @@ export abstract class Puppet extends EventEmitter {
     const allFilterFunction: MessagePayloadFilterFunction = payload => filterFunctionList.every(func => func(payload))
 
     return allFilterFunction
+  }
+
+  public async messageForward (receiver: Receiver, messageId: string): Promise<void | string> {
+    log.verbose('Puppet', 'messageForward(%s, %s)', JSON.stringify(receiver), messageId)
+
+    const payload = await this.messagePayload(messageId)
+
+    let newMsgId: void | string
+
+    switch (payload.type) {
+
+      case MessageType.Attachment:     // Attach(6),
+      case MessageType.Audio:          // Audio(1), Voice(34)
+      case MessageType.Image:          // Img(2), Image(3)
+      case MessageType.Video:          // Video(4), Video(43)
+        newMsgId = await this.messageSendFile(
+          receiver,
+          await this.messageFile(messageId),
+        )
+        break
+
+      case MessageType.Text:           // Text(1)
+        if (payload.text) {
+          newMsgId = await this.messageSendText(
+            receiver,
+            payload.text,
+          )
+        } else {
+          log.warn('Puppet', 'messageForward() payload.text is undefined.')
+        }
+        break
+
+      case MessageType.MiniProgram:    // MiniProgram(33)
+        newMsgId = await this.messageSendMiniProgram(
+          receiver,
+          await this.messageMiniProgram(messageId)
+        )
+        break
+
+      case MessageType.Url:            // Url(5)
+        await this.messageSendUrl(
+          receiver,
+          await this.messageUrl(messageId)
+        )
+        break
+
+      case MessageType.Contact:        // ShareCard(42)
+        newMsgId = await this.messageSendContact(
+          receiver,
+          await this.messageContact(messageId)
+        )
+        break
+
+      case MessageType.ChatHistory:    // ChatHistory(19)
+      case MessageType.Location:       // Location(48)
+      case MessageType.Emoticon:       // Sticker: Emoticon(15), Emoticon(47)
+      case MessageType.Transfer:
+      case MessageType.RedEnvelope:
+      case MessageType.Recalled:       // Recalled(10002)
+        throwUnsupportedError()
+        break
+
+      case MessageType.Money:          // Transfers(2000), RedEnvelopes(2001),
+        throw new Error('MessageType.Money has been deprecated. use .Transfer or .RedEnvelop instead.')
+
+      case MessageType.Unknown:
+      default:
+        throw new Error('Unsupported forward message type:' + MessageType[payload.type])
+    }
+
+    if (newMsgId) {
+      return newMsgId
+    }
   }
 
   /**
