@@ -57,6 +57,16 @@ class PuppetTest extends Puppet {
 
   /**
    *
+   * Tag
+   *
+   */
+  public async tagContactAdd (id: string, contactId: string) : Promise<void> { return void { id, contactId } }
+  public async tagContactRemove (id: string, contactId: string) : Promise<void> { return void { id, contactId } }
+  public async tagContactDelete (id: string) : Promise<void> { return void { id } }
+  public async tagContactList (contactId?: string) : Promise<string[]> { return [contactId || ''] }
+
+  /**
+   *
    * Contact
    *
    */
@@ -81,6 +91,8 @@ class PuppetTest extends Puppet {
   public async friendshipRawPayload (id: string)            : Promise<any> { return { id } as any }
   public async friendshipRawPayloadParser (rawPayload: any) : Promise<FriendshipPayload> { return rawPayload }
 
+  public async friendshipSearchPhone (phone: string) : Promise<string | null> { return phone }
+  public async friendshipSearchWeixin (weixin: string) : Promise<string | null> { return weixin }
   public async friendshipAdd (contactId: string, hello?: string) : Promise<void> { return { contactId, hello } as any }
   public async friendshipAccept (friendshipId: string)           : Promise<void> { return { friendshipId } as any }
 
@@ -101,6 +113,7 @@ class PuppetTest extends Puppet {
   public async messageSendUrl (to: Receiver, urlLinkPayload: UrlLinkPayload) : Promise<void | string> { return { to, urlLinkPayload } as any }
   public async messageSendMiniProgram (to: Receiver, miniProgramPayload: MiniProgramPayload) : Promise<void> { return { miniProgramPayload, to } as any }
 
+  public async messageRecall (messageId: string) : Promise<boolean> { return {messageId} as any }
   public async messageRawPayload (id: string)            : Promise<any> { return { id } as any }
   public async messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload> { return { rawPayload } as any }
 

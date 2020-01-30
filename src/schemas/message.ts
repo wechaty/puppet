@@ -10,10 +10,16 @@ export enum MessageType {
   Text,           // Text(1)
   Location,       // Location(48)
   MiniProgram,    // MiniProgram(33)
-  Money,          // Transfers(2000), RedEnvelopes(2001),
+  Transfer,       // Transfers(2000)
+  RedEnvelope,    // RedEnvelopes(2001)
   Recalled,       // Recalled(10002)
   Url,            // Url(5)
   Video,          // Video(4), Video(43)
+
+  /**
+   * @deprecated: use .Transfer & .RedEnvelopes instead.
+   */
+  Money,          // Huan(202001): DEPRECATED
 }
 
 /**
@@ -43,6 +49,7 @@ export enum WechatAppMessageType {
 
 /**
  * @private
+ * Huan(202001): The Windows(PC) DLL match the following numbers.
  */
 export enum WechatMessageType {
   Text              = 1,
@@ -61,8 +68,13 @@ export enum WechatMessageType {
   VoipInvite        = 53,
   MicroVideo        = 62,
   SysNotice         = 9999,
+  Transfer          = 2000, // 转账
+  RedEnvelope       = 2001, // 红包
+  MiniProgram       = 2002, // 小程序
+  GroupInvite       = 2003, // 群邀请
+  File              = 2004, // 文件消息
   Sys               = 10000,
-  Recalled          = 10002,
+  Recalled          = 10002,  // NOTIFY 服务通知
 }
 
 /** @hidden */
@@ -71,11 +83,11 @@ export interface MessagePayloadBase {
 
   // use message id to get rawPayload to get those informations when needed
   // contactId?    : string,        // Contact ShareCard
-  mentionIdList?: string[],   // Mentioned Contacts' Ids
+  mentionIdList?: string[],     // Mentioned Contacts' Ids
 
   filename?     : string,
   text?         : string,
-  timestamp     : number,        // Unix Timestamp(in seconds)
+  timestamp     : number,       // Huan(202001): we support both seconds & milliseconds in Wechaty now.
   type          : MessageType,
 }
 
