@@ -21,6 +21,7 @@ export type FriendshipPayloadConfirm = FriendshipPayloadBase & {
 
 /** @hidden */
 export type FriendshipPayloadReceive = FriendshipPayloadBase & {
+  scene?    : string,
   stranger? : string,
   ticket    : string,
   type      : FriendshipType.Receive,
