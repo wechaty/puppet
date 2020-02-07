@@ -5,16 +5,21 @@ export enum FriendshipType {
   Verify,
 }
 
-export enum FriendshipReceiveType {
-  QQ = '1',
-  Email = '2',
-  UserName = '3',
-  Room = '14',
-  Phone = '15',
-  Nearby = '18',
-  DriftingBottle = '25',
-  Shaking = '29',
-  Qrcode = '30',
+/**
+ * Huan(202002): Does those numbers are the underlying Wechat Protocol Data Values?
+ */
+export enum FriendshipSceneType {
+  QQTbd1         = 1, // FIXME: Huan(202002) in Wechat PC, QQ = 12.
+  Email          = 2,
+  Account        = 3,
+  QQTbd2         = 12, // FIXME: confirm the two QQ number QQ号搜索
+  Room           = 14,
+  Phone          = 15,
+  Card           = 17, // 名片分享
+  Location       = 18,
+  Bottle         = 25,
+  Shaking        = 29,
+  QRCode         = 30,
 }
 
 /** @hidden */
@@ -33,7 +38,7 @@ export type FriendshipPayloadConfirm = FriendshipPayloadBase & {
 
 /** @hidden */
 export type FriendshipPayloadReceive = FriendshipPayloadBase & {
-  scene?    : FriendshipReceiveType,
+  scene?    : FriendshipSceneType,
   stranger? : string,
   ticket    : string,
   type      : FriendshipType.Receive,

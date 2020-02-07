@@ -14,7 +14,7 @@ export {
   FriendshipPayloadVerify,
   FriendshipSearchQueryFilter,
   FriendshipType,
-  FriendshipReceiveType,
+  FriendshipSceneType,
 }                             from './schemas/friendship'
 export {
   MessagePayload,
