@@ -5,6 +5,18 @@ export enum FriendshipType {
   Verify,
 }
 
+export enum FriendshipReceiveType {
+  QQ = '1',
+  Email = '2',
+  UserName = '3',
+  Room = '14',
+  Phone = '15',
+  Nearby = '18',
+  DriftingBottle = '25',
+  Shaking = '29',
+  Qrcode = '30',
+}
+
 /** @hidden */
 export interface FriendshipPayloadBase {
   id        : string,
@@ -21,7 +33,7 @@ export type FriendshipPayloadConfirm = FriendshipPayloadBase & {
 
 /** @hidden */
 export type FriendshipPayloadReceive = FriendshipPayloadBase & {
-  scene?    : string,
+  scene?    : FriendshipReceiveType,
   stranger? : string,
   ticket    : string,
   type      : FriendshipType.Receive,
