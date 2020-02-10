@@ -126,6 +126,7 @@ class PuppetTest extends Puppet {
 
   public async roomInvitationRawPayload (roomInvitationId: string) : Promise<any> { return { roomInvitationId } as any }
   public async roomInvitationRawPayloadParser (rawPayload: any)    : Promise<RoomInvitationPayload> { return rawPayload }
+  public async setRoomInvitaionPayload (roomInvitationId: string, payload: RoomInvitationPayload) : Promise<any> { return { roomInvitationId, payload } as any }
 
   /**
    *

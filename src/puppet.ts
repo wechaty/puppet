@@ -1033,6 +1033,8 @@ export abstract class Puppet extends EventEmitter {
     return payload
   }
 
+  public abstract async setRoomInvitaionPayload (roomInvitationId: string, payload: RoomInvitationPayload) : Promise<any>
+
   /**
    *
    * Room
