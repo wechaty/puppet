@@ -15,6 +15,7 @@ import {
 
   FriendshipPayload,
   MessagePayload,
+  MessageImageType,
 
   Puppet,
 
@@ -125,6 +126,13 @@ class PuppetTest extends Puppet {
 
   public async roomInvitationRawPayload (roomInvitationId: string) : Promise<any> { return { roomInvitationId } as any }
   public async roomInvitationRawPayloadParser (rawPayload: any)    : Promise<RoomInvitationPayload> { return rawPayload }
+
+  /**
+   *
+   * Image
+   *
+   */
+  public async messageImage (messageId: string, _type: MessageImageType) : Promise<string> { return messageId }
 
   /**
    *

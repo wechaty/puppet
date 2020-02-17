@@ -119,3 +119,10 @@ export type MessagePayloadFilterFunction = (payload: MessagePayload)    => boole
 
 /** @hidden */
 export type MessagePayloadFilterFactory  = (query: MessageQueryFilter)  => MessagePayloadFilterFunction
+
+export enum MessageImageType {
+  URL,
+  THUMBNAIL,
+  HD,
+  ARTWORK,
+}

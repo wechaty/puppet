@@ -58,6 +58,7 @@ import {
   MessagePayloadFilterFunction,
   MessageQueryFilter,
   MessageType,
+  MessageImageType,
 }                                 from './schemas/message'
 import {
   RoomMemberPayload,
@@ -1068,6 +1069,13 @@ export abstract class Puppet extends EventEmitter {
 
     return payload
   }
+
+  /**
+   *
+   * Image
+   *
+   */
+  public abstract async messageImage (messageId: string, type: MessageImageType) : Promise<string>
 
   /**
    *

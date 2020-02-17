@@ -19,6 +19,7 @@ export {
 export {
   MessagePayload,
   MessageType,
+  MessageImageType,
   MessageQueryFilter,
 }                             from './schemas/message'
 export {
