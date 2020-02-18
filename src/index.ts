@@ -17,9 +17,11 @@ export {
   FriendshipSceneType,
 }                             from './schemas/friendship'
 export {
+  ImageType,
+}                             from './schemas/image'
+export {
   MessagePayload,
   MessageType,
-  MessageImageType,
   MessageQueryFilter,
 }                             from './schemas/message'
 export {

@@ -54,11 +54,13 @@ import {
   FriendshipSearchQueryFilter,
 }                                 from './schemas/friendship'
 import {
+  ImageType,
+}                                 from './schemas/image'
+import {
   MessagePayload,
   MessagePayloadFilterFunction,
   MessageQueryFilter,
   MessageType,
-  MessageImageType,
 }                                 from './schemas/message'
 import {
   RoomMemberPayload,
@@ -807,16 +809,17 @@ export abstract class Puppet extends EventEmitter {
    * Message
    *
    */
-  public abstract async messageContact (messageId: string)     : Promise<string>
-  public abstract async messageFile (messageId: string)        : Promise<FileBox>
-  public abstract async messageMiniProgram (messageId: string) : Promise<MiniProgramPayload>
-  public abstract async messageUrl (messageId: string)         : Promise<UrlLinkPayload>
+  public abstract async messageContact      (messageId: string)                       : Promise<string>
+  public abstract async messageFile         (messageId: string)                       : Promise<FileBox>
+  public abstract async messageImage        (messageId: string, imageType: ImageType) : Promise<FileBox>
+  public abstract async messageMiniProgram  (messageId: string)                       : Promise<MiniProgramPayload>
+  public abstract async messageUrl          (messageId: string)                       : Promise<UrlLinkPayload>
 
-  public abstract async messageSendContact (conversationId: string, contactId: string)                          : Promise<void | string>
-  public abstract async messageSendFile (conversationId: string, file: FileBox)                                 : Promise<void | string>
-  public abstract async messageSendMiniProgram (conversationId: string, miniProgramPayload: MiniProgramPayload) : Promise<void | string>
-  public abstract async messageSendText (conversationId: string, text: string, mentionIdList?: string[])        : Promise<void | string>
-  public abstract async messageSendUrl (conversationId: string, urlLinkPayload: UrlLinkPayload)                 : Promise<void | string>
+  public abstract async messageSendContact      (conversationId: string, contactId: string)                      : Promise<void | string>
+  public abstract async messageSendFile         (conversationId: string, file: FileBox)                          : Promise<void | string>
+  public abstract async messageSendMiniProgram  (conversationId: string, miniProgramPayload: MiniProgramPayload) : Promise<void | string>
+  public abstract async messageSendText         (conversationId: string, text: string, mentionIdList?: string[]) : Promise<void | string>
+  public abstract async messageSendUrl          (conversationId: string, urlLinkPayload: UrlLinkPayload)         : Promise<void | string>
 
   public abstract async messageRecall (messageId: string) : Promise<boolean>
 
@@ -1073,13 +1076,6 @@ export abstract class Puppet extends EventEmitter {
 
     return payload
   }
-
-  /**
-   *
-   * Image
-   *
-   */
-  public abstract async messageImage (messageId: string, type: MessageImageType) : Promise<string>
 
   /**
    *
