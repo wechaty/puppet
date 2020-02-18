@@ -15,7 +15,7 @@ import {
 
   FriendshipPayload,
   MessagePayload,
-  MessageImageType,
+  ImageType,
 
   Puppet,
 
@@ -103,6 +103,7 @@ class PuppetTest extends Puppet {
    */
   public async messageFile (messageId: string) : Promise<FileBox> { return { messageId } as any }
   public async messageUrl (messageId: string)  : Promise<UrlLinkPayload> { return { messageId } as any }
+  public async messageImage (messageId: string, imageType: ImageType) : Promise<FileBox> { return { imageType, messageId } as any }
   public async messageContact (messageId: string)  : Promise<string> { return { messageId } as any }
   public async messageMiniProgram (messageId: string)  : Promise<MiniProgramPayload> { return { messageId } as any }
 
@@ -126,13 +127,6 @@ class PuppetTest extends Puppet {
 
   public async roomInvitationRawPayload (roomInvitationId: string) : Promise<any> { return { roomInvitationId } as any }
   public async roomInvitationRawPayloadParser (rawPayload: any)    : Promise<RoomInvitationPayload> { return rawPayload }
-
-  /**
-   *
-   * Image
-   *
-   */
-  public async messageImage (messageId: string, _type: MessageImageType) : Promise<string> { return messageId }
 
   /**
    *
