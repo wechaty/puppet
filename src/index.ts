@@ -71,5 +71,5 @@ export {
 }                         from './puppet'
 
 export {
-  FileBox
+  FileBox,
 } from 'file-box'
