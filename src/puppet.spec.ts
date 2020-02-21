@@ -7,10 +7,8 @@ import sinon from 'sinon'
 
 import {
   FileBox,
-}                 from 'file-box'
-import {
   MemoryCard,
-}                 from 'memory-card'
+}                 from './config'
 
 import {
   ContactGender,
@@ -74,9 +72,9 @@ class PuppetTest extends Puppet {
    * Tag
    *
    */
-  public async tagContactAdd (id: string, contactId: string) : Promise<void> { return void { contactId, id } }
-  public async tagContactRemove (id: string, contactId: string) : Promise<void> { return void { contactId, id } }
-  public async tagContactDelete (id: string) : Promise<void> { return void { id } }
+  public async tagContactAdd (tagId: string, contactId: string) : Promise<void> { return void { contactId, tagId } }
+  public async tagContactRemove (tagId: string, contactId: string) : Promise<void> { return void { contactId, tagId } }
+  public async tagContactDelete (tagId: string) : Promise<void> { return void { tagId } }
   public async tagContactList (contactId?: string) : Promise<string[]> { return [contactId || ''] }
 
   /**

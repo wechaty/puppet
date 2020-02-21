@@ -1,6 +1,6 @@
 {
   "name": "wechaty-puppet",
-  "version": "0.19.15",
+  "version": "0.19.17",
   "description": "Abstract Puppet for Wechaty",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
@@ -46,22 +46,18 @@
     "@types/normalize-package-data": "^2.4.0",
     "@types/quick-lru": "^2.0.0",
     "@types/read-pkg-up": "^3.0.1",
-    "file-box": "^0.12.1",
-    "memory-card": "^0.6.7",
     "pkg-jq": "^0.2.2",
     "shx": "^0.3.1",
     "tstest": "^0.4.1",
     "typedoc": "^0.14.0",
     "typedoc-plugin-markdown": "^2.0.0"
   },
-  "peerDependencies": {
-    "memory-card": "^0.6.7",
-    "file-box": "^0.12.1"
-  },
   "dependencies": {
     "brolog": "^1.6.5",
     "clone-class": "^0.6.19",
+    "file-box": "^0.12.1",
     "hot-import": "^0.2.1",
+    "memory-card": "^0.6.7",
     "normalize-package-data": "^2.4.0",
     "quick-lru": "^3.0.0",
     "read-pkg-up": "^5.0.0",
