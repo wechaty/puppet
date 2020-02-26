@@ -7,5 +7,5 @@ export interface RoomInvitationPayload {
   memberCount  : number,
   memberIdList : string[],   // Friends' Contact Id List of the Room
   timestamp    : number,     // Unix Timestamp, in seconds or milliseconds
-  receiver     : string,     // the room invitation should send to which contact.
+  receiverId   : string,     // the room invitation should send to which contact.
 }
