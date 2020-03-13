@@ -6,6 +6,21 @@ export {
 }                             from './schemas/contact'
 export {
   ScanStatus,
+
+  EventFriendshipPayload,
+  EventLoginPayload,
+  EventLogoutPayload,
+  EventMessagePayload,
+  EventRoomInvitePayload,
+  EventRoomJoinPayload,
+  EventRoomLeavePayload,
+  EventRoomTopicPayload,
+  EventScanPayload,
+  EventDongPayload,
+  EventErrorPayload,
+  EventReadyPayload,
+  EventResetPayload,
+  EventWatchdogPayload,
 }                             from './schemas/event'
 export {
   FriendshipPayload,
@@ -47,13 +62,18 @@ export {
 export {
   PuppetOptions,
   PuppetEventName,
-  PuppetQRCodeScanEvent,
-  PuppetRoomInviteEvent,
-  PuppetRoomJoinEvent,
-  PuppetRoomLeaveEvent,
-  PuppetRoomTopicEvent,
+  // PuppetQRCodeScanEvent,
+  // PuppetRoomInviteEvent,
+  // PuppetRoomJoinEvent,
+  // PuppetRoomLeaveEvent,
+  // PuppetRoomTopicEvent,
   // Receiver,
 
+  /**
+   * Huan(202003): XXX_DICT
+   *  The following two data structure is for the downstream
+   *  to get a array of event string list.
+   */
   CHAT_EVENT_DICT,
   PUPPET_EVENT_DICT,
 
