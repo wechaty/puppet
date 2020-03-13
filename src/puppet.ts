@@ -141,7 +141,7 @@ export abstract class Puppet extends EventEmitter {
   /**
    * Throttle Reset Events
    */
-  private resetThrottleQueue : ThrottleQueue<EventResetPayload>
+  private resetThrottleQueue : ThrottleQueue<string>
 
   /**
    *
@@ -187,16 +187,16 @@ export abstract class Puppet extends EventEmitter {
     /**
      * 2. Setup `reset` Event via a 1 second Throttle Queue:
      */
-    this.resetThrottleQueue = new ThrottleQueue<EventResetPayload>(1000)
+    this.resetThrottleQueue = new ThrottleQueue<string>(1000)
     // 2.2. handle all `reset` events via the resetThrottleQueue
     this.on('reset', payload => {
       log.silly('Puppet', 'constructor() this.on(reset) payload: "%s"', JSON.stringify(payload))
-      this.resetThrottleQueue.next(payload)
+      this.resetThrottleQueue.next(payload.data)
     })
     // 2.3. call reset() and then ignore the following `reset` event for 1 second
-    this.resetThrottleQueue.subscribe(payload => {
-      log.silly('Puppet', 'constructor() resetThrottleQueue.subscribe() payload: "%s"', JSON.stringify(payload))
-      this.reset(payload.data)
+    this.resetThrottleQueue.subscribe(reason => {
+      log.silly('Puppet', 'constructor() resetThrottleQueue.subscribe() reason: "%s"', reason)
+      this.reset(reason)
     })
 
     /**
