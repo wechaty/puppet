@@ -29,7 +29,7 @@ export interface ContactPayload {
   city?      : string,
   friend?    : boolean,
   province?  : string,
-  isDelete?  : boolean,
+  isDeleted? : boolean,
   signature? : string,
   star?      : boolean,
   weixin?    : string,

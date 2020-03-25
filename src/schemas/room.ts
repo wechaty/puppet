@@ -14,7 +14,7 @@ export interface RoomPayload {
 
   topic        : string,
   avatar?      : string,
-  isDelete?    : boolean,
+  isDeleted?   : boolean,
   memberIdList : string[],
   ownerId?     : string,
   adminIdList  : string[],
