@@ -23,10 +23,7 @@ import QuickLru, {
   Options as QuickLruOptions,
 }                             from 'quick-lru'
 
-import {
-  Watchdog,
-  WatchdogFood,
-}                         from 'watchdog'
+import { Watchdog }       from 'watchdog'
 import { Constructor }    from 'clone-class'
 import { StateSwitch }    from 'state-switch'
 import { ThrottleQueue }  from 'rx-queue'
@@ -60,7 +57,7 @@ import {
   EventRoomInvitePayload,
   EventScanPayload,
   EventReadyPayload,
-  EventWatchdogPayload,
+  EventHeartbeatPayload,
 }                                 from './schemas/event'
 import {
   FriendshipPayload,
@@ -113,7 +110,9 @@ export abstract class Puppet extends EventEmitter {
   /**
    * Must overwrite by child class to identify their version
    */
-  public static readonly VERSION: string = '0.0.0'
+  public static readonly VERSION : string = '0.0.0'
+
+  public readonly state: StateSwitch
 
   protected readonly cacheContactPayload        : QuickLru<string, ContactPayload>
   protected readonly cacheFriendshipPayload     : QuickLru<string, FriendshipPayload>
@@ -122,7 +121,6 @@ export abstract class Puppet extends EventEmitter {
   protected readonly cacheRoomMemberPayload     : QuickLru<string, RoomMemberPayload>
   protected readonly cacheRoomInvitationPayload : QuickLru<string, RoomInvitationPayload>
 
-  protected readonly state   : StateSwitch
   protected readonly counter : number
   protected memory          : MemoryCard
 
@@ -136,7 +134,7 @@ export abstract class Puppet extends EventEmitter {
   /**
    * childPkg stores the `package.json` that the NPM module who extends the `Puppet`
    */
-  private readonly childPkg: undefined | normalize.Package
+  private readonly childPkg: normalize.Package
 
   /**
    * Throttle Reset Events
@@ -158,7 +156,7 @@ export abstract class Puppet extends EventEmitter {
     this.counter = PUPPET_COUNTER++
     log.verbose('Puppet', 'constructor(%s) #%d', JSON.stringify(options), this.counter)
 
-    this.state  = new StateSwitch(this.constructor.name, log)
+    this.state  = new StateSwitch(this.constructor.name, { log })
 
     this.memory = new MemoryCard() // dummy memory
     this.memory.load()  // load here is for testing only
@@ -168,20 +166,17 @@ export abstract class Puppet extends EventEmitter {
     /**
      * 1. Setup Watchdog
      *  puppet implementation class only need to do one thing:
-     *  feed the watchdog by `this.emit('watchdog', ...)`
+     *  feed the watchdog by `this.emit('heartbeat', ...)`
      */
     const timeout = this.options.timeout || DEFAULT_WATCHDOG_TIMEOUT
     log.verbose('Puppet', 'constructor() watchdog timeout set to %d seconds', timeout)
     this.watchdog = new Watchdog(1000 * timeout, 'Puppet')
 
-    this.on('watchdog', payload => {
-      const food: WatchdogFood = { data: payload.data }
-      this.watchdog.feed(food)
-    })
+    this.on('heartbeat', payload => this.watchdog.feed(payload))
+
     this.watchdog.on('reset', lastFood => {
-      const reason = JSON.stringify(lastFood)
-      log.silly('Puppet', 'constructor() watchdog.on(reset) reason: %s', reason)
-      this.emit('reset', { data: reason })
+      log.warn('Puppet', 'constructor() watchdog.on(reset) reason: %s', JSON.stringify(lastFood))
+      this.emit('reset', lastFood)
     })
 
     /**
@@ -202,16 +197,14 @@ export abstract class Puppet extends EventEmitter {
     /**
      * 3. Setup LRU Caches
      */
-    const lruOptions: QuickLruOptions = {
-      maxSize: 10 * 1000,
-    }
+    const lruOptions = (maxSize = 100): QuickLruOptions => ({ maxSize })
 
-    this.cacheContactPayload        = new QuickLru<string, ContactPayload>(lruOptions)
-    this.cacheFriendshipPayload     = new QuickLru<string, FriendshipPayload>(lruOptions)
-    this.cacheMessagePayload        = new QuickLru<string, MessagePayload>(lruOptions)
-    this.cacheRoomPayload           = new QuickLru<string, RoomPayload>(lruOptions)
-    this.cacheRoomMemberPayload     = new QuickLru<string, RoomMemberPayload>(lruOptions)
-    this.cacheRoomInvitationPayload = new QuickLru<string, RoomInvitationPayload>(lruOptions)
+    this.cacheContactPayload        = new QuickLru<string, ContactPayload>(lruOptions(3000))
+    this.cacheFriendshipPayload     = new QuickLru<string, FriendshipPayload>(lruOptions(100))
+    this.cacheMessagePayload        = new QuickLru<string, MessagePayload>(lruOptions(500))
+    this.cacheRoomPayload           = new QuickLru<string, RoomPayload>(lruOptions(500))
+    this.cacheRoomInvitationPayload = new QuickLru<string, RoomInvitationPayload>(lruOptions(100))
+    this.cacheRoomMemberPayload     = new QuickLru<string, RoomMemberPayload>(lruOptions(60 * 500))
 
     /**
      * 4. Load the package.json for Puppet Plugin version range matching
@@ -280,25 +273,6 @@ export abstract class Puppet extends EventEmitter {
    */
 
   /**
-   * API Before v0.21.6
-   */
-  // public emit (event: 'dong',         data?: string)                                                                 : boolean
-  // public emit (event: 'error',        error: Error)                                                                  : boolean
-  // public emit (event: 'friendship',   friendshipId: string)                                                          : boolean
-  // public emit (event: 'login',        contactId: string)                                                             : boolean
-  // public emit (event: 'logout',       contactId: string, reason?: string)                                            : boolean
-  // public emit (event: 'message',      messageId: string)                                                             : boolean
-  // public emit (event: 'reset',        reason: string)                                                                : boolean
-  // public emit (event: 'room-join',    roomId: string, inviteeIdList:  string[], inviterId: string, timestamp: number)                    : boolean
-  // public emit (event: 'room-leave',   roomId: string, leaverIdList:   string[], remover: string,   timestamp: number)                    : boolean
-  // public emit (event: 'room-topic',   roomId: string, newTopic:       string,   oldTopic: string,  changerId: string, timestamp: number) : boolean
-  // public emit (event: 'room-invite',  roomInvitationId: string)                                                      : boolean
-  // public emit (event: 'scan',         qrcode: string, status: ScanStatus, data?: string)                             : boolean
-  // public emit (event: 'ready')                                                                                       : boolean
-  // // Internal Usage: watchdog
-  // public emit (event: 'watchdog',     food: WatchdogFood) : boolean
-
-  /**
    * API After v0.21.6
    */
   public emit (event: 'dong',         payload: EventDongPayload)       : boolean
@@ -314,8 +288,13 @@ export abstract class Puppet extends EventEmitter {
   public emit (event: 'room-topic',   payload: EventRoomTopicPayload)  : boolean
   public emit (event: 'ready',        payload: EventReadyPayload)      : boolean
   public emit (event: 'scan',         payload: EventScanPayload)       : boolean
-  // Internal Usage: watchdog
-  public emit (event: 'watchdog',     payload: EventWatchdogPayload)   : boolean
+
+  // Rename `watchdog` to `heartbeat`
+  //  Internal Usage: watchdog
+  //  public emit (event: 'watchdog',    payload: EventWatchdogPayload)  : boolean
+
+  // Internal Usage: heartbeat
+  public emit (event: 'heartbeat',    payload: EventHeartbeatPayload)  : boolean
 
   public emit (event: never, ...args: never[]): never
 
@@ -335,25 +314,6 @@ export abstract class Puppet extends EventEmitter {
    */
 
   /**
-   * API Before v0.21.6
-   */
-  // public on (event: 'dong',         listener: (data?: string) => void)                                                                  : this
-  // public on (event: 'error',        listener: (error: string) => void)                                                                  : this
-  // public on (event: 'friendship',   listener: (friendshipId: string) => void)                                                           : this
-  // public on (event: 'login',        listener: (contactId: string) => void)                                                              : this
-  // public on (event: 'logout',       listener: (contactId: string, reason?: string) => void)                                             : this
-  // public on (event: 'message',      listener: (messageId: string) => void)                                                              : this
-  // public on (event: 'reset',        listener: (reason: string) => void)                                                                 : this
-  // public on (event: 'room-join',    listener: (roomId: string, inviteeIdList: string[], inviterId:  string, timestamp: number) => void)                    : this
-  // public on (event: 'room-leave',   listener: (roomId: string, leaverIdList:  string[], removerId: string,  timestamp: number) => void)                    : this
-  // public on (event: 'room-topic',   listener: (roomId: string, newTopic:      string,   oldTopic:   string, changerId: string, timestamp: number) => void) : this
-  // public on (event: 'room-invite',  listener: (roomInvitationId: string) => void)                                                       : this
-  // public on (event: 'scan',         listener: (qrcode: string, status: ScanStatus, data?: string) => void)                              : this
-  // public on (event: 'ready',        listener: () => void)                                                                               : this
-  // // Internal Usage: watchdog
-  // public on (event: 'watchdog',     listener: (data: WatchdogFood) => void)                                                    : this
-
-  /**
    * API After v0.21.6
    */
   public on (event: 'dong',         listener: (payload: EventDongPayload) => void)       : this
@@ -369,8 +329,12 @@ export abstract class Puppet extends EventEmitter {
   public on (event: 'room-invite',  listener: (payload: EventRoomInvitePayload) => void) : this
   public on (event: 'scan',         listener: (payload: EventScanPayload) => void)       : this
   public on (event: 'ready',        listener: (payload: EventReadyPayload) => void)      : this
-  // Internal Usage: watchdog
-  public on (event: 'watchdog',     listener: (payload: EventWatchdogPayload) => void): this
+
+  // rename `watchdog` to `heartbeat`
+  // public on (event: 'watchdog',     listener: (payload: EventWatchdogPayload) => void): this
+
+  // Internal Usage: heartbeat
+  public on (event: 'heartbeat',    listener: (payload: EventHeartbeatPayload) => void)  : this
 
   public on (event: never, listener: never): never
 
@@ -393,19 +357,24 @@ export abstract class Puppet extends EventEmitter {
   public abstract async stop ()  : Promise<void>
 
   /**
-   * reset() Should not be called directly.
-   * `protected` is for testing, not for the child class.
-   * should use `emit('reset', 'reason')` instead.
-   *  Huan, July 2018
+   * Huan(201808):
+   *  reset() Should not be called directly.
+   *  `protected` is for testing, not for the child class.
+   *  should use `emit('reset', 'reason')` instead.
    */
   protected reset (reason: string): void {
     log.verbose('Puppet', 'reset(%s)', reason)
 
-    if (this.state.off()) {
-      log.verbose('Puppet', 'reset(%s) state is off(), do nothing.', reason)
-      this.watchdog.sleep()
-      return
-    }
+    /**
+     * Huan(202003):
+     *  do not care state.off()
+     *  reset will cause the puppet to start (?)
+     */
+    // if (this.state.off()) {
+    //   log.verbose('Puppet', 'reset(%s) state is off(), make the watchdog to sleep', reason)
+    //   this.watchdog.sleep()
+    //   return
+    // }
 
     Promise.resolve()
       .then(() => this.stop())
@@ -486,13 +455,17 @@ export abstract class Puppet extends EventEmitter {
   public abstract ding (data?: string) : void
 
   /**
+   * Get the NPM name of the Puppet
+   */
+  public name () {
+    return this.childPkg.name
+  }
+
+  /**
    * Get version from the Puppet Implementation
    */
   public version (): string {
-    if (this.childPkg) {
-      return this.childPkg.version
-    }
-    return '0.0.0'
+    return this.childPkg.version
   }
 
   /**
