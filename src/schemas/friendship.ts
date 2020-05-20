@@ -43,6 +43,8 @@ export type FriendshipPayloadReceive = FriendshipPayloadBase & {
   stranger? : string,
   ticket    : string,
   type      : FriendshipType.Receive,
+  sharedContactId?
+            : string, // friendShip by Card, provide source contact
 }
 
 /** @hidden */
