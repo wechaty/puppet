@@ -41,6 +41,12 @@ export interface ContactPayload {
   signature? : string,
   star?      : boolean,
   weixin?    : string,
+
+  corp?        : string,
+  title?       : string,
+  description? : string,
+  isWeixin?    : boolean,
+  isExternal?  : boolean,
 }
 
 /** @hidden */
