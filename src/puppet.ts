@@ -76,9 +76,10 @@ import {
   PuppetOptions,
   YOU,
 }                                 from './schemas/puppet'
-import { throwUnsupportedError }   from './throw-unsupported-error'
+import { PayloadType }             from './schemas/payload'
 
-import { PuppetEventEmitter }   from './events'
+import { throwUnsupportedError }   from './throw-unsupported-error'
+import { PuppetEventEmitter }      from './events'
 
 const DEFAULT_WATCHDOG_TIMEOUT = 60
 let   PUPPET_COUNTER           = 0
@@ -617,11 +618,6 @@ export abstract class Puppet extends PuppetEventEmitter {
     return resultRoomIdList
   }
 
-  public async contactPayloadDirty (contactId: string): Promise<void> {
-    log.verbose('Puppet', 'contactPayloadDirty(%s)', contactId)
-    this.cacheContactPayload.delete(contactId)
-  }
-
   public async contactSearch (
     query?        : string | ContactQueryFilter,
     searchIdList? : string[],
@@ -677,7 +673,7 @@ export abstract class Puppet extends PuppetEventEmitter {
 
       } catch (e) {
         log.silly('Puppet', 'contactSearch() contactPayload exception: %s', e.message)
-        await this.contactPayloadDirty(id)
+        await this.dirtyPayloadContact(id)
       }
       return undefined
     }
@@ -860,11 +856,6 @@ export abstract class Puppet extends PuppetEventEmitter {
     return cachedPayload
   }
 
-  protected async friendshipPayloadDirty (friendshipId: string): Promise<void> {
-    log.verbose('Puppet', 'friendshipPayloadDirty(%s)', friendshipId)
-    this.cacheFriendshipPayload.delete(friendshipId)
-  }
-
   /**
    * Get & Set
    */
@@ -941,11 +932,6 @@ export abstract class Puppet extends PuppetEventEmitter {
     }
 
     return cachedPayload
-  }
-
-  protected async messagePayloadDirty (messageId: string): Promise<void> {
-    log.verbose('Puppet', 'messagePayloadDirty(%s)', messageId)
-    this.cacheMessagePayload.delete(messageId)
   }
 
   public async messagePayload (
@@ -1310,8 +1296,8 @@ export abstract class Puppet extends PuppetEventEmitter {
             // compatible with {} payload
             log.silly('Puppet', 'roomSearch() roomPayload exception: %s', e.message)
             // Remove invalid room id from cache to avoid getting invalid room payload again
-            await this.roomPayloadDirty(id)
-            await this.roomMemberPayloadDirty(id)
+            await this.dirtyPayloadRoom(id)
+            await this.dirtyPayloadRoomMember(id)
             return {} as any
           }
         }
@@ -1394,11 +1380,6 @@ export abstract class Puppet extends PuppetEventEmitter {
     return cachedPayload
   }
 
-  public async roomPayloadDirty (roomId: string): Promise<void> {
-    log.verbose('Puppet', 'roomPayloadDirty(%s)', roomId)
-    this.cacheRoomPayload.delete(roomId)
-  }
-
   public async roomPayload (
     roomId: string,
   ): Promise<RoomPayload> {
@@ -1438,18 +1419,6 @@ export abstract class Puppet extends PuppetEventEmitter {
     return contactId + '@@@' + roomId
   }
 
-  public async roomMemberPayloadDirty (roomId: string): Promise<void> {
-    log.verbose('Puppet', 'roomMemberPayloadDirty(%s)', roomId)
-
-    const contactIdList = await this.roomMemberList(roomId)
-
-    let cacheKey
-    contactIdList.forEach(contactId => {
-      cacheKey = this.cacheKeyRoomMember(roomId, contactId)
-      this.cacheRoomMemberPayload.delete(cacheKey)
-    })
-  }
-
   public async roomMemberPayload (
     roomId    : string,
     memberId : string,
@@ -1486,6 +1455,65 @@ export abstract class Puppet extends PuppetEventEmitter {
     log.silly('Puppet', 'roomMemberPayload(%s) cache SET', roomId)
 
     return payload
+  }
+
+  /**
+   *
+   * dirty payload methods
+   *  See: https://github.com/Chatie/grpc/pull/79
+   *
+   */
+
+  async dirtyPayload (type: PayloadType, id: string): Promise<void> {
+    log.verbose('Puppet', 'dirtyPayload(%s<%s>, %s)', PayloadType[type], type, id)
+
+    switch (type) {
+      case PayloadType.Message:
+        return this.dirtyPayloadMessage(id)
+      case PayloadType.Contact:
+        return this.dirtyPayloadContact(id)
+      case PayloadType.Room:
+        return this.dirtyPayloadRoom(id)
+      case PayloadType.RoomMember:
+        return this.dirtyPayloadRoomMember(id)
+      case PayloadType.Friendship:
+        return this.dirtyPayloadFriendship(id)
+
+      default:
+        throw new Error('unknown payload type: ' + type)
+    }
+  }
+
+  protected async dirtyPayloadRoom (roomId: string): Promise<void> {
+    log.verbose('Puppet', 'dirtyPayloadRoom(%s)', roomId)
+    this.cacheRoomPayload.delete(roomId)
+  }
+
+  protected async dirtyPayloadContact (contactId: string): Promise<void> {
+    log.verbose('Puppet', 'dirtyPayloadContact(%s)', contactId)
+    this.cacheContactPayload.delete(contactId)
+  }
+
+  protected async dirtyPayloadFriendship (friendshipId: string): Promise<void> {
+    log.verbose('Puppet', 'dirtyPayloadFriendship(%s)', friendshipId)
+    this.cacheFriendshipPayload.delete(friendshipId)
+  }
+
+  protected async dirtyPayloadMessage (messageId: string): Promise<void> {
+    log.verbose('Puppet', 'dirtyPayloadMessage(%s)', messageId)
+    this.cacheMessagePayload.delete(messageId)
+  }
+
+  protected async dirtyPayloadRoomMember (roomId: string): Promise<void> {
+    log.verbose('Puppet', 'dirtyPayloadRoomMember(%s)', roomId)
+
+    const contactIdList = await this.roomMemberList(roomId)
+
+    let cacheKey
+    contactIdList.forEach(contactId => {
+      cacheKey = this.cacheKeyRoomMember(roomId, contactId)
+      this.cacheRoomMemberPayload.delete(cacheKey)
+    })
   }
 
 }
