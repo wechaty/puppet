@@ -7,16 +7,22 @@ export enum ContactGender {
 /**
  * Huan(202004) TODO: Lock the ENUM number (like protobuf) ?
  */
-export enum ContactType {
+export enum BaseType {
   Unknown    = 0,
   Individual = 1,
   Official   = 2,
+  Corp       = 3,
 
   /**
    * Huan(202004):
    * @deprecated: use Individual instead
    */
   Personal = Individual,
+}
+
+export interface ContactType {
+  baseType: BaseType,
+  corpInternal?: boolean,
 }
 
 export interface ContactQueryFilter {
@@ -45,8 +51,6 @@ export interface ContactPayload {
   corp?        : string,
   title?       : string,
   description? : string,
-  isWeixin?    : boolean,
-  isExternal?  : boolean,
 }
 
 /** @hidden */
