@@ -12,7 +12,7 @@ import {
 import {
   ContactGender,
   ContactPayload,
-  ContactType,
+  BaseType,
 }                                 from './schemas/contact'
 import {
   MessagePayload,
@@ -42,7 +42,9 @@ test('contactQueryFilterFunction()', async t => {
       gender : ContactGender.Unknown,
       id     : 'id1',
       name   : TEXT_REGEX,
-      type   : ContactType.Personal,
+      type   : {
+        baseType: BaseType.Personal,
+      },
     },
     {
       alias  : TEXT_REGEX,
@@ -50,7 +52,9 @@ test('contactQueryFilterFunction()', async t => {
       gender : ContactGender.Unknown,
       id     : 'id2',
       name   : TEXT_TEXT,
-      type   : ContactType.Personal,
+      type   : {
+        baseType: BaseType.Personal,
+      },
     },
     {
       alias  : TEXT_TEXT,
@@ -58,7 +62,9 @@ test('contactQueryFilterFunction()', async t => {
       gender : ContactGender.Unknown,
       id     : 'id3',
       name   : TEXT_REGEX,
-      type   : ContactType.Personal,
+      type   : {
+        baseType: BaseType.Personal,
+      },
     },
     {
       alias  : TEXT_REGEX,
@@ -66,7 +72,9 @@ test('contactQueryFilterFunction()', async t => {
       gender : ContactGender.Unknown,
       id     : 'id4',
       name   : TEXT_TEXT,
-      type   : ContactType.Personal,
+      type   : {
+        baseType: BaseType.Personal,
+      },
     },
   ]
 
