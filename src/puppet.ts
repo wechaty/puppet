@@ -1364,27 +1364,27 @@ export abstract class Puppet extends PuppetEventEmitter {
     }
   }
 
-  protected async dirtyPayloadRoom (roomId: string): Promise<void> {
+  private async dirtyPayloadRoom (roomId: string): Promise<void> {
     log.verbose('Puppet', 'dirtyPayloadRoom(%s)', roomId)
     this.cacheRoomPayload.delete(roomId)
   }
 
-  protected async dirtyPayloadContact (contactId: string): Promise<void> {
+  private async dirtyPayloadContact (contactId: string): Promise<void> {
     log.verbose('Puppet', 'dirtyPayloadContact(%s)', contactId)
     this.cacheContactPayload.delete(contactId)
   }
 
-  protected async dirtyPayloadFriendship (friendshipId: string): Promise<void> {
+  private async dirtyPayloadFriendship (friendshipId: string): Promise<void> {
     log.verbose('Puppet', 'dirtyPayloadFriendship(%s)', friendshipId)
     this.cacheFriendshipPayload.delete(friendshipId)
   }
 
-  protected async dirtyPayloadMessage (messageId: string): Promise<void> {
+  private async dirtyPayloadMessage (messageId: string): Promise<void> {
     log.verbose('Puppet', 'dirtyPayloadMessage(%s)', messageId)
     this.cacheMessagePayload.delete(messageId)
   }
 
-  protected async dirtyPayloadRoomMember (roomId: string): Promise<void> {
+  private async dirtyPayloadRoomMember (roomId: string): Promise<void> {
     log.verbose('Puppet', 'dirtyPayloadRoomMember(%s)', roomId)
 
     const contactIdList = await this.roomMemberList(roomId)
