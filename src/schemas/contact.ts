@@ -45,8 +45,8 @@ export interface ContactPayload {
 
   corp?        : string,
   title?       : string,
-  description? : string,
-  internal?    : boolean,
+  desc?        : string,
+  coworker?    : boolean,
 }
 
 /** @hidden */
