@@ -43,9 +43,9 @@ export interface ContactPayload {
   star?      : boolean,
   weixin?    : string,
 
-  corp?        : string,
+  corporation? : string,
   title?       : string,
-  desc?        : string,
+  description? : string,
   coworker?    : boolean,
 }
 
