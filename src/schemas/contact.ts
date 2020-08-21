@@ -8,10 +8,10 @@ export enum ContactGender {
  * Huan(202004) TODO: Lock the ENUM number (like protobuf) ?
  */
 export enum ContactType {
-  Unknown    = 0,
-  Individual = 1,
-  Official   = 2,
-  Corp       = 3,
+  Unknown     = 0,
+  Individual  = 1,
+  Official    = 2,
+  Corporation = 3,
 
   /**
    * Huan(202004):
