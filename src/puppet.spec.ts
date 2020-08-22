@@ -43,7 +43,7 @@ test('contactQueryFilterFunction()', async t => {
       id     : 'id1',
       name   : TEXT_REGEX,
       phone  : [],
-      type   : ContactType.Personal,
+      type   : ContactType.Individual,
     },
     {
       alias  : TEXT_REGEX,
@@ -52,7 +52,7 @@ test('contactQueryFilterFunction()', async t => {
       id     : 'id2',
       name   : TEXT_TEXT,
       phone  : [],
-      type   : ContactType.Personal,
+      type   : ContactType.Individual,
     },
     {
       alias  : TEXT_TEXT,
@@ -61,7 +61,7 @@ test('contactQueryFilterFunction()', async t => {
       id     : 'id3',
       name   : TEXT_REGEX,
       phone  : [],
-      type   : ContactType.Personal,
+      type   : ContactType.Individual,
     },
     {
       alias  : TEXT_REGEX,
@@ -70,7 +70,7 @@ test('contactQueryFilterFunction()', async t => {
       id     : 'id4',
       name   : TEXT_TEXT,
       phone  : [],
-      type   : ContactType.Personal,
+      type   : ContactType.Individual,
     },
   ]
 
