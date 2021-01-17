@@ -23,6 +23,13 @@ export enum FriendshipSceneType {
   QRCode   = 30,
 }
 
+export interface FriendshipSource{
+  sourceContactId ?:string;
+  sourceName ?:string;
+  shareCardContactId?:string;
+  shareCardName?:string;
+}
+
 /** @hidden */
 export interface FriendshipPayloadBase {
   id        : string,
@@ -30,14 +37,6 @@ export interface FriendshipPayloadBase {
   contactId : string,
   hello?    : string,
   timestamp : number, // Unix Timestamp, in seconds or milliseconds
-}
-
-/** @hidden */
-export interface FriendshipSource{
-  sourceContactId ?:string;
-  sourceName ?:string;
-  shareCardContactId?:string;
-  shareCardName?:string;
 }
 
 /** @hidden */
