@@ -33,6 +33,15 @@ export interface FriendshipPayloadBase {
 }
 
 /** @hidden */
+export interface FriendshipSource{
+  sourceContactId ?:string;
+  sourceName ?:string;
+  shareCardContactId?:string;
+  shareCardName?:string;
+}
+
+
+/** @hidden */
 export type FriendshipPayloadConfirm = FriendshipPayloadBase & {
   type      : FriendshipType.Confirm,
 }
@@ -43,6 +52,7 @@ export type FriendshipPayloadReceive = FriendshipPayloadBase & {
   stranger? : string,
   ticket    : string,
   type      : FriendshipType.Receive,
+  source?   : FriendshipSource,
 }
 
 /** @hidden */
