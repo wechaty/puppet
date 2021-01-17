@@ -40,7 +40,6 @@ export interface FriendshipSource{
   shareCardName?:string;
 }
 
-
 /** @hidden */
 export type FriendshipPayloadConfirm = FriendshipPayloadBase & {
   type      : FriendshipType.Confirm,
