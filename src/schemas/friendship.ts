@@ -25,8 +25,15 @@ export enum FriendshipSceneType {
 
 /**
  * Issue #2120: https://github.com/wechaty/wechaty/pull/2120
+ * Ref Issue #1801: https://github.com/wechaty/wechaty/issues/1801
  * Author: github@suhli
- * Email: shuhang624535537@gmail.com
+ *
+ * sourceContactId: contact id of who send the contact card
+ * sourceName: name of who send the contact card
+ * shareCardContactId: maybe always null
+ * shareCardName: maybe always null
+ *
+ * Example: https://github.com/wechaty/wechaty/issues/1801#issuecomment-761726700
  */
 export interface FriendshipSource{
   sourceContactId ?:string;
