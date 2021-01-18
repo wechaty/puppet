@@ -23,6 +23,11 @@ export enum FriendshipSceneType {
   QRCode   = 30,
 }
 
+/**
+ * Issue #2120: https://github.com/wechaty/wechaty/pull/2120
+ * Author: github@suhli
+ * Email: shuhang624535537@gmail.com
+ */
 export interface FriendshipSource{
   sourceContactId ?:string;
   sourceName ?:string;
