@@ -30,8 +30,8 @@ export enum FriendshipSceneType {
  *
  * sourceContactId: contact id of who send the contact card
  * sourceName: name of who send the contact card
- * shareCardContactId: maybe always null
- * shareCardName: maybe always null
+ * shareCardContactId: maybe always empty string
+ * shareCardName: maybe always empty string
  *
  * Example: https://github.com/wechaty/wechaty/issues/1801#issuecomment-761726700
  */
