@@ -42,7 +42,8 @@ test('contactQueryFilterFunction()', async t => {
       gender : ContactGender.Unknown,
       id     : 'id1',
       name   : TEXT_REGEX,
-      type   : ContactType.Personal,
+      phone  : [],
+      type   : ContactType.Individual,
     },
     {
       alias  : TEXT_REGEX,
@@ -50,7 +51,8 @@ test('contactQueryFilterFunction()', async t => {
       gender : ContactGender.Unknown,
       id     : 'id2',
       name   : TEXT_TEXT,
-      type   : ContactType.Personal,
+      phone  : [],
+      type   : ContactType.Individual,
     },
     {
       alias  : TEXT_TEXT,
@@ -58,7 +60,8 @@ test('contactQueryFilterFunction()', async t => {
       gender : ContactGender.Unknown,
       id     : 'id3',
       name   : TEXT_REGEX,
-      type   : ContactType.Personal,
+      phone  : [],
+      type   : ContactType.Individual,
     },
     {
       alias  : TEXT_REGEX,
@@ -66,7 +69,8 @@ test('contactQueryFilterFunction()', async t => {
       gender : ContactGender.Unknown,
       id     : 'id4',
       name   : TEXT_TEXT,
-      type   : ContactType.Personal,
+      phone  : [],
+      type   : ContactType.Individual,
     },
   ]
 
@@ -283,7 +287,8 @@ test('reset event throttle for reset()', async t => {
   const sandbox = sinon.createSandbox()
 
   const timer = sandbox.useFakeTimers()
-  const reset = sandbox.stub(puppet, 'reset')
+  const reset = sandbox.stub(puppet as any, 'reset')
+  await puppet.start()
 
   puppet.emit('reset', { data: 'testing' })
   t.equal(reset.callCount, 1, 'should call reset() immediately')

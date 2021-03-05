@@ -13,19 +13,19 @@ import {
   RoomMemberPayload,
   RoomQueryFilter,
   ContactQueryFilter,
-}             from '../../../src/'
+}                           from '../../../src/mod'
 
 /**
  * expose to public for internal methods:
  */
 import { MessagePayloadFilterFunction } from '../../../src/schemas/message'
-import { RoomPayloadFilterFunction } from '../../../src/schemas/room'
+import { RoomPayloadFilterFunction }    from '../../../src/schemas/room'
 import { ContactPayloadFilterFunction } from '../../../src/schemas/contact'
 
 export class PuppetTest extends Puppet {
 
-  public async start () : Promise<void> { return {} as any }
-  public async stop ()  : Promise<void> { return {} as any }
+  public async start () : Promise<void> { return super.start() }
+  public async stop ()  : Promise<void> { return super.stop() }
 
   public async ding (data?: string)   : Promise<void> { return data as any as void }
   public async logout () : Promise<void> { return {} as any }
@@ -63,7 +63,13 @@ export class PuppetTest extends Puppet {
   public async contactAvatar (contactId: string, file: FileBox)  : Promise<void>
   public async contactAvatar (contactId: string, file?: FileBox) : Promise<void | FileBox> { return { contactId, file } as any }
 
+  public async contactPhone (contactId: string, phoneList: string[]): Promise<void> { return { contactId, phoneList } as any }
+
   public async contactList ()                    : Promise<string[]> { return {} as any }
+
+  public async contactCorporationRemark (contactId: string, corporationRemark: string | null) : Promise<void> { return { contactId, corporationRemark } as any }
+
+  public async contactDescription (contactId: string, description: string | null): Promise<void> { return { contactId, description } as any }
 
   public async contactRawPayload (id: string)            : Promise<any> { return { id } as any }
   public async contactRawPayloadParser (rawPayload: any) : Promise<ContactPayload> { return { rawPayload } as any }
@@ -164,9 +170,19 @@ export class PuppetTest extends Puppet {
     return super.contactQueryFilterFactory(query)
   }
 
-  public reset (reason: string): void {
-    return super.reset(reason)
-  }
+  /**
+   * FIXME: Huan(202008)
+   *  this method has overwrite the super.reset() without any functionality
+   *  need to change to super.reset()
+   *  however, we need to solve
+   *    `error TS1034: 'super' must be followed by an argument list or member access.`
+   *  first.
+   *
+   */
+  // private reset (reason: string): void {
+  //   // return super.reset(reason)
+  //   void reason
+  // }
 
 }
 
