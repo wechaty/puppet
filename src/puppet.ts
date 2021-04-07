@@ -796,6 +796,13 @@ export abstract class Puppet extends PuppetEventEmitter {
 
   /**
    *
+   * Conversation
+   *
+   */
+  abstract conversationRead (conversationId: string) : Promise<void>
+
+  /**
+   *
    * Message
    *
    */
@@ -813,7 +820,6 @@ export abstract class Puppet extends PuppetEventEmitter {
   abstract messageSendUrl         (conversationId: string, urlLinkPayload: UrlLinkPayload)         : Promise<void | string>
 
   abstract messageRecall (messageId: string) : Promise<boolean>
-  abstract messageRead (conversationId: string) : Promise<void>
 
   protected abstract messageRawPayload (messageId: string)     : Promise<any>
   protected abstract messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload>

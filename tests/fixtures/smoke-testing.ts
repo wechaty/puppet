@@ -116,7 +116,7 @@ class PuppetTest extends Puppet {
   public async messageSendMiniProgram (to: string, miniProgramPayload: MiniProgramPayload) : Promise<void> { return { miniProgramPayload, to } as any }
 
   public async messageRecall (messageId: string) : Promise<boolean> { void messageId; return true }
-  public async messageRead (conversationId: string) : Promise<void> { void conversationId }
+  public async conversationRead (conversationId: string) : Promise<void> { void conversationId }
 
   public async messageRawPayload (id: string)            : Promise<any> { return { id } as any }
   public async messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload> { return { rawPayload } as any }
