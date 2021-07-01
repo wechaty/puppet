@@ -1,6 +1,6 @@
 export enum RoomType {
   UNKNOWN = 0,
-  INNER = 1,
+  INTERNAL = 1,
   EXTERNAL = 2,
 }
 
