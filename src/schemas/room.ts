@@ -1,7 +1,7 @@
 export enum RoomType {
-  UNKNOWN = 0,
-  INTERNAL = 1,
-  EXTERNAL = 2,
+  Unknown = 0,
+  Internal = 1,
+  External = 2,
 }
 
 export interface RoomMemberQueryFilter {
