@@ -33,6 +33,12 @@ import {
   FileBox,
   MemoryCard,
   log,
+  CONTACT_CACHE_SIZE,
+  FRIENDSHIP_CACHE_SIZE,
+  MESSAGE_CACHE_SIZE,
+  ROOM_CACHE_SIZE,
+  ROOM_INVITATION_CACHE_SIZE,
+  ROOM_MEMBER_CACHE_SIZE,
 }                       from './config'
 
 import {
@@ -170,14 +176,14 @@ export abstract class Puppet extends PuppetEventEmitter {
     /**
      * 3. Setup LRU Caches
      */
-    const lruOptions = (maxSize = 100): QuickLruOptions<any, any> => ({ maxSize })
+    const lruOptions = (maxSize = '100'): QuickLruOptions<any, any> => ({ maxSize: Number(maxSize) })
 
-    this.cacheContactPayload        = new QuickLru<string, ContactPayload>(lruOptions(3000))
-    this.cacheFriendshipPayload     = new QuickLru<string, FriendshipPayload>(lruOptions(100))
-    this.cacheMessagePayload        = new QuickLru<string, MessagePayload>(lruOptions(500))
-    this.cacheRoomPayload           = new QuickLru<string, RoomPayload>(lruOptions(500))
-    this.cacheRoomInvitationPayload = new QuickLru<string, RoomInvitationPayload>(lruOptions(100))
-    this.cacheRoomMemberPayload     = new QuickLru<string, RoomMemberPayload>(lruOptions(60 * 500))
+    this.cacheContactPayload        = new QuickLru<string, ContactPayload>(lruOptions(CONTACT_CACHE_SIZE))
+    this.cacheFriendshipPayload     = new QuickLru<string, FriendshipPayload>(lruOptions(FRIENDSHIP_CACHE_SIZE))
+    this.cacheMessagePayload        = new QuickLru<string, MessagePayload>(lruOptions(MESSAGE_CACHE_SIZE))
+    this.cacheRoomPayload           = new QuickLru<string, RoomPayload>(lruOptions(ROOM_CACHE_SIZE))
+    this.cacheRoomInvitationPayload = new QuickLru<string, RoomInvitationPayload>(lruOptions(ROOM_INVITATION_CACHE_SIZE))
+    this.cacheRoomMemberPayload     = new QuickLru<string, RoomMemberPayload>(lruOptions(ROOM_MEMBER_CACHE_SIZE))
 
     /**
      * 4. Load the package.json for Puppet Plugin version range matching
