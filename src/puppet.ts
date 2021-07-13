@@ -33,12 +33,12 @@ import {
   FileBox,
   MemoryCard,
   log,
-  CONTACT_CACHE_SIZE,
-  FRIENDSHIP_CACHE_SIZE,
-  MESSAGE_CACHE_SIZE,
-  ROOM_CACHE_SIZE,
-  ROOM_INVITATION_CACHE_SIZE,
-  ROOM_MEMBER_CACHE_SIZE,
+  WECHATY_PUPPET_LRU_CACHE_SIZE_CONTACT,
+  WECHATY_PUPPET_LRU_CACHE_SIZE_FRIENDSHIP,
+  WECHATY_PUPPET_LRU_CACHE_SIZE_MESSAGE,
+  WECHATY_PUPPET_LRU_CACHE_SIZE_ROOM,
+  WECHATY_PUPPET_LRU_CACHE_SIZE_ROOM_INVITATION,
+  WECHATY_PUPPET_LRU_CACHE_SIZE_ROOM_MEMBER,
 }                       from './config'
 
 import {
@@ -178,12 +178,12 @@ export abstract class Puppet extends PuppetEventEmitter {
      */
     const lruOptions = (maxSize = '100'): QuickLruOptions<any, any> => ({ maxSize: Number(maxSize) })
 
-    this.cacheContactPayload        = new QuickLru<string, ContactPayload>(lruOptions(CONTACT_CACHE_SIZE))
-    this.cacheFriendshipPayload     = new QuickLru<string, FriendshipPayload>(lruOptions(FRIENDSHIP_CACHE_SIZE))
-    this.cacheMessagePayload        = new QuickLru<string, MessagePayload>(lruOptions(MESSAGE_CACHE_SIZE))
-    this.cacheRoomPayload           = new QuickLru<string, RoomPayload>(lruOptions(ROOM_CACHE_SIZE))
-    this.cacheRoomInvitationPayload = new QuickLru<string, RoomInvitationPayload>(lruOptions(ROOM_INVITATION_CACHE_SIZE))
-    this.cacheRoomMemberPayload     = new QuickLru<string, RoomMemberPayload>(lruOptions(ROOM_MEMBER_CACHE_SIZE))
+    this.cacheContactPayload        = new QuickLru<string, ContactPayload>(lruOptions(WECHATY_PUPPET_LRU_CACHE_SIZE_CONTACT))
+    this.cacheFriendshipPayload     = new QuickLru<string, FriendshipPayload>(lruOptions(WECHATY_PUPPET_LRU_CACHE_SIZE_FRIENDSHIP))
+    this.cacheMessagePayload        = new QuickLru<string, MessagePayload>(lruOptions(WECHATY_PUPPET_LRU_CACHE_SIZE_MESSAGE))
+    this.cacheRoomPayload           = new QuickLru<string, RoomPayload>(lruOptions(WECHATY_PUPPET_LRU_CACHE_SIZE_ROOM))
+    this.cacheRoomInvitationPayload = new QuickLru<string, RoomInvitationPayload>(lruOptions(WECHATY_PUPPET_LRU_CACHE_SIZE_ROOM_INVITATION))
+    this.cacheRoomMemberPayload     = new QuickLru<string, RoomMemberPayload>(lruOptions(WECHATY_PUPPET_LRU_CACHE_SIZE_ROOM_MEMBER))
 
     /**
      * 4. Load the package.json for Puppet Plugin version range matching
