@@ -1,9 +1,3 @@
-export enum RoomType {
-  Unknown = 0,
-  Internal = 1,
-  External = 2,
-}
-
 export interface RoomMemberQueryFilter {
   name?         : string,
   roomAlias?    : string,
@@ -23,7 +17,7 @@ export interface RoomPayload {
   memberIdList : string[],
   ownerId?     : string,
   adminIdList  : string[],
-  type?        : RoomType,
+  external?    : boolean,
 }
 
 export interface RoomMemberPayload {
