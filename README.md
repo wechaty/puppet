@@ -103,7 +103,6 @@ Set the max size for wechaty entities in LRU Cache.
 | `WECHATY_PUPPET_LRU_CACHE_SIZE_ROOM` | The max cache size for room, default value `500` |
 | `WECHATY_PUPPET_LRU_CACHE_SIZE_ROOM_INVITATION` | The max cache size for room invitation, default value `100` |
 | `WECHATY_PUPPET_LRU_CACHE_SIZE_ROOM_MEMBER` | The max cache size for room member, default value `30000` |
-```
 
 ## Resources
 
