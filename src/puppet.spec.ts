@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env node --loader ts-node/esm
 
 import {
   test,
@@ -7,28 +7,28 @@ import {
 
 import {
   MemoryCard,
-}                 from './config'
+}                 from './config.js'
 
 import {
   ContactGender,
   ContactPayload,
   ContactType,
-}                                 from './schemas/contact'
+}                                 from './schemas/contact.js'
 import {
   MessagePayload,
   MessageQueryFilter,
   MessageType,
-}                                 from './schemas/message'
+}                                 from './schemas/message.js'
 import {
   RoomPayload,
-}                                 from './schemas/room'
+}                                 from './schemas/room.js'
 
 /**
  * The Fixture
  */
 import {
   PuppetTest,
-}               from '../tests/fixtures/puppet-test/puppet-test'
+}               from '../tests/fixtures/puppet-test/puppet-test.js'
 
 test('contactQueryFilterFunction()', async t => {
 
