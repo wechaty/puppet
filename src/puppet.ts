@@ -34,54 +34,54 @@ import {
   MemoryCard,
   log,
   envVars,
-}                       from './config'
+}                       from './config.js'
 
 import {
   ContactPayload,
   ContactPayloadFilterFunction,
   ContactQueryFilter,
-}                                 from './schemas/contact'
+}                                 from './schemas/contact.js'
 import {
   EventLoginPayload,
-}                                 from './schemas/event'
+}                                 from './schemas/event.js'
 import {
   FriendshipAddOptions,
   FriendshipPayload,
   FriendshipSearchQueryFilter,
-}                                 from './schemas/friendship'
+}                                 from './schemas/friendship.js'
 import {
   ImageType,
-}                                 from './schemas/image'
+}                                 from './schemas/image.js'
 import {
   MessagePayload,
   MessagePayloadFilterFunction,
   MessageQueryFilter,
   MessageType,
-}                                 from './schemas/message'
+}                                 from './schemas/message.js'
 import {
   RoomMemberPayload,
   RoomMemberQueryFilter,
   RoomPayload,
   RoomPayloadFilterFunction,
   RoomQueryFilter,
-}                                 from './schemas/room'
+}                                 from './schemas/room.js'
 import {
   RoomInvitationPayload,
-}                                 from './schemas/room-invitation'
+}                                 from './schemas/room-invitation.js'
 import {
   UrlLinkPayload,
-}                                 from './schemas/url-link'
+}                                 from './schemas/url-link.js'
 import {
   MiniProgramPayload,
-}                                 from './schemas/mini-program'
+}                                 from './schemas/mini-program.js'
 import {
   PuppetOptions,
   YOU,
-}                                 from './schemas/puppet'
-import { PayloadType }             from './schemas/payload'
+}                                 from './schemas/puppet.js'
+import { PayloadType }             from './schemas/payload.js'
 
-import { PuppetEventEmitter }      from './events'
-import { VERSION }                 from './version'
+import { PuppetEventEmitter }      from './events.js'
+import { VERSION }                 from './version.js'
 
 const DEFAULT_WATCHDOG_TIMEOUT = 60
 let   PUPPET_COUNTER           = 0
