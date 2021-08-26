@@ -13,15 +13,15 @@ import {
   RoomMemberPayload,
   RoomQueryFilter,
   ContactQueryFilter,
-}                           from '../../../src/mod'
+}                           from '../../../src/mod.js'
 
 /**
  * expose to public for internal methods:
  */
-import { MessagePayloadFilterFunction } from '../../../src/schemas/message'
-import { RoomPayloadFilterFunction }    from '../../../src/schemas/room'
-import { ContactPayloadFilterFunction } from '../../../src/schemas/contact'
-import { FriendshipAddOptions } from '../../../src/schemas/friendship'
+import { MessagePayloadFilterFunction } from '../../../src/schemas/message.js'
+import { RoomPayloadFilterFunction }    from '../../../src/schemas/room.js'
+import { ContactPayloadFilterFunction } from '../../../src/schemas/contact.js'
+import { FriendshipAddOptions } from '../../../src/schemas/friendship.js'
 
 export class PuppetTest extends Puppet {
 
@@ -186,11 +186,13 @@ export class PuppetTest extends Puppet {
    *    `error TS1034: 'super' must be followed by an argument list or member access.`
    *  first.
    *
+   * Update:
+   *  - Huan(202108): uncommented the below code
+   *      and change `reset` from private to protected in parent class
    */
-  // private reset (reason: string): void {
-  //   // return super.reset(reason)
-  //   void reason
-  // }
+  protected override reset (reason: string): void {
+    return super.reset(reason)
+  }
 
 }
 

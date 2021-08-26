@@ -320,7 +320,7 @@ export abstract class Puppet extends PuppetEventEmitter {
    *
    * Huan(202008): Update from protected to private
    */
-  private reset (reason: string): void {
+  protected reset (reason: string): void {
     log.verbose('Puppet', 'reset(%s)', reason)
 
     /**

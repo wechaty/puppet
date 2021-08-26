@@ -2,8 +2,6 @@
   "name": "wechaty-puppet",
   "version": "0.43.1",
   "description": "Abstract Puppet for Wechaty",
-  "main": "./dist/cjs/src/mod.js",
-  "typings": "./dist/esm/src/mod.d.ts",
   "type": "module",
   "exports": {
     ".": {
@@ -11,6 +9,7 @@
       "require": "./dist/cjs/src/mod.js"
     }
   },
+  "typings": "./dist/esm/src/mod.d.ts",
   "engines": {
     "node": ">=14",
     "wechaty": ">=0.62"
@@ -63,7 +62,7 @@
   "dependencies": {
     "brolog": "^1.12.4",
     "clone-class": "^0.6.20",
-    "file-box": "^0.16.8",
+    "file-box": "^0.17.8",
     "hot-import": "^0.2.14",
     "memory-card": "^0.12.2",
     "normalize-package-data": "^3.0.2",
@@ -72,7 +71,7 @@
     "rx-queue": "^0.12.4",
     "rxjs": "^7.3.0",
     "semver": "^7.3.5",
-    "state-switch": "^0.15.8",
+    "state-switch": "^0.15.10",
     "typed-emitter": "^1.3.1",
     "watchdog": "^0.8.17"
   },
