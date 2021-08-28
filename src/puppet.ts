@@ -18,7 +18,7 @@
  */
 import QuickLru, {
   Options as QuickLruOptions,
-}                             from 'quick-lru'
+}                             from '@alloc/quick-lru'
 
 import { Watchdog }       from 'watchdog'
 import { Constructor }    from 'clone-class'
@@ -175,7 +175,7 @@ export abstract class Puppet extends PuppetEventEmitter {
      * 3. Setup LRU Caches
      */
     const lruOptions = (maxSize = 100): QuickLruOptions<any, any> => ({
-      // maxAge: 60 * 60 * 1000 * 1000, // 1 hour
+      maxAge: 15 * 60 * 1000 * 1000, // 15 minutes
       maxSize: maxSize,
     })
 
