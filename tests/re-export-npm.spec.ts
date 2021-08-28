@@ -1,4 +1,4 @@
-#!/usr/bin/env node --loader ts-node/esm
+#!/usr/bin/env node --no-warnings --loader ts-node/esm
 
 import { test }  from 'tstest'
 
@@ -9,7 +9,7 @@ import {
 }                 from '../src/mod.js'
 
 test('Re-export helper modules', async t => {
-  t.true(FileBox,     'should re-export FileBox')
-  t.true(MemoryCard,  'should re-export MemoryCard')
-  t.true(StateSwitch, 'should re-export StateSwitch')
+  t.ok(FileBox,     'should re-export FileBox')
+  t.ok(MemoryCard,  'should re-export MemoryCard')
+  t.ok(StateSwitch, 'should re-export StateSwitch')
 })

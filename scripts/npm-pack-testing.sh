@@ -13,23 +13,22 @@ cd $TMPDIR
 
 npm init -y
 npm install *-*.*.*.tgz \
-  @types/quick-lru \
   @types/node \
-  @types/normalize-package-data \
   typescript@latest
 
 #
 # CommonJS
 #
 ./node_modules/.bin/tsc \
+  --target es5 \
+  --module CommonJS \
+  \
+  --moduleResolution node \
   --esModuleInterop \
   --lib esnext \
   --noEmitOnError \
   --noImplicitAny \
   --skipLibCheck \
-  --target es5 \
-  --module CommonJS \
-  --moduleResolution node \
   smoke-testing.ts
 
 echo
@@ -44,14 +43,15 @@ node smoke-testing.js
 echo "`jq '.type="module"' package.json`" > package.json
 
 ./node_modules/.bin/tsc \
+  --target es2020 \
+  --module es2020 \
+  \
+  --moduleResolution node \
   --esModuleInterop \
   --lib esnext \
   --noEmitOnError \
   --noImplicitAny \
   --skipLibCheck \
-  --target es2020 \
-  --module es2020 \
-  --moduleResolution node \
   smoke-testing.ts
 
 echo

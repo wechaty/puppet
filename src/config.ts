@@ -3,7 +3,7 @@ import { FileBox } from 'file-box'
 import { MemoryCard } from 'memory-card'
 import { StateSwitch } from 'state-switch'
 
-import { VERSION } from './version.js'
+import { packageJson } from './package-json.js'
 
 import * as envVars from './env-vars.js'
 
@@ -12,6 +12,8 @@ if (logLevel) {
   log.level(logLevel.toLowerCase() as any)
   log.silly('Puppet', 'Config: WECHATY_LOG set level to %s', logLevel)
 }
+
+const VERSION = packageJson.version || '0.0.0'
 
 export {
   log,

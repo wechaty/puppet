@@ -1,4 +1,4 @@
-#!/usr/bin/env node --loader ts-node/esm
+#!/usr/bin/env node --no-warnings --loader ts-node/esm
 
 import { test }  from 'tstest'
 import {
@@ -50,5 +50,5 @@ test('RxJS: fromEvent type inference', async t => {
 
   const result = await future
   expectType<EventScanPayload>(result)
-  t.deepEqual(result, payload, 'should get scan payload')
+  t.same(result, payload, 'should get scan payload')
 })

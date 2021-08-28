@@ -23,7 +23,15 @@ import { RoomPayloadFilterFunction }    from '../../../src/schemas/room.js'
 import { ContactPayloadFilterFunction } from '../../../src/schemas/contact.js'
 import { FriendshipAddOptions } from '../../../src/schemas/friendship.js'
 
-export class PuppetTest extends Puppet {
+class PuppetTest extends Puppet {
+
+  override name () {
+    return 'puppet-test'
+  }
+
+  override version () {
+    return '1.0.0'
+  }
 
   override async start () : Promise<void> { return super.start() }
   override async stop ()  : Promise<void> { return super.stop() }
@@ -137,7 +145,7 @@ export class PuppetTest extends Puppet {
   override async roomAnnounce (roomId: string, text: string)  : Promise<void>
   override async roomAnnounce (roomId: string, text?: string) : Promise<void | string> { return { roomId, text } as any }
 
-  override async roomAdd (roomId: string, contactId: string, inviteOnly?: boolean) : Promise<void> { return { contactId, roomId, inviteOnly } as any }
+  override async roomAdd (roomId: string, contactId: string, inviteOnly?: boolean) : Promise<void> { return { contactId, inviteOnly, roomId } as any }
   override async roomAvatar (roomId: string)                                       : Promise<FileBox> { return { roomId } as any }
   override async roomCreate (contactIdList: string[], topic?: string)              : Promise<string> { return { contactIdList, topic } as any }
   override async roomDel (roomId: string, contactId: string)                       : Promise<void> { return { contactId, roomId } as any }
@@ -196,4 +204,7 @@ export class PuppetTest extends Puppet {
 
 }
 
+export {
+  PuppetTest,
+}
 export default PuppetTest

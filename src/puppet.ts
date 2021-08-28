@@ -24,17 +24,19 @@ import { Watchdog }       from 'watchdog'
 import { Constructor }    from 'clone-class'
 import { StateSwitch }    from 'state-switch'
 import { ThrottleQueue }  from 'rx-queue'
-import { callerResolve }  from 'hot-import'
+// import { callerResolve }  from 'hot-import'
 
-import normalize               from 'normalize-package-data'
-import readPkgUp               from 'read-pkg-up'
+// import normalize               from 'normalize-package-data'
+// import readPkgUp               from 'read-pkg-up'
 
 import {
-  FileBox,
-  MemoryCard,
-  log,
   envVars,
+  FileBox,
+  log,
+  MemoryCard,
+  VERSION,
 }                       from './config.js'
+import { packageJson }  from './package-json.js'
 
 import {
   ContactPayload,
@@ -81,7 +83,6 @@ import {
 import { PayloadType }             from './schemas/payload.js'
 
 import { PuppetEventEmitter }      from './events.js'
-import { VERSION }                 from './version.js'
 
 const DEFAULT_WATCHDOG_TIMEOUT = 60
 let   PUPPET_COUNTER           = 0
@@ -122,7 +123,8 @@ export abstract class Puppet extends PuppetEventEmitter {
   /**
    * childPkg stores the `package.json` that the NPM module who extends the `Puppet`
    */
-  private readonly childPkg: normalize.Package
+  // Huan(202108): Remove this property, because it the `hot-import` module is not a ESM compatible one
+  // private readonly childPkg: normalize.Package
 
   /**
    * Throttle Reset Events
@@ -196,27 +198,32 @@ export abstract class Puppet extends PuppetEventEmitter {
       envVars.WECHATY_PUPPET_LRU_CACHE_SIZE_ROOM(options.lruCacheSize?.room)),
     )
 
-    /**
-     * 4. Load the package.json for Puppet Plugin version range matching
-     *
-     * For: dist/src/puppet/puppet.ts
-     *  We need to up 3 times: ../../../package.json
-     */
-    try {
-      const childClassPath = callerResolve('.', __filename)
-      log.verbose('Puppet', 'constructor() childClassPath=%s', childClassPath)
+    {
+      /* eslint  no-lone-blocks: off */
+      // Huan(202108): remove this code block because it's unclear what it does
 
-      this.childPkg = readPkgUp.sync({ cwd: childClassPath })!.packageJson
-    } catch (e) {
-      log.error('Puppet', 'constructor() %s', e)
-      throw e
+      /**
+       * 4. Load the package.json for Puppet Plugin version range matching
+       *
+       * For: dist/src/puppet/puppet.ts
+       *  We need to up 3 times: ../../../package.json
+       */
+      // try {
+      //   const childClassPath = callerResolve('.', __filename)
+      //   log.verbose('Puppet', 'constructor() childClassPath=%s', childClassPath)
+
+      //   this.childPkg = readPkgUp.readPackageUpSync({ cwd: childClassPath })!.packageJson
+      // } catch (e) {
+      //   log.error('Puppet', 'constructor() %s', e)
+      //   throw e
+      // }
+
+      // if (!this.childPkg) {
+      //   throw new Error('Cannot found package.json for Puppet Plugin Module')
+      // }
+
+      // normalize(this.childPkg)
     }
-
-    if (!this.childPkg) {
-      throw new Error('Cannot found package.json for Puppet Plugin Module')
-    }
-
-    normalize(this.childPkg)
 
     this.feedDog = this.feedDog.bind(this)
     this.dogReset = this.dogReset.bind(this)
@@ -428,15 +435,18 @@ export abstract class Puppet extends PuppetEventEmitter {
   /**
    * Get the NPM name of the Puppet
    */
-  name () {
-    return this.childPkg.name
+  name (): string {
+    if (!packageJson.name) {
+      throw new Error('packageJson.name is undefined')
+    }
+    return packageJson.name
   }
 
   /**
    * Get version from the Puppet Implementation
    */
   version (): string {
-    return this.childPkg.version
+    return VERSION
   }
 
   /**
@@ -586,7 +596,7 @@ export abstract class Puppet extends PuppetEventEmitter {
         }
 
       } catch (e) {
-        log.silly('Puppet', 'contactSearch() contactPayload exception: %s', e.message)
+        log.silly('Puppet', 'contactSearch() contactPayload exception: %s', (e as Error).message)
         await this.dirtyPayloadContact(id)
       }
       return undefined
@@ -1157,7 +1167,7 @@ export abstract class Puppet extends PuppetEventEmitter {
               return await this.roomPayload(id)
             } catch (e) {
               // compatible with {} payload
-              log.silly('Puppet', 'roomSearch() roomPayload exception: %s', e.message)
+              log.silly('Puppet', 'roomSearch() roomPayload exception: %s', (e as Error).message)
               // Remove invalid room id from cache to avoid getting invalid room payload again
               await this.dirtyPayloadRoom(id)
               await this.dirtyPayloadRoomMember(id)
