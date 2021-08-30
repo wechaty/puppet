@@ -6,7 +6,7 @@ export interface MomentPayload {
   content?: string,
   urlLink?: UrlLinkPayload,
   images?: FileBox[],
-  momentId: string,
+  id: string,
   createTime: number,
   updateTime: number,
 }
