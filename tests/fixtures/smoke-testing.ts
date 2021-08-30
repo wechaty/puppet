@@ -11,6 +11,7 @@ import {
 
   FriendshipPayload,
   MessagePayload,
+  MomentPayload,
   ImageType,
 
   Puppet,
@@ -53,6 +54,26 @@ class PuppetTest extends Puppet {
   override async tagContactRemove (id: string, contactId: string) : Promise<void> { return void { contactId, id } }
   override async tagContactDelete (id: string) : Promise<void> { return void { id } }
   override async tagContactList (contactId?: string) : Promise<string[]> { return [contactId || ''] }
+
+  /**
+   *
+   * Moment
+   *
+   */
+   override async momentSignature (signature?: string): Promise<boolean | string> { return { signature } as any }
+   override async momentCoverage (image: FileBox): Promise<boolean> { return { image } as any }
+   override async postTextMoment (content: string, visibleList?: string[]): Promise<string> { return { content, visibleList } as any }
+   override async postLinkMoment (urlLinkPayload: UrlLinkPayload, content?: string): Promise<string> { return { urlLinkPayload, content } as any }
+   override async postImageMoment (images: FileBox[], content?: string): Promise<string> { return { images, content } as any }
+
+   override async momentPayload (id: string): Promise<MomentPayload> { return { id } as any }
+
+   override async momentList (): Promise<string[]> { return {} as any }
+   override async revokeMoment (id: string): Promise<boolean> { return { id } as any }
+   override async likeMoment (id: string): Promise<boolean> { return { id } as any }
+   override async revokeLikeMoment (id: string): Promise<boolean> { return { id } as any }
+   override async commentMoment (id: string, comment: string): Promise<boolean> { return { id, comment } as any }
+   override async revokeCommentMoment (id: string): Promise<boolean> { return { id } as any }
 
   /**
    *
