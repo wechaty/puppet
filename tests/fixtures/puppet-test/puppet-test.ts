@@ -22,6 +22,7 @@ import { MessagePayloadFilterFunction } from '../../../src/schemas/message.js'
 import { RoomPayloadFilterFunction }    from '../../../src/schemas/room.js'
 import { ContactPayloadFilterFunction } from '../../../src/schemas/contact.js'
 import { FriendshipAddOptions } from '../../../src/schemas/friendship.js'
+import { MomentPayload } from '../../../src/schemas/moment.js'
 
 class PuppetTest extends Puppet {
 
@@ -58,6 +59,26 @@ class PuppetTest extends Puppet {
   override async tagContactRemove (tagId: string, contactId: string) : Promise<void> { void { contactId, tagId } }
   override async tagContactDelete (tagId: string) : Promise<void> { void { tagId } }
   override async tagContactList (contactId?: string) : Promise<string[]> { return [contactId || ''] }
+
+  /**
+   *
+   * Moment
+   *
+   */
+  override async momentSignature (signature?: string): Promise<boolean | string> { return { signature } as any }
+  override async momentCoverage (image: FileBox): Promise<boolean> { return { image } as any }
+  override async postTextMoment (content: string, visibleList?: string[]): Promise<string> { return { content, visibleList } as any }
+  override async postLinkMoment (urlLinkPayload: UrlLinkPayload, content?: string): Promise<string> { return { urlLinkPayload, content } as any }
+  override async postImageMoment (images: FileBox[], content?: string): Promise<string> { return { images, content } as any }
+
+  override async momentPayload (id: string): Promise<MomentPayload> { return { id } as any }
+
+  override async momentList (): Promise<string[]> { return {} as any }
+  override async revokeMoment (id: string): Promise<boolean> { return { id } as any }
+  override async likeMoment (id: string): Promise<boolean> { return { id } as any }
+  override async revokeLikeMoment (id: string): Promise<boolean> { return { id } as any }
+  override async commentMoment (id: string, comment: string): Promise<boolean> { return { id, comment } as any }
+  override async revokeCommentMoment (id: string): Promise<boolean> { return { id } as any }
 
   /**
    *
