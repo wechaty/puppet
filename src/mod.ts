@@ -74,6 +74,9 @@ export {
 export {
   MiniProgramPayload,
 }                             from './schemas/mini-program.js'
+export {
+  MomentPayload,
+}                             from './schemas/moment.js'
 
 export {
   throwUnsupportedError,
