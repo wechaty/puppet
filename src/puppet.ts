@@ -523,8 +523,8 @@ export abstract class Puppet extends PuppetEventEmitter {
   abstract revokeMoment (id: string)                                         : Promise<boolean>
   abstract likeMoment (id: string)                                           : Promise<boolean>
   abstract revokeLikeMoment (id: string)                                     : Promise<boolean>
-  abstract commentMoment (id: string, comment: string)                       : Promise<boolean>
-  abstract revokeCommentMoment (id: string)                                  : Promise<boolean>
+  abstract commentMoment (id: string, comment: string, commentId?: string)   : Promise<string>
+  abstract revokeCommentMoment (commentId: string)                           : Promise<boolean>
 
   /**
    *

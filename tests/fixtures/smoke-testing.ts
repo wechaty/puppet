@@ -72,8 +72,8 @@ class PuppetTest extends Puppet {
    override async revokeMoment (id: string): Promise<boolean> { return { id } as any }
    override async likeMoment (id: string): Promise<boolean> { return { id } as any }
    override async revokeLikeMoment (id: string): Promise<boolean> { return { id } as any }
-   override async commentMoment (id: string, comment: string): Promise<boolean> { return { id, comment } as any }
-   override async revokeCommentMoment (id: string): Promise<boolean> { return { id } as any }
+   override async commentMoment (id: string, comment: string, commentId?: string): Promise<string> { return { id, comment, commentId } as any }
+   override async revokeCommentMoment (commentId: string): Promise<boolean> { return { commentId } as any }
 
   /**
    *
