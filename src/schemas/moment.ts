@@ -10,3 +10,9 @@ export interface MomentPayload {
   createTime: number,
   updateTime: number,
 }
+
+export interface MomentListOption {
+  authorId?: string,
+  momentId?: string,
+  page?: number,
+}

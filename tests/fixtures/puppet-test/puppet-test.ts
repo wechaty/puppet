@@ -22,7 +22,7 @@ import { MessagePayloadFilterFunction } from '../../../src/schemas/message.js'
 import { RoomPayloadFilterFunction }    from '../../../src/schemas/room.js'
 import { ContactPayloadFilterFunction } from '../../../src/schemas/contact.js'
 import { FriendshipAddOptions } from '../../../src/schemas/friendship.js'
-import { MomentPayload } from '../../../src/schemas/moment.js'
+import { MomentListOption, MomentPayload } from '../../../src/schemas/moment.js'
 
 class PuppetTest extends Puppet {
 
@@ -73,7 +73,7 @@ class PuppetTest extends Puppet {
 
   override async momentPayload (id: string): Promise<MomentPayload> { return { id } as any }
 
-  override async momentList (): Promise<string[]> { return {} as any }
+  override async momentList (option?: MomentListOption): Promise<string[]> { return { option } as any }
   override async revokeMoment (id: string): Promise<boolean> { return { id } as any }
   override async likeMoment (id: string): Promise<boolean> { return { id } as any }
   override async revokeLikeMoment (id: string): Promise<boolean> { return { id } as any }

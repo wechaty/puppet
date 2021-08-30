@@ -81,7 +81,7 @@ import {
   YOU,
 }                                 from './schemas/puppet.js'
 import { PayloadType }             from './schemas/payload.js'
-import { MomentPayload } from './schemas/moment.js'
+import { MomentListOption, MomentPayload } from './schemas/moment.js'
 
 import { PuppetEventEmitter }      from './events.js'
 
@@ -519,7 +519,7 @@ export abstract class Puppet extends PuppetEventEmitter {
 
   abstract momentPayload (id: string)                                        : Promise<MomentPayload>
 
-  abstract momentList ()                                                     : Promise<string[]>
+  abstract momentList (option?: MomentListOption)                            : Promise<string[]>
   abstract revokeMoment (id: string)                                         : Promise<boolean>
   abstract likeMoment (id: string)                                           : Promise<boolean>
   abstract revokeLikeMoment (id: string)                                     : Promise<boolean>

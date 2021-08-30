@@ -76,6 +76,7 @@ export {
 }                             from './schemas/mini-program.js'
 export {
   MomentPayload,
+  MomentListOption,
 }                             from './schemas/moment.js'
 
 export {
