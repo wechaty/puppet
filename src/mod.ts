@@ -74,6 +74,9 @@ export {
 export {
   MiniProgramPayload,
 }                             from './schemas/mini-program.js'
+export {
+  ChannelsPayload,
+}                             from './schemas/channels.js'
 
 export {
   throwUnsupportedError,
