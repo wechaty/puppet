@@ -81,6 +81,7 @@ import {
   YOU,
 }                                 from './schemas/puppet.js'
 import { PayloadType }             from './schemas/payload.js'
+import { MomentPayload } from './schemas/moment.js'
 
 import { PuppetEventEmitter }      from './events.js'
 
@@ -504,6 +505,26 @@ export abstract class Puppet extends PuppetEventEmitter {
   abstract tagContactList (contactId: string)                  : Promise<string[]>
   abstract tagContactList ()                                   : Promise<string[]>
   abstract tagContactRemove (tagId: string, contactId: string) : Promise<void>
+
+  /**
+   *
+   * Moment
+   *
+   */
+  abstract momentSignature (signature?: string)                              : Promise<boolean | string>
+  abstract momentCoverage (image: FileBox)                                   : Promise<boolean>
+  abstract postTextMoment (content: string, visibleList?: string[])          : Promise<string>
+  abstract postLinkMoment (urlLinkPayload: UrlLinkPayload, content?: string) : Promise<string>
+  abstract postImageMoment (images: FileBox[], content?: string)             : Promise<string>
+
+  abstract momentPayload (id: string)                                        : Promise<MomentPayload>
+
+  abstract momentList ()                                                     : Promise<string[]>
+  abstract revokeMoment (id: string)                                         : Promise<boolean>
+  abstract likeMoment (id: string)                                           : Promise<boolean>
+  abstract revokeLikeMoment (id: string)                                     : Promise<boolean>
+  abstract commentMoment (id: string, comment: string)                       : Promise<boolean>
+  abstract revokeCommentMoment (id: string)                                  : Promise<boolean>
 
   /**
    *
