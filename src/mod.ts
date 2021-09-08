@@ -98,9 +98,9 @@ import type {
 import type {
   MiniProgramPayload,
 }                             from './schemas/mini-program.js'
-export {
-  ChannelsPayload,
-}                             from './schemas/channels.js'
+import type {
+  VideoPostPayload,
+}                             from './schemas/video-post.js'
 
 import type {
   PuppetOptions,
@@ -162,6 +162,7 @@ export type {
   RoomPayload,
   RoomQueryFilter,
   UrlLinkPayload,
+  VideoPostPayload,
 }
 
 export {
