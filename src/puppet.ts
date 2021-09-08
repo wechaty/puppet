@@ -82,9 +82,11 @@ import {
   PuppetOptions,
   YOU,
 }                                 from './schemas/puppet.js'
-import { PayloadType }             from './schemas/payload.js'
+import { PayloadType }            from './schemas/payload.js'
 
-import { PuppetEventEmitter }      from './events.js'
+import { PuppetEventEmitter }     from './events.js'
+import { ListOption }             from './schemas/list.js'
+import { CommentPayload }         from './schemas/comment.js'
 
 const DEFAULT_WATCHDOG_TIMEOUT = 60
 let   PUPPET_COUNTER           = 0
@@ -503,6 +505,25 @@ export abstract class Puppet extends PuppetEventEmitter {
   abstract tagContactList (contactId: string)                  : Promise<string[]>
   abstract tagContactList ()                                   : Promise<string[]>
   abstract tagContactRemove (tagId: string, contactId: string) : Promise<void>
+
+  /**
+   *
+   * Comment
+   *
+   */
+  abstract comment (messageId: string, content: string)         : Promise<CommentPayload>
+  abstract replyComment (commentId: string, content: string)    : Promise<CommentPayload>
+  abstract revokeComment (commentId: string)                    : Promise<boolean>
+  abstract listComments (messageId: string, option: ListOption) : Promise<boolean>
+
+  /**
+   *
+   * Like
+   *
+   */
+  abstract like (messageId: string)                             : Promise<boolean>
+  abstract cancel (messageId: string)                           : Promise<boolean>
+  abstract listLikes (messageId: string, option: ListOption) : Promise<boolean>
 
   /**
    *

@@ -23,6 +23,8 @@ import {
 
   UrlLinkPayload,
   MiniProgramPayload,
+  CommentPayload,
+  ListOption,
 
   VERSION,
 }                             from 'wechaty-puppet'
@@ -120,6 +122,26 @@ class PuppetTest extends Puppet {
    *
    */
   override async conversationReadMark (conversationId: string, hasRead?: boolean) : Promise<void | boolean> { void conversationId, void hasRead }
+
+  /**
+   *
+   * Comment
+   *
+   */
+  override async comment (messageId: string, content: string)         : Promise<CommentPayload> { return { messageId, content} as any }
+  override async replyComment (commentId: string, content: string)    : Promise<CommentPayload> { return { commentId, content} as any }
+  override async revokeComment (commentId: string)                    : Promise<boolean> { return { commentId } as any }
+  override async listComments (messageId: string, option: ListOption) : Promise<boolean> { return { messageId, option} as any }
+
+  /**
+   *
+   * Like
+   *
+   */
+  override async like (messageId: string)                          : Promise<boolean> { return { messageId } as any}
+  override async cancel (messageId: string)                        : Promise<boolean> { return { messageId } as any}
+  override async listLikes (messageId: string, option: ListOption) : Promise<boolean> { return { messageId, option } as any}
+
 
   /**
    *
