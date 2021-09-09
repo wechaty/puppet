@@ -78,6 +78,12 @@ import type {
 import type {
   MiniProgramPayload,
 }                                 from './schemas/mini-program.js'
+import type {
+  ListOption,
+}             from './schemas/list.js'
+import type {
+  CommentPayload,
+}         from './schemas/comment.js'
 import {
   PuppetOptions,
   YOU,
@@ -85,8 +91,6 @@ import {
 import { PayloadType }            from './schemas/payload.js'
 
 import { PuppetEventEmitter }     from './events.js'
-import { ListOption }             from './schemas/list.js'
-import { CommentPayload }         from './schemas/comment.js'
 
 const DEFAULT_WATCHDOG_TIMEOUT = 60
 let   PUPPET_COUNTER           = 0
