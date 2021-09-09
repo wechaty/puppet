@@ -101,6 +101,12 @@ import type {
 import type {
   VideoPostPayload,
 }                             from './schemas/video-post.js'
+import type {
+  CommentPayload,
+}                             from './schemas/comment.js'
+import type {
+  ListOption,
+}                             from './schemas/list.js'
 
 import type {
   PuppetOptions,
@@ -163,6 +169,8 @@ export type {
   RoomQueryFilter,
   UrlLinkPayload,
   VideoPostPayload,
+  CommentPayload,
+  ListOption,
 }
 
 export {
