@@ -23,6 +23,7 @@ import {
 
   UrlLinkPayload,
   MiniProgramPayload,
+  LocationPayload,
 
   VERSION,
 }                             from 'wechaty-puppet'
@@ -101,6 +102,7 @@ class PuppetTest extends Puppet {
   override async messageImage (messageId: string, imageType: ImageType) : Promise<FileBox> { return { imageType, messageId } as any }
   override async messageContact (messageId: string)  : Promise<string> { return { messageId } as any }
   override async messageMiniProgram (messageId: string)  : Promise<MiniProgramPayload> { return { messageId } as any }
+  override async messageLocation (messageId: string) : Promise<LocationPayload> { return { messageId } as any }
 
   override async messageForward (to: string, messageId: string)              : Promise<void | string> { return { messageId, to } as any }
   override async messageSendContact (receiver: string, contactId: string)    : Promise<void | string> { return { contactId, receiver } as any }
@@ -108,6 +110,7 @@ class PuppetTest extends Puppet {
   override async messageSendText (to: string, text: string)                  : Promise<void | string> { return { text, to } as any }
   override async messageSendUrl (to: string, urlLinkPayload: UrlLinkPayload) : Promise<void | string> { return { to, urlLinkPayload } as any }
   override async messageSendMiniProgram (to: string, miniProgramPayload: MiniProgramPayload) : Promise<void> { return { miniProgramPayload, to } as any }
+  override async messageSendLocation    (conversationId: string, locationPayload: LocationPayload)       : Promise<void | string> { return { conversationId, locationPayload } as any }
 
   override async messageRecall (messageId: string) : Promise<boolean> { void messageId; return true }
 
