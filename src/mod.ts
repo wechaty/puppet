@@ -98,7 +98,7 @@ import type {
 import type {
   MiniProgramPayload,
 }                             from './schemas/mini-program.js'
-import {
+import type {
   LocationPayload,
 }                             from './schemas/location.js'
 
