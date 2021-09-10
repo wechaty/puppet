@@ -13,7 +13,6 @@ import {
   RoomMemberPayload,
   RoomQueryFilter,
   ContactQueryFilter,
-  CommentPayload,
   ListOption,
 }                           from '../../../src/mod.js'
 
@@ -133,19 +132,19 @@ class PuppetTest extends Puppet {
    * Comment
    *
    */
-  override async comment (messageId: string, content: string)         : Promise<CommentPayload> { return { messageId, content} as any }
-  override async replyComment (commentId: string, content: string)    : Promise<CommentPayload> { return { commentId, content} as any }
-  override async revokeComment (commentId: string)                    : Promise<boolean> { return { commentId } as any }
-  override async listComments (messageId: string, option: ListOption) : Promise<boolean> { return { messageId, option} as any }
+  override async commentContent (messageId: string, content: string) : Promise<MessagePayload> { return { messageId, content} as any }
+  override async commentReply (commentId: string, content: string)   : Promise<MessagePayload> { return { commentId, content} as any }
+  override async commentRevoke (commentId: string)                   : Promise<boolean> { return { commentId } as any }
+  override async commentList (messageId: string, option: ListOption) : Promise<boolean> { return { messageId, option} as any }
 
   /**
    *
    * Like
    *
    */
-  override async like (messageId: string)                          : Promise<boolean> { return { messageId } as any}
-  override async cancel (messageId: string)                        : Promise<boolean> { return { messageId } as any}
-  override async listLikes (messageId: string, option: ListOption) : Promise<boolean> { return { messageId, option } as any}
+  override async likeThis (messageId: string)                     : Promise<boolean> { return { messageId } as any}
+  override async likeCancel (messageId: string)                   : Promise<boolean> { return { messageId } as any}
+  override async likeList (messageId: string, option: ListOption) : Promise<boolean> { return { messageId, option } as any}
 
   /**
    *

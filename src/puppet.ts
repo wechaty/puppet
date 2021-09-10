@@ -84,9 +84,6 @@ import type {
 import type {
   ListOption,
 }                                 from './schemas/list.js'
-import type {
-  CommentPayload,
-}                                 from './schemas/comment.js'
 import {
   PuppetOptions,
   YOU,
@@ -515,25 +512,6 @@ export abstract class Puppet extends PuppetEventEmitter {
 
   /**
    *
-   * Comment
-   *
-   */
-  abstract comment (messageId: string, content: string)         : Promise<CommentPayload>
-  abstract replyComment (commentId: string, content: string)    : Promise<CommentPayload>
-  abstract revokeComment (commentId: string)                    : Promise<boolean>
-  abstract listComments (messageId: string, option: ListOption) : Promise<boolean>
-
-  /**
-   *
-   * Like
-   *
-   */
-  abstract like (messageId: string)                             : Promise<boolean>
-  abstract cancel (messageId: string)                           : Promise<boolean>
-  abstract listLikes (messageId: string, option: ListOption) : Promise<boolean>
-
-  /**
-   *
    * Contact
    *
    */
@@ -857,6 +835,25 @@ export abstract class Puppet extends PuppetEventEmitter {
    *
    */
   abstract conversationReadMark (conversationId: string, hasRead?: boolean) : Promise<void | boolean>
+
+  /**
+   *
+   * Like
+   *
+   */
+  abstract likeThis (messageId: string)                     : Promise<boolean>
+  abstract likeCancel (messageId: string)                   : Promise<boolean>
+  abstract likeList (messageId: string, option: ListOption) : Promise<boolean>
+
+  /**
+   *
+   * Comment
+   *
+   */
+  abstract commentContent (messageId: string, content: string) : Promise<MessagePayload>
+  abstract commentReply (commentId: string, content: string)   : Promise<MessagePayload>
+  abstract commentRevoke (commentId: string)                   : Promise<boolean>
+  abstract commentList (messageId: string, option: ListOption) : Promise<boolean>
 
   /**
    *

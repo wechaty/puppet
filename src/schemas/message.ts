@@ -82,6 +82,7 @@ export interface MessagePayloadBase {
   // contactId?    : string,        // Contact ShareCard
 
   filename?     : string,
+  quoteId?      : string,
   text?         : string,
   timestamp     : number,       // Huan(202001): we support both seconds & milliseconds in Wechaty now.
   type          : MessageType,
@@ -100,11 +101,18 @@ export interface MessagePayloadTo {
   roomId?       : string,
   toId          : string,   // if to is not set, then room must be set
 }
+/** @hidden */
+export interface MessagePayloadComment {
+  fromId        : string,
+  parentId      : string,
+  toId?         : string,
+}
 
 export type MessagePayload = MessagePayloadBase
                             & (
                                 MessagePayloadRoom
                               | MessagePayloadTo
+                              | MessagePayloadComment
                             )
 
 export interface MessageQueryFilter {

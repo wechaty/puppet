@@ -3,7 +3,7 @@
  */
 export interface VideoPostPayload {
   authorId?    : string,
-  coverageUrl? : string,
+  coverUrl? : string,
   title        : string,
   videoUrl     : string,
 }
