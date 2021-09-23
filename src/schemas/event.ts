@@ -1,4 +1,4 @@
-import { PayloadType } from './payload'
+import type { PayloadType } from './payload'
 
 /**
  * The event `scan` status number.
@@ -66,9 +66,9 @@ export interface EventDongPayload {
   data: string,
 }
 
-export interface EventErrorPayload {
-  data: string,
-}
+export type EventErrorPayload = {
+  data?: string,
+} & Error
 
 export interface EventReadyPayload {
   data: string,
