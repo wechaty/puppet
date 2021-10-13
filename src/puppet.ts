@@ -26,7 +26,6 @@ import { ThrottleQueue }        from 'rx-queue'
 // import readPkgUp               from 'read-pkg-up'
 
 import {
-  FileBox,
   log,
   MemoryCard,
   NAME,
@@ -34,54 +33,24 @@ import {
 }                       from './config.js'
 
 import type {
-  ContactPayload,
-  ContactPayloadFilterFunction,
-  ContactQueryFilter,
-}                                 from './schemas/contact.js'
-import type {
   EventLoginPayload,
 }                                 from './schemas/event.js'
 import type {
-  FriendshipAddOptions,
-  FriendshipPayload,
-  FriendshipSearchQueryFilter,
-}                                 from './schemas/friendship.js'
-import type {
-  ImageType,
-}                                 from './schemas/image.js'
-import type {
-  MessagePayload,
-  MessagePayloadFilterFunction,
-  MessageQueryFilter,
-  MessageType,
-}                                 from './schemas/message.js'
-import type {
-  RoomMemberPayload,
-  RoomMemberQueryFilter,
-  RoomPayload,
-  RoomPayloadFilterFunction,
-  RoomQueryFilter,
-}                                 from './schemas/room.js'
-import type {
-  RoomInvitationPayload,
-}                                 from './schemas/room-invitation.js'
-import type {
-  UrlLinkPayload,
-}                                 from './schemas/url-link.js'
-import type {
-  MiniProgramPayload,
-}                                 from './schemas/mini-program.js'
-import type {
-  LocationPayload,
-}                                 from './schemas/location.js'
-import {
   PuppetOptions,
-  YOU,
 }                                 from './schemas/puppet.js'
 import { PayloadType }            from './schemas/payload.js'
 
-import { PuppetEventEmitter }     from './events.js'
-import { PayloadCache }           from './payload-cache.js'
+import {
+  PuppetEventEmitter,
+}                                 from './events.js'
+
+import { cacheMixin }           from './mixins/cache-mixin.js'
+import { contactMixin }         from './mixins/contact-mixin.js'
+import { friendshipMixin }      from './mixins/friendship-mixin.js'
+import { messageMixin }         from './mixins/message-mixin.js'
+import { roomInvitationMixin }  from './mixins/room-invitation-mixin.js'
+import { roomMixin }            from './mixins/room-mixin.js'
+import { tagMixin }             from './mixins/tag-mixin.js'
 
 const DEFAULT_WATCHDOG_TIMEOUT_SECONDS  = 60
 let   PUPPET_COUNTER                    = 0
@@ -93,7 +62,24 @@ let   PUPPET_COUNTER                    = 0
  * See: https://github.com/wechaty/wechaty/wiki/Puppet
  *
  */
-abstract class Puppet extends PuppetEventEmitter {
+
+const MixinBase = messageMixin(
+  roomInvitationMixin(
+    tagMixin(
+      friendshipMixin(
+        roomMixin(
+          contactMixin(
+            cacheMixin(
+              PuppetEventEmitter,
+            ),
+          ),
+        ),
+      ),
+    ),
+  ),
+)
+
+abstract class Puppet extends MixinBase {
 
   /**
    * Must overwrite by child class to identify their version
@@ -107,8 +93,10 @@ abstract class Puppet extends PuppetEventEmitter {
 
   /**
    * Login-ed User ID
+   *
+   * FIXME: remove the override
    */
-  protected id?: string
+  protected override id?: string
 
   protected readonly watchdog : Watchdog
 
@@ -122,8 +110,6 @@ abstract class Puppet extends PuppetEventEmitter {
    * Throttle Reset Events
    */
   private resetThrottleQueue: ThrottleQueue<string>
-
-  protected payloadCache: PayloadCache
 
   /**
    *
@@ -164,8 +150,6 @@ abstract class Puppet extends PuppetEventEmitter {
       log.silly('Puppet', 'constructor() resetThrottleQueue.subscribe() reason: "%s"', reason)
       this.reset(reason)
     })
-
-    this.payloadCache = new PayloadCache(options.lruCacheSize)
 
     {
       /* eslint  no-lone-blocks: off */
@@ -247,7 +231,7 @@ abstract class Puppet extends PuppetEventEmitter {
     this.watchdog.on('reset', this.dogReset)
     this.on('reset', this.throttleReset)
 
-    this.payloadCache.start()
+    this.cache.start()
   }
 
   async stop (): Promise<void> {
@@ -257,7 +241,7 @@ abstract class Puppet extends PuppetEventEmitter {
 
     this.watchdog.sleep()
 
-    this.payloadCache.stop()
+    this.cache.stop()
   }
 
   private feedDog (payload: any) {
@@ -435,855 +419,6 @@ abstract class Puppet extends PuppetEventEmitter {
 
   /**
    *
-   * ContactSelf
-   *
-   */
-  abstract contactSelfName (name: string)           : Promise<void>
-  abstract contactSelfQRCode ()                     : Promise<string /* QR Code Value */>
-  abstract contactSelfSignature (signature: string) : Promise<void>
-
-  /**
-   *
-   * Tag
-   *  tagContactAdd - add a tag for a Contact. Create it first if it not exist.
-   *  tagContactRemove - remove a tag from the Contact
-   *  tagContactDelete - delete a tag from Wechat
-   *  tagContactList(id) - get tags from a specific Contact
-   *  tagContactList() - get tags from all Contacts
-   *
-   */
-  abstract tagContactAdd (tagId: string, contactId: string)    : Promise<void>
-  abstract tagContactDelete (tagId: string)                    : Promise<void>
-  abstract tagContactList (contactId: string)                  : Promise<string[]>
-  abstract tagContactList ()                                   : Promise<string[]>
-  abstract tagContactRemove (tagId: string, contactId: string) : Promise<void>
-
-  /**
-   *
-   * Contact
-   *
-   */
-  abstract contactAlias (contactId: string)                       : Promise<string>
-  abstract contactAlias (contactId: string, alias: string | null) : Promise<void>
-
-  abstract contactAvatar (contactId: string)                : Promise<FileBox>
-  abstract contactAvatar (contactId: string, file: FileBox) : Promise<void>
-
-  abstract contactPhone (contactId: string, phoneList: string[]) : Promise<void>
-
-  abstract contactCorporationRemark (contactId: string, corporationRemark: string | null): Promise<void>
-
-  abstract contactDescription (contactId: string, description: string | null): Promise<void>
-
-  abstract contactList ()                   : Promise<string[]>
-
-  protected abstract contactRawPayload (contactId: string)     : Promise<any>
-  protected abstract contactRawPayloadParser (rawPayload: any) : Promise<ContactPayload>
-
-  async contactRoomList (
-    contactId: string,
-  ): Promise<string[] /* roomId */> {
-    log.verbose('Puppet', 'contactRoomList(%s)', contactId)
-
-    const roomIdList = await this.roomList()
-    const roomPayloadList = await Promise.all(
-      roomIdList.map(
-        roomId => this.roomPayload(roomId),
-      ),
-    )
-    const resultRoomIdList = roomPayloadList
-      .filter(roomPayload => roomPayload.memberIdList.includes(contactId))
-      .map(payload => payload.id)
-
-    return resultRoomIdList
-  }
-
-  async contactSearch (
-    query?        : string | ContactQueryFilter,
-    searchIdList? : string[],
-  ): Promise<string[]> {
-    log.verbose('Puppet', 'contactSearch(query=%s, %s)',
-      JSON.stringify(query),
-      searchIdList
-        ? `idList.length = ${searchIdList.length}`
-        : '',
-    )
-
-    if (!searchIdList) {
-      searchIdList = await this.contactList()
-    }
-
-    log.silly('Puppet', 'contactSearch() searchIdList.length = %d', searchIdList.length)
-
-    if (!query) {
-      return searchIdList
-    }
-
-    if (typeof query === 'string') {
-      const nameIdList  = await this.contactSearch({ name: query },  searchIdList)
-      const aliasIdList = await this.contactSearch({ alias: query }, searchIdList)
-
-      return Array.from(
-        new Set([
-          ...nameIdList,
-          ...aliasIdList,
-        ]),
-      )
-    }
-
-    const filterFunction: ContactPayloadFilterFunction = this.contactQueryFilterFactory(query)
-
-    const BATCH_SIZE = 16
-    let   batchIndex = 0
-
-    const resultIdList: string[] = []
-
-    const matchId = async (id: string) => {
-      try {
-        /**
-         * Does LRU cache matter at here?
-         */
-        // const rawPayload = await this.contactRawPayload(id)
-        // const payload    = await this.contactRawPayloadParser(rawPayload)
-        const payload = await this.contactPayload(id)
-
-        if (filterFunction(payload)) {
-          return id
-        }
-
-      } catch (e) {
-        log.silly('Puppet', 'contactSearch() contactPayload exception: %s', (e as Error).message)
-        await this.dirtyPayloadContact(id)
-      }
-      return undefined
-    }
-
-    while (BATCH_SIZE * batchIndex < searchIdList.length) {
-      const batchSearchIdList  = searchIdList.slice(
-        BATCH_SIZE * batchIndex,
-        BATCH_SIZE * (batchIndex + 1),
-      )
-
-      const matchBatchIdFutureList = batchSearchIdList.map(matchId)
-      const matchBatchIdList       = await Promise.all(matchBatchIdFutureList)
-
-      const batchSearchIdResultList: string[] = matchBatchIdList.filter(id => !!id) as string[]
-
-      resultIdList.push(...batchSearchIdResultList)
-
-      batchIndex++
-    }
-
-    log.silly('Puppet', 'contactSearch() searchContactPayloadList.length = %d', resultIdList.length)
-
-    return resultIdList
-  }
-
-  protected contactQueryFilterFactory (
-    query: ContactQueryFilter,
-  ): ContactPayloadFilterFunction {
-    log.verbose('Puppet', 'contactQueryFilterFactory(%s)',
-      JSON.stringify(query),
-    )
-
-    /**
-     * Clean the query for keys with empty value
-     */
-    Object.keys(query).forEach(key => {
-      if (query[key as keyof ContactQueryFilter] === undefined) {
-        delete query[key as keyof ContactQueryFilter]
-      }
-    })
-
-    if (Object.keys(query).length < 1) {
-      throw new Error('query must provide at least one key. current query is empty.')
-    } else if (Object.keys(query).length > 1) {
-      throw new Error('query only support one key. multi key support is not available now.')
-    }
-    // Huan(202105): we use `!` at here because the above `if` checks
-    const filterKey = Object.keys(query)[0]!.toLowerCase() as keyof ContactQueryFilter
-
-    const isValid = [
-      'alias',
-      'id',
-      'name',
-      'weixin',
-    ].includes(filterKey)
-
-    if (!isValid) {
-      throw new Error('key not supported: ' + filterKey)
-    }
-
-    // TypeScript bug: have to set `undefined | string | RegExp` at here, or the later code type check will get error
-    const filterValue: undefined | string | RegExp = query[filterKey]
-    if (!filterValue) {
-      throw new Error('filterValue not found for filterKey: ' + filterKey)
-    }
-
-    let filterFunction
-
-    if (typeof filterValue === 'string') {
-      filterFunction = (payload: ContactPayload) => filterValue === payload[filterKey]
-    } else if (filterValue instanceof RegExp) {
-      filterFunction = (payload: ContactPayload) => !!payload[filterKey] && filterValue.test(payload[filterKey]!)
-    } else {
-      throw new Error('unsupported filterValue type: ' + typeof filterValue)
-    }
-
-    return filterFunction
-  }
-
-  /**
-   * Check a Contact Id if it's still valid.
-   *  For example: talk to the server, and see if it should be deleted in the local cache.
-   */
-  async contactValidate (contactId: string) : Promise<boolean> {
-    log.silly('Puppet', 'contactValidate(%s) base class just return `true`', contactId)
-    return true
-  }
-
-  protected contactPayloadCache (contactId: string): undefined | ContactPayload {
-    // log.silly('Puppet', 'contactPayloadCache(id=%s) @ %s', contactId, this)
-    if (!contactId) {
-      throw new Error('no id')
-    }
-    const cachedPayload = this.payloadCache.contact.get(contactId)
-
-    if (cachedPayload) {
-      // log.silly('Puppet', 'contactPayload(%s) cache HIT', contactId)
-    } else {
-      log.silly('Puppet', 'contactPayload(%s) cache MISS', contactId)
-    }
-
-    return cachedPayload
-  }
-
-  async contactPayload (
-    contactId: string,
-  ): Promise<ContactPayload> {
-    // log.silly('Puppet', 'contactPayload(id=%s) @ %s', contactId, this)
-
-    if (!contactId) {
-      throw new Error('no id')
-    }
-
-    /**
-     * 1. Try to get from cache first
-     */
-    const cachedPayload = this.contactPayloadCache(contactId)
-    if (cachedPayload) {
-      return cachedPayload
-    }
-
-    /**
-     * 2. Cache not found
-     */
-    const rawPayload = await this.contactRawPayload(contactId)
-    const payload    = await this.contactRawPayloadParser(rawPayload)
-
-    this.payloadCache.contact.set(contactId, payload)
-    log.silly('Puppet', 'contactPayload(%s) cache SET', contactId)
-
-    return payload
-  }
-
-  /**
-   *
-   * Friendship
-   *
-   */
-  abstract friendshipAccept (friendshipId: string)           : Promise<void>
-  abstract friendshipAdd (contactId: string, option?: FriendshipAddOptions) : Promise<void>
-
-  abstract friendshipSearchPhone (phone: string)   : Promise<null | string>
-  abstract friendshipSearchWeixin (weixin: string) : Promise<null | string>
-
-  protected abstract friendshipRawPayload (friendshipId: string)  : Promise<any>
-  protected abstract friendshipRawPayloadParser (rawPayload: any) : Promise<FriendshipPayload>
-
-  async friendshipSearch (
-    searchQueryFilter: FriendshipSearchQueryFilter,
-  ): Promise<string | null> {
-    log.verbose('Puppet', 'friendshipSearch("%s")', JSON.stringify(searchQueryFilter))
-
-    if (Object.keys(searchQueryFilter).length !== 1) {
-      throw new Error('searchQueryFilter should only include one key for query!')
-    }
-
-    if (searchQueryFilter.phone) {
-      return this.friendshipSearchPhone(searchQueryFilter.phone)
-    } else if (searchQueryFilter.weixin) {
-      return this.friendshipSearchWeixin(searchQueryFilter.weixin)
-    }
-
-    throw new Error(`unknown key from searchQueryFilter: ${Object.keys(searchQueryFilter).join('')}`)
-  }
-
-  protected friendshipPayloadCache (friendshipId: string): undefined | FriendshipPayload {
-    log.silly('Puppet', 'friendshipPayloadCache(id=%s) @ %s', friendshipId, this)
-
-    if (!friendshipId) {
-      throw new Error('no id')
-    }
-    const cachedPayload = this.payloadCache.friendship.get(friendshipId)
-
-    if (cachedPayload) {
-      // log.silly('Puppet', 'friendshipPayloadCache(%s) cache HIT', friendshipId)
-    } else {
-      log.silly('Puppet', 'friendshipPayloadCache(%s) cache MISS', friendshipId)
-    }
-
-    return cachedPayload
-  }
-
-  /**
-   * Get & Set
-   */
-  async friendshipPayload (friendshipId: string)                                : Promise<FriendshipPayload>
-  async friendshipPayload (friendshipId: string, newPayload: FriendshipPayload) : Promise<void>
-
-  async friendshipPayload (
-    friendshipId : string,
-    newPayload?  : FriendshipPayload,
-  ): Promise<void | FriendshipPayload> {
-    log.verbose('Puppet', 'friendshipPayload(%s)',
-      friendshipId,
-      newPayload
-        ? ',' + JSON.stringify(newPayload)
-        : '',
-    )
-
-    if (typeof newPayload === 'object') {
-      await this.payloadCache.friendship.set(friendshipId, newPayload)
-      return
-    }
-
-    /**
-     * 1. Try to get from cache first
-     */
-    const cachedPayload = this.friendshipPayloadCache(friendshipId)
-    if (cachedPayload) {
-      return cachedPayload
-    }
-
-    /**
-     * 2. Cache not found
-     */
-    const rawPayload = await this.friendshipRawPayload(friendshipId)
-    const payload    = await this.friendshipRawPayloadParser(rawPayload)
-
-    this.payloadCache.friendship.set(friendshipId, payload)
-
-    return payload
-  }
-
-  /**
-   *
-   * Conversation
-   *
-   */
-  abstract conversationReadMark (conversationId: string, hasRead?: boolean) : Promise<void | boolean>
-
-  /**
-   *
-   * Message
-   *
-   */
-  abstract messageContact      (messageId: string)                       : Promise<string>
-  abstract messageFile         (messageId: string)                       : Promise<FileBox>
-  abstract messageImage        (messageId: string, imageType: ImageType) : Promise<FileBox>
-  abstract messageMiniProgram  (messageId: string)                       : Promise<MiniProgramPayload>
-  abstract messageUrl          (messageId: string)                       : Promise<UrlLinkPayload>
-  abstract messageLocation     (messageId: string)                       : Promise<LocationPayload>
-
-  abstract messageForward         (conversationId: string, messageId: string,)                     : Promise<void | string>
-  abstract messageSendContact     (conversationId: string, contactId: string)                      : Promise<void | string>
-  abstract messageSendFile        (conversationId: string, file: FileBox)                          : Promise<void | string>
-  abstract messageSendMiniProgram (conversationId: string, miniProgramPayload: MiniProgramPayload) : Promise<void | string>
-  abstract messageSendText        (conversationId: string, text: string, mentionIdList?: string[]) : Promise<void | string>
-  abstract messageSendUrl         (conversationId: string, urlLinkPayload: UrlLinkPayload)         : Promise<void | string>
-  abstract messageSendLocation    (conversationId: string, locationPayload: LocationPayload)       : Promise<void | string>
-
-  abstract messageRecall (messageId: string) : Promise<boolean>
-
-  protected abstract messageRawPayload (messageId: string)     : Promise<any>
-  protected abstract messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload>
-
-  protected messagePayloadCache (messageId: string): undefined | MessagePayload {
-    // log.silly('Puppet', 'messagePayloadCache(id=%s) @ %s', messageId, this)
-    if (!messageId) {
-      throw new Error('no id')
-    }
-    const cachedPayload = this.payloadCache.message.get(messageId)
-    if (cachedPayload) {
-      // log.silly('Puppet', 'messagePayloadCache(%s) cache HIT', messageId)
-    } else {
-      log.silly('Puppet', 'messagePayloadCache(%s) cache MISS', messageId)
-    }
-
-    return cachedPayload
-  }
-
-  async messagePayload (
-    messageId: string,
-  ): Promise<MessagePayload> {
-    log.verbose('Puppet', 'messagePayload(%s)', messageId)
-
-    if (!messageId) {
-      throw new Error('no id')
-    }
-
-    /**
-     * 1. Try to get from cache first
-     */
-    const cachedPayload = this.messagePayloadCache(messageId)
-    if (cachedPayload) {
-      return cachedPayload
-    }
-
-    /**
-     * 2. Cache not found
-     */
-    const rawPayload = await this.messageRawPayload(messageId)
-    const payload    = await this.messageRawPayloadParser(rawPayload)
-
-    this.payloadCache.message.set(messageId, payload)
-    log.silly('Puppet', 'messagePayload(%s) cache SET', messageId)
-
-    return payload
-  }
-
-  messageList (): string[] {
-    log.verbose('Puppet', 'messageList()')
-    return [...this.payloadCache.message.keys()]
-  }
-
-  async messageSearch (
-    query?: MessageQueryFilter,
-  ): Promise<string[] /* Message Id List */> {
-    log.verbose('Puppet', 'messageSearch(%s)', JSON.stringify(query))
-
-    const allMessageIdList: string[] = this.messageList()
-    log.silly('Puppet', 'messageSearch() allMessageIdList.length=%d', allMessageIdList.length)
-
-    if (!query || Object.keys(query).length <= 0) {
-      return allMessageIdList
-    }
-
-    const messagePayloadList: MessagePayload[] = await Promise.all(
-      allMessageIdList.map(
-        id => this.messagePayload(id),
-      ),
-    )
-
-    const filterFunction = this.messageQueryFilterFactory(query)
-
-    const messageIdList = messagePayloadList
-      .filter(filterFunction)
-      .map(payload => payload.id)
-
-    log.silly('Puppet', 'messageSearch() messageIdList filtered. result length=%d', messageIdList.length)
-
-    return messageIdList
-  }
-
-  protected messageQueryFilterFactory (
-    query: MessageQueryFilter,
-  ): MessagePayloadFilterFunction {
-    log.verbose('Puppet', 'messageQueryFilterFactory(%s)',
-      JSON.stringify(query),
-    )
-
-    if (Object.keys(query).length < 1) {
-      throw new Error('query empty')
-    }
-
-    const filterFunctionList: MessagePayloadFilterFunction[] = []
-
-    const filterKeyList = Object.keys(query) as Array<keyof MessageQueryFilter>
-
-    for (const filterKey of filterKeyList) {
-      // TypeScript bug: have to set `undefined | string | RegExp` at here, or the later code type check will get error
-      const filterValue: undefined | string | MessageType | RegExp = query[filterKey]
-      if (!filterValue) {
-        throw new Error('filterValue not found for filterKey: ' + filterKey)
-      }
-
-      let filterFunction: MessagePayloadFilterFunction
-
-      if (filterValue instanceof RegExp) {
-        filterFunction = (payload: MessagePayload) => filterValue.test(payload[filterKey] as string)
-      } else { // if (typeof filterValue === 'string') {
-        filterFunction = (payload: MessagePayload) => filterValue === payload[filterKey]
-      }
-
-      filterFunctionList.push(filterFunction)
-    }
-
-    const allFilterFunction: MessagePayloadFilterFunction = payload => filterFunctionList.every(func => func(payload))
-
-    return allFilterFunction
-  }
-
-  /**
-   *
-   * Room Invitation
-   *
-   */
-  protected roomInvitationPayloadCache (
-    roomInvitationId: string,
-  ): undefined | RoomInvitationPayload {
-    // log.silly('Puppet', 'roomInvitationPayloadCache(id=%s) @ %s', friendshipId, this)
-    if (!roomInvitationId) {
-      throw new Error('no id')
-    }
-    const cachedPayload = this.payloadCache.roomInvitation.get(roomInvitationId)
-
-    if (cachedPayload) {
-      // log.silly('Puppet', 'roomInvitationPayloadCache(%s) cache HIT', roomInvitationId)
-    } else {
-      log.silly('Puppet', 'roomInvitationPayloadCache(%s) cache MISS', roomInvitationId)
-    }
-
-    return cachedPayload
-  }
-
-  abstract roomInvitationAccept (roomInvitationId: string): Promise<void>
-
-  protected abstract roomInvitationRawPayload (roomInvitationId: string) : Promise<any>
-  protected abstract roomInvitationRawPayloadParser (rawPayload: any)    : Promise<RoomInvitationPayload>
-
-  /**
-   * Get & Set
-   */
-  async roomInvitationPayload (roomInvitationId: string)                                    : Promise<RoomInvitationPayload>
-  async roomInvitationPayload (roomInvitationId: string, newPayload: RoomInvitationPayload) : Promise<void>
-
-  async roomInvitationPayload (roomInvitationId: string, newPayload?: RoomInvitationPayload): Promise<void | RoomInvitationPayload> {
-    log.verbose('Puppet', 'roomInvitationPayload(%s)', roomInvitationId)
-
-    if (typeof newPayload === 'object') {
-      this.payloadCache.roomInvitation.set(roomInvitationId, newPayload)
-      return
-    }
-
-    /**
-     * 1. Try to get from cache first
-     */
-    const cachedPayload = this.roomInvitationPayloadCache(roomInvitationId)
-    if (cachedPayload) {
-      return cachedPayload
-    }
-
-    /**
-     * 2. Cache not found
-     */
-
-    const rawPayload = await this.roomInvitationRawPayload(roomInvitationId)
-    const payload = await this.roomInvitationRawPayloadParser(rawPayload)
-
-    return payload
-  }
-
-  /**
-   *
-   * Room
-   *
-   */
-  abstract roomAdd (roomId: string, contactId: string, inviteOnly?: boolean) : Promise<void>
-  abstract roomAvatar (roomId: string)                                       : Promise<FileBox>
-  abstract roomCreate (contactIdList: string[], topic?: string)              : Promise<string>
-  abstract roomDel (roomId: string, contactId: string)                       : Promise<void>
-  abstract roomList ()                                                       : Promise<string[]>
-  abstract roomQRCode (roomId: string)                                       : Promise<string>
-  abstract roomQuit (roomId: string)                                         : Promise<void>
-  abstract roomTopic (roomId: string)                                        : Promise<string>
-  abstract roomTopic (roomId: string, topic: string)                         : Promise<void>
-
-  protected abstract roomRawPayload (roomId: string)        : Promise<any>
-  protected abstract roomRawPayloadParser (rawPayload: any) : Promise<RoomPayload>
-
-  /**
-   *
-   * RoomMember
-   *
-   */
-  abstract roomAnnounce (roomId: string)               : Promise<string>
-  abstract roomAnnounce (roomId: string, text: string) : Promise<void>
-  abstract roomMemberList (roomId: string)             : Promise<string[]>
-
-  protected abstract roomMemberRawPayload (roomId: string, contactId: string) : Promise<any>
-  protected abstract roomMemberRawPayloadParser (rawPayload: any)             : Promise<RoomMemberPayload>
-
-  async roomMemberSearch (
-    roomId : string,
-    query  : (YOU | string) | RoomMemberQueryFilter,
-  ): Promise<string[]> {
-    log.verbose('Puppet', 'roomMemberSearch(%s, %s)', roomId, JSON.stringify(query))
-
-    if (!this.id) {
-      throw new Error('no puppet.id. need puppet to be login-ed for a search')
-    }
-    if (!query) {
-      throw new Error('no query')
-    }
-
-    /**
-     * 0. for YOU: 'You', '你' in sys message
-     */
-    if (query === YOU) {
-      return [this.id]
-    }
-
-    /**
-     * 1. for Text Query
-     */
-    if (typeof query === 'string') {
-      let contactIdList: string[] = []
-      contactIdList = contactIdList.concat(
-        await this.roomMemberSearch(roomId, { roomAlias:     query }),
-        await this.roomMemberSearch(roomId, { name:          query }),
-        await this.roomMemberSearch(roomId, { contactAlias:  query }),
-      )
-      // Keep the unique id only
-      // https://stackoverflow.com/a/14438954/1123955
-      // return [...new Set(contactIdList)]
-      return Array.from(
-        new Set(contactIdList),
-      )
-    }
-
-    /**
-     * 2. for RoomMemberQueryFilter
-     */
-    const memberIdList = await this.roomMemberList(roomId)
-
-    let idList: string[] = []
-
-    if (query.contactAlias || query.name) {
-      /**
-       * We will only have `alias` or `name` set at here.
-       * One is set, the other will be `undefined`
-       */
-      const contactQueryFilter: ContactQueryFilter = {
-        alias : query.contactAlias,
-        name  : query.name,
-      }
-
-      idList = idList.concat(
-        await this.contactSearch(
-          contactQueryFilter,
-          memberIdList,
-        ),
-      )
-    }
-
-    const memberPayloadList = await Promise.all(
-      memberIdList.map(
-        contactId => this.roomMemberPayload(roomId, contactId),
-      ),
-    )
-
-    if (query.roomAlias) {
-      idList = idList.concat(
-        memberPayloadList.filter(
-          payload => payload.roomAlias === query.roomAlias,
-        ).map(payload => payload.id),
-      )
-    }
-
-    return idList
-  }
-
-  async roomSearch (
-    query?: RoomQueryFilter,
-  ): Promise<string[] /* Room Id List */> {
-    log.verbose('Puppet', 'roomSearch(%s)', query ? JSON.stringify(query) : '')
-
-    const allRoomIdList: string[] = await this.roomList()
-    log.silly('Puppet', 'roomSearch() allRoomIdList.length=%d', allRoomIdList.length)
-
-    if (!query || Object.keys(query).length <= 0) {
-      return allRoomIdList
-    }
-
-    const roomPayloadList: RoomPayload[] = []
-
-    const BATCH_SIZE = 10
-    let   batchIndex = 0
-
-    while (batchIndex * BATCH_SIZE < allRoomIdList.length) {
-      const batchRoomIds = allRoomIdList.slice(
-        BATCH_SIZE * batchIndex,
-        BATCH_SIZE * (batchIndex + 1),
-      )
-
-      const batchPayloads = (await Promise.all(
-        batchRoomIds.map(
-          async id => {
-            try {
-              return await this.roomPayload(id)
-            } catch (e) {
-              // compatible with {} payload
-              log.silly('Puppet', 'roomSearch() roomPayload exception: %s', (e as Error).message)
-              // Remove invalid room id from cache to avoid getting invalid room payload again
-              await this.dirtyPayloadRoom(id)
-              await this.dirtyPayloadRoomMember(id)
-              return {} as any
-            }
-          },
-        ),
-      )).filter(payload => Object.keys(payload).length > 0)
-
-      roomPayloadList.push(...batchPayloads)
-      batchIndex++
-    }
-
-    const filterFunction = this.roomQueryFilterFactory(query)
-
-    const roomIdList = roomPayloadList
-      .filter(filterFunction)
-      .map(payload => payload.id)
-
-    log.silly('Puppet', 'roomSearch() roomIdList filtered. result length=%d', roomIdList.length)
-
-    return roomIdList
-  }
-
-  protected roomQueryFilterFactory (
-    query: RoomQueryFilter,
-  ): RoomPayloadFilterFunction {
-    log.verbose('Puppet', 'roomQueryFilterFactory(%s)',
-      JSON.stringify(query),
-    )
-
-    if (Object.keys(query).length < 1) {
-      throw new Error('query must provide at least one key. current query is empty.')
-    } else if (Object.keys(query).length > 1) {
-      throw new Error('query only support one key. multi key support is not available now.')
-    }
-    // Huan(202105): we use `Object.keys(query)[0]!` with `!` at here because we have the above `if` checks
-    // TypeScript bug: have to set `undefined | string | RegExp` at here, or the later code type check will get error
-    const filterKey = Object.keys(query)[0]!.toLowerCase() as keyof RoomQueryFilter
-
-    const isValid = [
-      'topic',
-      'id',
-    ].includes(filterKey)
-
-    if (!isValid) {
-      throw new Error('query key unknown: ' + filterKey)
-    }
-
-    const filterValue: undefined | string | RegExp = query[filterKey]
-    if (!filterValue) {
-      throw new Error('filterValue not found for filterKey: ' + filterKey)
-    }
-
-    let filterFunction: RoomPayloadFilterFunction
-
-    if (filterValue instanceof RegExp) {
-      filterFunction = (payload: RoomPayload) => filterValue.test(payload[filterKey])
-    } else { // if (typeof filterValue === 'string') {
-      filterFunction = (payload: RoomPayload) => filterValue === payload[filterKey]
-    }
-
-    return filterFunction
-  }
-
-  /**
-   * Check a Room Id if it's still valid.
-   *  For example: talk to the server, and see if it should be deleted in the local cache.
-   */
-  async roomValidate (roomId: string): Promise<boolean> {
-    log.silly('Puppet', 'roomValidate(%s) base class just return `true`', roomId)
-    return true
-  }
-
-  protected roomPayloadCache (roomId: string): undefined | RoomPayload {
-    // log.silly('Puppet', 'roomPayloadCache(id=%s) @ %s', roomId, this)
-    if (!roomId) {
-      throw new Error('no id')
-    }
-    const cachedPayload = this.payloadCache.room.get(roomId)
-    if (cachedPayload) {
-      // log.silly('Puppet', 'roomPayloadCache(%s) cache HIT', roomId)
-    } else {
-      log.silly('Puppet', 'roomPayloadCache(%s) cache MISS', roomId)
-    }
-
-    return cachedPayload
-  }
-
-  async roomPayload (
-    roomId: string,
-  ): Promise<RoomPayload> {
-    log.verbose('Puppet', 'roomPayload(%s)', roomId)
-
-    if (!roomId) {
-      throw new Error('no id')
-    }
-
-    /**
-     * 1. Try to get from cache first
-     */
-    const cachedPayload = this.roomPayloadCache(roomId)
-    if (cachedPayload) {
-      return cachedPayload
-    }
-
-    /**
-     * 2. Cache not found
-     */
-    const rawPayload = await this.roomRawPayload(roomId)
-    const payload    = await this.roomRawPayloadParser(rawPayload)
-
-    this.payloadCache.room.set(roomId, payload)
-    log.silly('Puppet', 'roomPayload(%s) cache SET', roomId)
-
-    return payload
-  }
-
-  async roomMemberPayload (
-    roomId    : string,
-    memberId : string,
-  ): Promise<RoomMemberPayload> {
-    log.verbose('Puppet', 'roomMemberPayload(roomId=%s, memberId=%s)',
-      roomId,
-      memberId,
-    )
-
-    if (!roomId || !memberId) {
-      throw new Error('no id')
-    }
-
-    /**
-     * 1. Try to get from cache
-     */
-    const CACHE_KEY     = this.payloadCache.roomMemberId(roomId, memberId)
-    const cachedPayload = this.payloadCache.roomMember.get(CACHE_KEY)
-
-    if (cachedPayload) {
-      return cachedPayload
-    }
-
-    /**
-     * 2. Cache not found
-     */
-    const rawPayload = await this.roomMemberRawPayload(roomId, memberId)
-    if (!rawPayload) {
-      throw new Error('contact(' + memberId + ') is not in the Room(' + roomId + ')')
-    }
-    const payload    = await this.roomMemberRawPayloadParser(rawPayload)
-
-    this.payloadCache.roomMember.set(CACHE_KEY, payload)
-    log.silly('Puppet', 'roomMemberPayload(%s) cache SET', roomId)
-
-    return payload
-  }
-
-  /**
-   *
    * dirty payload methods
    *  See: https://github.com/Chatie/grpc/pull/79
    *
@@ -1309,36 +444,19 @@ abstract class Puppet extends PuppetEventEmitter {
     }
   }
 
-  private async dirtyPayloadRoom (roomId: string): Promise<void> {
-    log.verbose('Puppet', 'dirtyPayloadRoom(%s)', roomId)
-    this.payloadCache.room.delete(roomId)
-  }
-
-  private async dirtyPayloadContact (contactId: string): Promise<void> {
-    log.verbose('Puppet', 'dirtyPayloadContact(%s)', contactId)
-    this.payloadCache.contact.delete(contactId)
-  }
+  // private async dirtyPayloadContact (contactId: string): Promise<void> {
+  //   log.verbose('Puppet', 'dirtyPayloadContact(%s)', contactId)
+  //   this.payloadCache.contact.delete(contactId)
+  // }
 
   private async dirtyPayloadFriendship (friendshipId: string): Promise<void> {
     log.verbose('Puppet', 'dirtyPayloadFriendship(%s)', friendshipId)
-    this.payloadCache.friendship.delete(friendshipId)
+    this.cache.friendship.delete(friendshipId)
   }
 
   private async dirtyPayloadMessage (messageId: string): Promise<void> {
     log.verbose('Puppet', 'dirtyPayloadMessage(%s)', messageId)
-    this.payloadCache.message.delete(messageId)
-  }
-
-  private async dirtyPayloadRoomMember (roomId: string): Promise<void> {
-    log.verbose('Puppet', 'dirtyPayloadRoomMember(%s)', roomId)
-
-    const contactIdList = await this.roomMemberList(roomId)
-
-    let cacheKey
-    contactIdList.forEach(contactId => {
-      cacheKey = this.payloadCache.roomMemberId(roomId, contactId)
-      this.payloadCache.roomMember.delete(cacheKey)
-    })
+    this.cache.message.delete(messageId)
   }
 
 }
