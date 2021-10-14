@@ -12,11 +12,11 @@ import {
   Code,
 }                           from './grpc.js'
 
-const isPuppetError = (payload: any): payload is PuppetError => payload instanceof Object
+const isGError = (payload: any): payload is GError => payload instanceof Object
   && isEcmaError(payload)
   && isGrpcStatus(payload)
 
-class PuppetError extends Error implements GrpcStatus, EcmaError {
+class GError extends Error implements GrpcStatus, EcmaError {
 
   code     : number
   details? : any[]
@@ -46,27 +46,45 @@ class PuppetError extends Error implements GrpcStatus, EcmaError {
     super()
     log.verbose('PuppetError', 'constructor("%s")', JSON.stringify(payload))
 
+    /**
+     * Common properties
+     */
     this.message = payload.message
 
-    if (isPuppetError(payload)) {
+    if (isGError(payload)) {
       this.code    = payload.code
       this.details = payload.details
       this.name    = payload.name
       this.stack   = payload.stack
+
     } else if (isGrpcStatus(payload)) {
       this.code    = payload.code
       this.details = payload.details
-      this.name    = Code[this.code] || String(this.code)
+      /**
+       * Convert gRPC error to EcmaError
+       */
+      this.name = Array.isArray(payload.details) && payload.details.length > 0
+        ? payload.details[0]
+        : Code[this.code] || String(this.code)
+
     } else if (isEcmaError(payload)) {
-      this.code  = Code.UNKNOWN
       this.name  = payload.name
       this.stack = payload.stack
+      /**
+       * Convert EcmaError to gRPC error
+       */
+      this.code  = Code.UNKNOWN
+      this.details = [
+        payload.name,
+        ...payload.stack?.split('\n') ?? [],
+      ]
+
     } else {
       throw new Error('payload is neither EcmaError nor GrpcStatus')
     }
   }
 
-  public toJSON (): GrpcStatus | EcmaError {
+  public toJSON (): GrpcStatus & EcmaError {
     return {
       code    : this.code,
       details : this.details,
@@ -76,11 +94,27 @@ class PuppetError extends Error implements GrpcStatus, EcmaError {
     }
   }
 
+  public toGrpcStatus (): GrpcStatus {
+    return {
+      code    : this.code,
+      details : this.details,
+      message : this.message,
+    }
+  }
+
+  public toEcmaError (): EcmaError {
+    return {
+      message : this.message,
+      name    : this.name,
+      stack   : this.stack,
+    }
+  }
+
 }
 
 export {
-  PuppetError,
-  isPuppetError,
+  GError,
+  isGError as isPuppetError,
   isGrpcStatus,
   isEcmaError,
 }
