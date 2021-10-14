@@ -49,13 +49,15 @@ abstract class PuppetSkelton extends PuppetEventEmitter {
   }
 
   /**
-   * Huan(202110):
+   * Huan(202110): Issue #156 - https://github.com/wechaty/puppet/issues/156
+   *
    *  All mixins should implemente both `start()` and `stop()`,
    *  and they must call `super.start()` and `super.stop()`
    *  so that all start()/stop() can be chained.
    */
   async start (): Promise<void> {}
-  async stop (): Promise<void> {}
+  async stop  (): Promise<void> {}
+
   async reset (_reason: string): Promise<void> {}
 
 }
