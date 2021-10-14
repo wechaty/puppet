@@ -19,7 +19,7 @@ const cacheMixin = <TBase extends Constructor>(Base: TBase) => {
 
       const options: PuppetOptions = args[0] || {}
 
-      this.cache = new PayloadCache(options.lruCacheSize)
+      this.cache = new PayloadCache(options.cache)
     }
 
   }
@@ -27,4 +27,9 @@ const cacheMixin = <TBase extends Constructor>(Base: TBase) => {
   return CacheMixin
 }
 
+type CacheMixin = ReturnType<typeof cacheMixin>
+
+export type {
+  CacheMixin,
+}
 export { cacheMixin }

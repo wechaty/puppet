@@ -6,9 +6,7 @@ import type {
   RoomInvitationPayload,
 }                                 from '../schemas/room-invitation.js'
 
-import type { cacheMixin } from './cache-mixin.js'
-
-type CacheMixin = ReturnType<typeof cacheMixin>
+import type { CacheMixin }        from './cache-mixin.js'
 
 const roomInvitationMixin = <TBase extends CacheMixin>(Base: TBase) => {
 

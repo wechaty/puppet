@@ -7,9 +7,7 @@ import type {
   FriendshipSearchQueryFilter,
 }                                 from '../schemas/friendship.js'
 
-import type { cacheMixin } from './cache-mixin.js'
-
-type CacheMixin = ReturnType<typeof cacheMixin>
+import type { CacheMixin }        from './cache-mixin.js'
 
 const friendshipMixin = <TBase extends CacheMixin>(Base: TBase) => {
 

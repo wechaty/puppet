@@ -9,9 +9,7 @@ import type {
   ContactQueryFilter,
 }                                 from '../schemas/contact.js'
 
-import type { cacheMixin } from './cache-mixin.js'
-
-type CacheMixin = ReturnType<typeof cacheMixin>
+import type { CacheMixin }        from './cache-mixin.js'
 
 const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
 
@@ -273,4 +271,9 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
   return ContactMixin
 }
 
+type ContactMixin = ReturnType<typeof contactMixin>
+
+export type {
+  ContactMixin,
+}
 export { contactMixin }

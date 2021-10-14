@@ -17,11 +17,8 @@ import {
   YOU,
 }                                 from '../schemas/puppet.js'
 
-import type { cacheMixin } from './cache-mixin.js'
-import type { contactMixin } from './contact-mixin.js'
-
-type CacheMixin   = ReturnType<typeof cacheMixin>
-type ContactMixin = ReturnType<typeof contactMixin>
+import type { CacheMixin }   from './cache-mixin.js'
+import type { ContactMixin } from './contact-mixin.js'
 
 type RoomMixinDependency = CacheMixin & ContactMixin // & { new (...args: any[]): { id?: string } }
 

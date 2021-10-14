@@ -22,9 +22,7 @@ import type {
   LocationPayload,
 }                                 from '../schemas/location.js'
 
-import type { cacheMixin } from './cache-mixin.js'
-
-type CacheMixin = ReturnType<typeof cacheMixin>
+import type { CacheMixin }        from './cache-mixin.js'
 
 const messageMixin = <TBase extends CacheMixin>(Base: TBase) => {
 

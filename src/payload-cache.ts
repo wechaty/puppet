@@ -23,15 +23,9 @@ import type {
 import type {
   RoomInvitationPayload,
 }                         from './schemas/room-invitation.js'
+import type { PuppetOptions } from './schemas/puppet.js'
 
-interface PayloadCacheOptions {
-  contact?        : number
-  friendship?     : number
-  message?        : number
-  room?           : number
-  roomInvitation? : number
-  roomMember?     : number
-}
+type PayloadCacheOptions = Required<PuppetOptions>['cache']
 
 class PayloadCache {
 
@@ -45,7 +39,7 @@ class PayloadCache {
   constructor (
     protected options: PayloadCacheOptions = {},
   ) {
-    log.verbose('PayloadCache', 'constructor(%s)', JSON.stringify(options))
+    log.verbose('PayloadCache', 'constructor("%s")', JSON.stringify(options))
 
     /**
      * Setup LRU Caches
