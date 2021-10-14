@@ -17,22 +17,16 @@ import {
   YOU,
 }                                 from '../schemas/puppet.js'
 
-import type { CacheMixin }   from './cache-mixin.js'
-import type { ContactMixin } from './contact-mixin.js'
+import type { PuppetSkelton } from '../puppet/skelton.js'
+import type { ContactMixin }  from './contact-mixin.js'
 
-type RoomMixinDependency = CacheMixin & ContactMixin // & { new (...args: any[]): { id?: string } }
+const roomMixin = <MixinBase extends typeof PuppetSkelton & ContactMixin>(mixinBase: MixinBase) => {
 
-const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
-
-  abstract class RoomMixin extends Base {
-
-    /**
-     * FIXME: remove `id` by using it from the PuppetBase class
-     */
-    protected id?: string
+  abstract class RoomMixin extends mixinBase {
 
     constructor (...args: any[]) {
       super(...args)
+      log.verbose('PuppetRoomMixin', 'constructor()')
     }
 
     /**
@@ -91,7 +85,7 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
       roomId : string,
       query  : (YOU | string) | RoomMemberQueryFilter,
     ): Promise<string[]> {
-      log.verbose('Puppet', 'roomMemberSearch(%s, %s)', roomId, JSON.stringify(query))
+      log.verbose('PuppetRoomMixin', 'roomMemberSearch(%s, %s)', roomId, JSON.stringify(query))
 
       if (!this.id) {
         throw new Error('no puppet.id. need puppet to be login-ed for a search')
@@ -170,10 +164,10 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
     async roomSearch (
       query?: RoomQueryFilter,
     ): Promise<string[] /* Room Id List */> {
-      log.verbose('Puppet', 'roomSearch(%s)', query ? JSON.stringify(query) : '')
+      log.verbose('PuppetRoomMixin', 'roomSearch(%s)', query ? JSON.stringify(query) : '')
 
       const allRoomIdList: string[] = await this.roomList()
-      log.silly('Puppet', 'roomSearch() allRoomIdList.length=%d', allRoomIdList.length)
+      log.silly('PuppetRoomMixin', 'roomSearch() allRoomIdList.length=%d', allRoomIdList.length)
 
       if (!query || Object.keys(query).length <= 0) {
         return allRoomIdList
@@ -197,7 +191,7 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
                 return await this.roomPayload(id)
               } catch (e) {
                 // compatible with {} payload
-                log.silly('Puppet', 'roomSearch() roomPayload exception: %s', (e as Error).message)
+                log.silly('PuppetRoomMixin', 'roomSearch() roomPayload exception: %s', (e as Error).message)
                 // Remove invalid room id from cache to avoid getting invalid room payload again
                 await this.dirtyPayloadRoom(id)
                 await this.dirtyPayloadRoomMember(id)
@@ -217,7 +211,7 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
         .filter(filterFunction)
         .map(payload => payload.id)
 
-      log.silly('Puppet', 'roomSearch() roomIdList filtered. result length=%d', roomIdList.length)
+      log.silly('PuppetRoomMixin', 'roomSearch() roomIdList filtered. result length=%d', roomIdList.length)
 
       return roomIdList
     }
@@ -230,7 +224,7 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
     roomQueryFilterFactory (
       query: RoomQueryFilter,
     ): RoomPayloadFilterFunction {
-      log.verbose('Puppet', 'roomQueryFilterFactory(%s)',
+      log.verbose('PuppetRoomMixin', 'roomQueryFilterFactory(%s)',
         JSON.stringify(query),
       )
 
@@ -273,7 +267,7 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
       *  For example: talk to the server, and see if it should be deleted in the local cache.
       */
     async roomValidate (roomId: string): Promise<boolean> {
-      log.silly('Puppet', 'roomValidate(%s) base class just return `true`', roomId)
+      log.silly('PuppetRoomMixin', 'roomValidate(%s) base class just return `true`', roomId)
       return true
     }
 
@@ -283,15 +277,15 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
      * @protected
      */
     roomPayloadCache (roomId: string): undefined | RoomPayload {
-      // log.silly('Puppet', 'roomPayloadCache(id=%s) @ %s', roomId, this)
+      // log.silly('PuppetRoomMixin', 'roomPayloadCache(id=%s) @ %s', roomId, this)
       if (!roomId) {
         throw new Error('no id')
       }
       const cachedPayload = this.cache.room.get(roomId)
       if (cachedPayload) {
-        // log.silly('Puppet', 'roomPayloadCache(%s) cache HIT', roomId)
+        // log.silly('PuppetRoomMixin', 'roomPayloadCache(%s) cache HIT', roomId)
       } else {
-        log.silly('Puppet', 'roomPayloadCache(%s) cache MISS', roomId)
+        log.silly('PuppetRoomMixin', 'roomPayloadCache(%s) cache MISS', roomId)
       }
 
       return cachedPayload
@@ -300,7 +294,7 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
     async roomPayload (
       roomId: string,
     ): Promise<RoomPayload> {
-      log.verbose('Puppet', 'roomPayload(%s)', roomId)
+      log.verbose('PuppetRoomMixin', 'roomPayload(%s)', roomId)
 
       if (!roomId) {
         throw new Error('no id')
@@ -321,7 +315,7 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
       const payload    = await this.roomRawPayloadParser(rawPayload)
 
       this.cache.room.set(roomId, payload)
-      log.silly('Puppet', 'roomPayload(%s) cache SET', roomId)
+      log.silly('PuppetRoomMixin', 'roomPayload(%s) cache SET', roomId)
 
       return payload
     }
@@ -330,7 +324,7 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
       roomId    : string,
       memberId : string,
     ): Promise<RoomMemberPayload> {
-      log.verbose('Puppet', 'roomMemberPayload(roomId=%s, memberId=%s)',
+      log.verbose('PuppetRoomMixin', 'roomMemberPayload(roomId=%s, memberId=%s)',
         roomId,
         memberId,
       )
@@ -359,7 +353,7 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
       const payload    = await this.roomMemberRawPayloadParser(rawPayload)
 
       this.cache.roomMember.set(CACHE_KEY, payload)
-      log.silly('Puppet', 'roomMemberPayload(%s) cache SET', roomId)
+      log.silly('PuppetRoomMixin', 'roomMemberPayload(%s) cache SET', roomId)
 
       return payload
     }
@@ -369,12 +363,12 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
      *  remove private temporary
      */
     async dirtyPayloadRoom (roomId: string): Promise<void> {
-      log.verbose('Puppet', 'dirtyPayloadRoom(%s)', roomId)
+      log.verbose('PuppetRoomMixin', 'dirtyPayloadRoom(%s)', roomId)
       this.cache.room.delete(roomId)
     }
 
     async dirtyPayloadRoomMember (roomId: string): Promise<void> {
-      log.verbose('Puppet', 'dirtyPayloadRoomMember(%s)', roomId)
+      log.verbose('PuppetRoomMixin', 'dirtyPayloadRoomMember(%s)', roomId)
 
       const contactIdList = await this.roomMemberList(roomId)
 

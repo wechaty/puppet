@@ -15,7 +15,7 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
 
     constructor (...args: any[]) {
       super(...args)
-      log.verbose('CacheMixin', 'constructor("%s")', JSON.stringify(args))
+      log.verbose('PuppetCacheMixin', 'constructor("%s")', JSON.stringify(args))
 
       const options: PuppetOptions = args[0] || {}
 
@@ -23,13 +23,13 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
     }
 
     override async start (): Promise<void> {
-      log.verbose('CacheMixin', 'start()')
+      log.verbose('PuppetCacheMixin', 'start()')
       await super.start()
       this.cache.start()
     }
 
     override async stop (): Promise<void> {
-      log.verbose('CacheMixin', 'stop()')
+      log.verbose('PuppetCacheMixin', 'stop()')
       this.cache.stop()
       await super.stop()
     }

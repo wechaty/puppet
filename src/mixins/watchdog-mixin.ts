@@ -15,19 +15,19 @@ const watchdogMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinB
 
     constructor (...args: any[]) {
       super(...args)
-      log.verbose('WatchdogMixin', 'constructor("%s")', JSON.stringify(args))
+      log.verbose('PuppetWatchdogMixin', 'constructor("%s")', JSON.stringify(args))
 
       this.watchdog = new PuppetWatchdog(this)
     }
 
     override async start (): Promise<void> {
-      log.verbose('WatchdogMixin', 'start()')
+      log.verbose('PuppetWatchdogMixin', 'start()')
       await super.start()
       this.watchdog.start()
     }
 
     override async stop (): Promise<void> {
-      log.verbose('WatchdogMixin', 'stop()')
+      log.verbose('PuppetWatchdogMixin', 'stop()')
       this.watchdog.stop()
       await super.stop()
     }

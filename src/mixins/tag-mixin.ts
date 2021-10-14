@@ -1,11 +1,14 @@
-import type { CacheMixin } from './cache-mixin.js'
+import { log } from '../config.js'
 
-const tagMixin = <TBase extends CacheMixin>(Base: TBase) => {
+import type { PuppetSkelton }   from '../puppet/skelton.js'
 
-  abstract class TagMixin extends Base {
+const tagMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase) => {
+
+  abstract class TagMixin extends mixinBase {
 
     constructor (...args: any[]) {
       super(...args)
+      log.verbose('PuppetTagMixin', 'constructor()')
     }
 
     /**

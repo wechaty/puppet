@@ -22,14 +22,16 @@ import type {
   LocationPayload,
 }                                 from '../schemas/location.js'
 
-import type { CacheMixin }        from './cache-mixin.js'
+import type { PuppetSkelton }        from '../puppet/skelton.js'
+import type { CacheMixin } from './cache-mixin.js'
 
-const messageMixin = <TBase extends CacheMixin>(Base: TBase) => {
+const messageMixin = <MinxinBase extends typeof PuppetSkelton & CacheMixin>(baseMixin: MinxinBase) => {
 
-  abstract class MessageMixin extends Base {
+  abstract class MessageMixin extends baseMixin {
 
     constructor (...args: any[]) {
       super(...args)
+      log.verbose('PuppetMessageMixin', 'constructor()')
     }
 
     /**
@@ -81,15 +83,15 @@ const messageMixin = <TBase extends CacheMixin>(Base: TBase) => {
      * @protected
      */
     messagePayloadCache (messageId: string): undefined | MessagePayload {
-      // log.silly('Puppet', 'messagePayloadCache(id=%s) @ %s', messageId, this)
+      // log.silly('PuppetMessageMixin', 'messagePayloadCache(id=%s) @ %s', messageId, this)
       if (!messageId) {
         throw new Error('no id')
       }
       const cachedPayload = this.cache.message.get(messageId)
       if (cachedPayload) {
-        // log.silly('Puppet', 'messagePayloadCache(%s) cache HIT', messageId)
+        // log.silly('PuppetMessageMixin', 'messagePayloadCache(%s) cache HIT', messageId)
       } else {
-        log.silly('Puppet', 'messagePayloadCache(%s) cache MISS', messageId)
+        log.silly('PuppetMessageMixin', 'messagePayloadCache(%s) cache MISS', messageId)
       }
 
       return cachedPayload
@@ -98,7 +100,7 @@ const messageMixin = <TBase extends CacheMixin>(Base: TBase) => {
     async messagePayload (
       messageId: string,
     ): Promise<MessagePayload> {
-      log.verbose('Puppet', 'messagePayload(%s)', messageId)
+      log.verbose('PuppetMessageMixin', 'messagePayload(%s)', messageId)
 
       if (!messageId) {
         throw new Error('no id')
@@ -119,23 +121,23 @@ const messageMixin = <TBase extends CacheMixin>(Base: TBase) => {
       const payload    = await this.messageRawPayloadParser(rawPayload)
 
       this.cache.message.set(messageId, payload)
-      log.silly('Puppet', 'messagePayload(%s) cache SET', messageId)
+      log.silly('PuppetMessageMixin', 'messagePayload(%s) cache SET', messageId)
 
       return payload
     }
 
     messageList (): string[] {
-      log.verbose('Puppet', 'messageList()')
+      log.verbose('PuppetMessageMixin', 'messageList()')
       return [...this.cache.message.keys()]
     }
 
     async messageSearch (
       query?: MessageQueryFilter,
     ): Promise<string[] /* Message Id List */> {
-      log.verbose('Puppet', 'messageSearch(%s)', JSON.stringify(query))
+      log.verbose('PuppetMessageMixin', 'messageSearch(%s)', JSON.stringify(query))
 
       const allMessageIdList: string[] = this.messageList()
-      log.silly('Puppet', 'messageSearch() allMessageIdList.length=%d', allMessageIdList.length)
+      log.silly('PuppetMessageMixin', 'messageSearch() allMessageIdList.length=%d', allMessageIdList.length)
 
       if (!query || Object.keys(query).length <= 0) {
         return allMessageIdList
@@ -153,7 +155,7 @@ const messageMixin = <TBase extends CacheMixin>(Base: TBase) => {
         .filter(filterFunction)
         .map(payload => payload.id)
 
-      log.silly('Puppet', 'messageSearch() messageIdList filtered. result length=%d', messageIdList.length)
+      log.silly('PuppetMessageMixin', 'messageSearch() messageIdList filtered. result length=%d', messageIdList.length)
 
       return messageIdList
     }
@@ -166,7 +168,7 @@ const messageMixin = <TBase extends CacheMixin>(Base: TBase) => {
     messageQueryFilterFactory (
       query: MessageQueryFilter,
     ): MessagePayloadFilterFunction {
-      log.verbose('Puppet', 'messageQueryFilterFactory(%s)',
+      log.verbose('PuppetMessageMixin', 'messageQueryFilterFactory(%s)',
         JSON.stringify(query),
       )
 

@@ -2,6 +2,7 @@ import {
   FileBox,
   log,
 }                       from '../config.js'
+import type { PuppetSkelton } from '../puppet/skelton.js'
 
 import type {
   ContactPayload,
@@ -9,14 +10,15 @@ import type {
   ContactQueryFilter,
 }                                 from '../schemas/contact.js'
 
-import type { CacheMixin }        from './cache-mixin.js'
+import type { CacheMixin }    from './cache-mixin.js'
 
-const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
+const contactMixin = <MixinBase extends CacheMixin & typeof PuppetSkelton>(mixinBase: MixinBase) => {
 
-  abstract class ContactMixin extends Base {
+  abstract class ContactMixin extends mixinBase {
 
     constructor (...args: any[]) {
       super(...args)
+      log.verbose('PuppetContactMixin', 'constructor()')
     }
 
     /**
@@ -64,7 +66,7 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
     // async contactRoomList (
     //   contactId: string,
     // ): Promise<string[] /* roomId */> {
-    //   log.verbose('Puppet', 'contactRoomList(%s)', contactId)
+    //   log.verbose('PuppetContactMixin', 'contactRoomList(%s)', contactId)
 
     //   const roomIdList = await this.roomList()
     //   const roomPayloadList = await Promise.all(
@@ -83,7 +85,7 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
       query?        : string | ContactQueryFilter,
       searchIdList? : string[],
     ): Promise<string[]> {
-      log.verbose('Puppet', 'contactSearch(query=%s, %s)',
+      log.verbose('PuppetContactMixin', 'contactSearch(query=%s, %s)',
         JSON.stringify(query),
         searchIdList
           ? `idList.length = ${searchIdList.length}`
@@ -94,7 +96,7 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
         searchIdList = await this.contactList()
       }
 
-      log.silly('Puppet', 'contactSearch() searchIdList.length = %d', searchIdList.length)
+      log.silly('PuppetContactMixin', 'contactSearch() searchIdList.length = %d', searchIdList.length)
 
       if (!query) {
         return searchIdList
@@ -133,7 +135,7 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
           }
 
         } catch (e) {
-          log.silly('Puppet', 'contactSearch() contactPayload exception: %s', (e as Error).message)
+          log.silly('PuppetContactMixin', 'contactSearch() contactPayload exception: %s', (e as Error).message)
           await this.dirtyPayloadContact(id)
         }
         return undefined
@@ -155,7 +157,7 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
         batchIndex++
       }
 
-      log.silly('Puppet', 'contactSearch() searchContactPayloadList.length = %d', resultIdList.length)
+      log.silly('PuppetContactMixin', 'contactSearch() searchContactPayloadList.length = %d', resultIdList.length)
 
       return resultIdList
     }
@@ -165,7 +167,7 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
      *  TODO: redesign dirtyPayloadContact
      */
     async dirtyPayloadContact (contactId: string): Promise<void> {
-      log.verbose('Puppet', 'dirtyPayloadContact(%s)', contactId)
+      log.verbose('PuppetContactMixin', 'dirtyPayloadContact(%s)', contactId)
       this.cache.contact.delete(contactId)
     }
 
@@ -177,7 +179,7 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
     contactQueryFilterFactory (
       query: ContactQueryFilter,
     ): ContactPayloadFilterFunction {
-      log.verbose('Puppet', 'contactQueryFilterFactory(%s)',
+      log.verbose('PuppetContactMixin', 'contactQueryFilterFactory(%s)',
         JSON.stringify(query),
       )
 
@@ -233,7 +235,7 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
      *  For example: talk to the server, and see if it should be deleted in the local cache.
      */
     async contactValidate (contactId: string) : Promise<boolean> {
-      log.silly('Puppet', 'contactValidate(%s) base class just return `true`', contactId)
+      log.silly('PuppetContactMixin', 'contactValidate(%s) base class just return `true`', contactId)
       return true
     }
 
@@ -243,16 +245,16 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
      * @protected
      */
     contactPayloadCache (contactId: string): undefined | ContactPayload {
-      // log.silly('Puppet', 'contactPayloadCache(id=%s) @ %s', contactId, this)
+      // log.silly('PuppetContactMixin', 'contactPayloadCache(id=%s) @ %s', contactId, this)
       if (!contactId) {
         throw new Error('no id')
       }
       const cachedPayload = this.cache.contact.get(contactId)
 
       if (cachedPayload) {
-        // log.silly('Puppet', 'contactPayload(%s) cache HIT', contactId)
+        // log.silly('PuppetContactMixin', 'contactPayload(%s) cache HIT', contactId)
       } else {
-        log.silly('Puppet', 'contactPayload(%s) cache MISS', contactId)
+        log.silly('PuppetContactMixin', 'contactPayload(%s) cache MISS', contactId)
       }
 
       return cachedPayload
@@ -261,7 +263,7 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
     async contactPayload (
       contactId: string,
     ): Promise<ContactPayload> {
-      // log.silly('Puppet', 'contactPayload(id=%s) @ %s', contactId, this)
+      // log.silly('PuppetContactMixin', 'contactPayload(id=%s) @ %s', contactId, this)
 
       if (!contactId) {
         throw new Error('no id')
@@ -282,7 +284,7 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
       const payload    = await this.contactRawPayloadParser(rawPayload)
 
       this.cache.contact.set(contactId, payload)
-      log.silly('Puppet', 'contactPayload(%s) cache SET', contactId)
+      log.silly('PuppetContactMixin', 'contactPayload(%s) cache SET', contactId)
 
       return payload
     }

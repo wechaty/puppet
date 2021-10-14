@@ -6,14 +6,16 @@ import type {
   RoomInvitationPayload,
 }                                 from '../schemas/room-invitation.js'
 
-import type { CacheMixin }        from './cache-mixin.js'
+import type { PuppetSkelton }        from '../puppet/skelton.js'
+import type { CacheMixin } from './cache-mixin.js'
 
-const roomInvitationMixin = <TBase extends CacheMixin>(Base: TBase) => {
+const roomInvitationMixin = <MixinBase extends typeof PuppetSkelton & CacheMixin>(mixinBase: MixinBase) => {
 
-  abstract class RoomInvitationMixin extends Base {
+  abstract class RoomInvitationMixin extends mixinBase {
 
     constructor (...args: any[]) {
       super(...args)
+      log.verbose('PuppetRoomInvitationMixin', 'constructor()')
     }
 
     /**
@@ -30,16 +32,16 @@ const roomInvitationMixin = <TBase extends CacheMixin>(Base: TBase) => {
     roomInvitationPayloadCache (
       roomInvitationId: string,
     ): undefined | RoomInvitationPayload {
-      // log.silly('Puppet', 'roomInvitationPayloadCache(id=%s) @ %s', friendshipId, this)
+      // log.silly('PuppetRoomInvitationMixin', 'roomInvitationPayloadCache(id=%s) @ %s', friendshipId, this)
       if (!roomInvitationId) {
         throw new Error('no id')
       }
       const cachedPayload = this.cache.roomInvitation.get(roomInvitationId)
 
       if (cachedPayload) {
-        // log.silly('Puppet', 'roomInvitationPayloadCache(%s) cache HIT', roomInvitationId)
+        // log.silly('PuppetRoomInvitationMixin', 'roomInvitationPayloadCache(%s) cache HIT', roomInvitationId)
       } else {
-        log.silly('Puppet', 'roomInvitationPayloadCache(%s) cache MISS', roomInvitationId)
+        log.silly('PuppetRoomInvitationMixin', 'roomInvitationPayloadCache(%s) cache MISS', roomInvitationId)
       }
 
       return cachedPayload
@@ -68,7 +70,7 @@ const roomInvitationMixin = <TBase extends CacheMixin>(Base: TBase) => {
     async roomInvitationPayload (roomInvitationId: string, newPayload: RoomInvitationPayload) : Promise<void>
 
     async roomInvitationPayload (roomInvitationId: string, newPayload?: RoomInvitationPayload): Promise<void | RoomInvitationPayload> {
-      log.verbose('Puppet', 'roomInvitationPayload(%s)', roomInvitationId)
+      log.verbose('PuppetRoomInvitationMixin', 'roomInvitationPayload(%s)', roomInvitationId)
 
       if (typeof newPayload === 'object') {
         this.cache.roomInvitation.set(roomInvitationId, newPayload)

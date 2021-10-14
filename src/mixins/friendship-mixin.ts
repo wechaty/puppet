@@ -7,14 +7,16 @@ import type {
   FriendshipSearchQueryFilter,
 }                                 from '../schemas/friendship.js'
 
-import type { CacheMixin }        from './cache-mixin.js'
+import type { PuppetSkelton }        from '../puppet/skelton.js'
+import type { CacheMixin } from './cache-mixin.js'
 
-const friendshipMixin = <TBase extends CacheMixin>(Base: TBase) => {
+const friendshipMixin = <MixinBase extends typeof PuppetSkelton & CacheMixin>(mixinBase: MixinBase) => {
 
-  abstract class FriendshipMixin extends Base {
+  abstract class FriendshipMixin extends mixinBase {
 
     constructor (...args: any[]) {
       super(...args)
+      log.verbose('PuppetFriendshipMixin', 'constructor()')
     }
 
     /**
@@ -45,7 +47,7 @@ const friendshipMixin = <TBase extends CacheMixin>(Base: TBase) => {
     async friendshipSearch (
       searchQueryFilter: FriendshipSearchQueryFilter,
     ): Promise<string | null> {
-      log.verbose('Puppet', 'friendshipSearch("%s")', JSON.stringify(searchQueryFilter))
+      log.verbose('PuppetFriendshipMixin', 'friendshipSearch("%s")', JSON.stringify(searchQueryFilter))
 
       if (Object.keys(searchQueryFilter).length !== 1) {
         throw new Error('searchQueryFilter should only include one key for query!')
@@ -66,7 +68,7 @@ const friendshipMixin = <TBase extends CacheMixin>(Base: TBase) => {
      * @protected
      */
     friendshipPayloadCache (friendshipId: string): undefined | FriendshipPayload {
-      log.silly('Puppet', 'friendshipPayloadCache(id=%s) @ %s', friendshipId, this)
+      log.silly('PuppetFriendshipMixin', 'friendshipPayloadCache(id=%s) @ %s', friendshipId, this)
 
       if (!friendshipId) {
         throw new Error('no id')
@@ -74,9 +76,9 @@ const friendshipMixin = <TBase extends CacheMixin>(Base: TBase) => {
       const cachedPayload = this.cache.friendship.get(friendshipId)
 
       if (cachedPayload) {
-        // log.silly('Puppet', 'friendshipPayloadCache(%s) cache HIT', friendshipId)
+        // log.silly('PuppetFriendshipMixin', 'friendshipPayloadCache(%s) cache HIT', friendshipId)
       } else {
-        log.silly('Puppet', 'friendshipPayloadCache(%s) cache MISS', friendshipId)
+        log.silly('PuppetFriendshipMixin', 'friendshipPayloadCache(%s) cache MISS', friendshipId)
       }
 
       return cachedPayload
@@ -92,7 +94,7 @@ const friendshipMixin = <TBase extends CacheMixin>(Base: TBase) => {
       friendshipId : string,
       newPayload?  : FriendshipPayload,
     ): Promise<void | FriendshipPayload> {
-      log.verbose('Puppet', 'friendshipPayload(%s)',
+      log.verbose('PuppetFriendshipMixin', 'friendshipPayload(%s)',
         friendshipId,
         newPayload
           ? ',' + JSON.stringify(newPayload)
