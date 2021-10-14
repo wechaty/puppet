@@ -123,6 +123,13 @@ import type {
   PuppetImplementation,
 }                         from './puppet.js'
 
+import {
+  isEcmaError,
+  isGrpcStatus,
+  isPuppetError,
+  PuppetError,
+}                 from './error/mod.js'
+
 export type {
   ContactPayload,
   ContactQueryFilter,
@@ -174,6 +181,9 @@ export {
   FriendshipSceneType,
   FriendshipType,
   ImageType,
+  isEcmaError,
+  isGrpcStatus,
+  isPuppetError,
   log,
   looseInstanceOfFileBox,
   looseInstanceOfPuppet,
@@ -182,6 +192,7 @@ export {
   PayloadType,
   PUPPET_EVENT_DICT,
   Puppet,
+  PuppetError,
   ScanStatus,
   StateSwitch,
   throwUnsupportedError,
