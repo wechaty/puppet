@@ -113,4 +113,5 @@ class PayloadCache {
 
 }
 
+export type { PayloadCacheOptions }
 export { PayloadCache }
