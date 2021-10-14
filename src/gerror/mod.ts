@@ -1,13 +1,13 @@
 import {
   isEcmaError,
   isGrpcStatus,
-  isPuppetError,
+  isGError,
   GError,
 }                   from './gerror.js'
 
 export {
   isEcmaError,
   isGrpcStatus,
-  isPuppetError,
+  isGError,
   GError,
 }

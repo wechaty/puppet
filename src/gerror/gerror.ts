@@ -114,7 +114,7 @@ class GError extends Error implements GrpcStatus, EcmaError {
 
 export {
   GError,
-  isGError as isPuppetError,
+  isGError,
   isGrpcStatus,
   isEcmaError,
 }

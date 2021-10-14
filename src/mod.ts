@@ -84,9 +84,9 @@ import type {
 import {
   isEcmaError,
   isGrpcStatus,
-  isPuppetError,
-  PuppetError,
-}                 from './error/mod.js'
+  isGError,
+  GError,
+}                 from './gerror/mod.js'
 
 export type {
   ContactPayload,
@@ -141,7 +141,7 @@ export {
   ImageType,
   isEcmaError,
   isGrpcStatus,
-  isPuppetError,
+  isGError,
   log,
   looseInstanceOfFileBox,
   looseInstanceOfPuppet,
@@ -150,7 +150,7 @@ export {
   PayloadType,
   PUPPET_EVENT_DICT,
   Puppet,
-  PuppetError,
+  GError,
   ScanStatus,
   StateSwitch,
   throwUnsupportedError,
