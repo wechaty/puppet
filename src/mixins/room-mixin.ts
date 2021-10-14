@@ -50,8 +50,19 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
     abstract roomTopic (roomId: string)                                        : Promise<string>
     abstract roomTopic (roomId: string, topic: string)                         : Promise<void>
 
-    protected abstract roomRawPayload (roomId: string)        : Promise<any>
-    protected abstract roomRawPayloadParser (rawPayload: any) : Promise<RoomPayload>
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    abstract roomRawPayload (roomId: string)        : Promise<any>
+
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    abstract roomRawPayloadParser (rawPayload: any) : Promise<RoomPayload>
 
     /**
       *
@@ -62,8 +73,19 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
     abstract roomAnnounce (roomId: string, text: string) : Promise<void>
     abstract roomMemberList (roomId: string)             : Promise<string[]>
 
-    protected abstract roomMemberRawPayload (roomId: string, contactId: string) : Promise<any>
-    protected abstract roomMemberRawPayloadParser (rawPayload: any)             : Promise<RoomMemberPayload>
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    abstract roomMemberRawPayload (roomId: string, contactId: string) : Promise<any>
+
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    abstract roomMemberRawPayloadParser (rawPayload: any)             : Promise<RoomMemberPayload>
 
     async roomMemberSearch (
       roomId : string,
@@ -200,7 +222,12 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
       return roomIdList
     }
 
-    protected roomQueryFilterFactory (
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    roomQueryFilterFactory (
       query: RoomQueryFilter,
     ): RoomPayloadFilterFunction {
       log.verbose('Puppet', 'roomQueryFilterFactory(%s)',
@@ -250,7 +277,12 @@ const roomMixin = <TBase extends RoomMixinDependency>(Base: TBase) => {
       return true
     }
 
-    protected roomPayloadCache (roomId: string): undefined | RoomPayload {
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    roomPayloadCache (roomId: string): undefined | RoomPayload {
       // log.silly('Puppet', 'roomPayloadCache(id=%s) @ %s', roomId, this)
       if (!roomId) {
         throw new Error('no id')

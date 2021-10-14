@@ -21,7 +21,13 @@ const roomInvitationMixin = <TBase extends CacheMixin>(Base: TBase) => {
      * Room Invitation
      *
      */
-    protected roomInvitationPayloadCache (
+
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    roomInvitationPayloadCache (
       roomInvitationId: string,
     ): undefined | RoomInvitationPayload {
       // log.silly('Puppet', 'roomInvitationPayloadCache(id=%s) @ %s', friendshipId, this)
@@ -41,8 +47,19 @@ const roomInvitationMixin = <TBase extends CacheMixin>(Base: TBase) => {
 
     abstract roomInvitationAccept (roomInvitationId: string): Promise<void>
 
-    protected abstract roomInvitationRawPayload (roomInvitationId: string) : Promise<any>
-    protected abstract roomInvitationRawPayloadParser (rawPayload: any)    : Promise<RoomInvitationPayload>
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    abstract roomInvitationRawPayload (roomInvitationId: string) : Promise<any>
+
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    abstract roomInvitationRawPayloadParser (rawPayload: any)    : Promise<RoomInvitationPayload>
 
     /**
      * Get & Set

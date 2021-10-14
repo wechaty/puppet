@@ -47,8 +47,19 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
 
     abstract contactList ()                   : Promise<string[]>
 
-    protected abstract contactRawPayload (contactId: string)     : Promise<any>
-    protected abstract contactRawPayloadParser (rawPayload: any) : Promise<ContactPayload>
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    abstract contactRawPayload (contactId: string)     : Promise<any>
+
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    abstract contactRawPayloadParser (rawPayload: any) : Promise<ContactPayload>
 
     // async contactRoomList (
     //   contactId: string,
@@ -158,7 +169,12 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
       this.cache.contact.delete(contactId)
     }
 
-    protected contactQueryFilterFactory (
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    contactQueryFilterFactory (
       query: ContactQueryFilter,
     ): ContactPayloadFilterFunction {
       log.verbose('Puppet', 'contactQueryFilterFactory(%s)',
@@ -221,7 +237,12 @@ const contactMixin = <TBase extends CacheMixin>(Base: TBase) => {
       return true
     }
 
-    protected contactPayloadCache (contactId: string): undefined | ContactPayload {
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    contactPayloadCache (contactId: string): undefined | ContactPayload {
       // log.silly('Puppet', 'contactPayloadCache(id=%s) @ %s', contactId, this)
       if (!contactId) {
         throw new Error('no id')

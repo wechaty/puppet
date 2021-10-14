@@ -61,10 +61,26 @@ const messageMixin = <TBase extends CacheMixin>(Base: TBase) => {
 
     abstract messageRecall (messageId: string) : Promise<boolean>
 
-    protected abstract messageRawPayload (messageId: string)     : Promise<any>
-    protected abstract messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload>
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    abstract messageRawPayload (messageId: string)     : Promise<any>
 
-    protected messagePayloadCache (messageId: string): undefined | MessagePayload {
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    abstract messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload>
+
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    messagePayloadCache (messageId: string): undefined | MessagePayload {
       // log.silly('Puppet', 'messagePayloadCache(id=%s) @ %s', messageId, this)
       if (!messageId) {
         throw new Error('no id')
@@ -142,7 +158,12 @@ const messageMixin = <TBase extends CacheMixin>(Base: TBase) => {
       return messageIdList
     }
 
-    protected messageQueryFilterFactory (
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    messageQueryFilterFactory (
       query: MessageQueryFilter,
     ): MessagePayloadFilterFunction {
       log.verbose('Puppet', 'messageQueryFilterFactory(%s)',

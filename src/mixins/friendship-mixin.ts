@@ -28,8 +28,19 @@ const friendshipMixin = <TBase extends CacheMixin>(Base: TBase) => {
     abstract friendshipSearchPhone (phone: string)   : Promise<null | string>
     abstract friendshipSearchWeixin (weixin: string) : Promise<null | string>
 
-    protected abstract friendshipRawPayload (friendshipId: string)  : Promise<any>
-    protected abstract friendshipRawPayloadParser (rawPayload: any) : Promise<FriendshipPayload>
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    abstract friendshipRawPayload (friendshipId: string)  : Promise<any>
+
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    abstract friendshipRawPayloadParser (rawPayload: any) : Promise<FriendshipPayload>
 
     async friendshipSearch (
       searchQueryFilter: FriendshipSearchQueryFilter,
@@ -49,7 +60,12 @@ const friendshipMixin = <TBase extends CacheMixin>(Base: TBase) => {
       throw new Error(`unknown key from searchQueryFilter: ${Object.keys(searchQueryFilter).join('')}`)
     }
 
-    protected friendshipPayloadCache (friendshipId: string): undefined | FriendshipPayload {
+    /**
+     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     *
+     * @protected
+     */
+    friendshipPayloadCache (friendshipId: string): undefined | FriendshipPayload {
       log.silly('Puppet', 'friendshipPayloadCache(id=%s) @ %s', friendshipId, this)
 
       if (!friendshipId) {
