@@ -1,5 +1,3 @@
-import type { Constructor } from 'clone-class'
-
 import {
   log,
 }           from '../config.js'
@@ -7,9 +5,11 @@ import {
 import type { PuppetOptions }   from '../schemas/puppet.js'
 import { PayloadCache }         from '../payload-cache.js'
 
-const cacheMixin = <TBase extends Constructor>(Base: TBase) => {
+import type { PuppetSkelton } from '../puppet/skelton.js'
 
-  class CacheMixin extends Base {
+const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase) => {
+
+  abstract class CacheMixin extends mixinBase {
 
     cache: PayloadCache
 
@@ -20,6 +20,18 @@ const cacheMixin = <TBase extends Constructor>(Base: TBase) => {
       const options: PuppetOptions = args[0] || {}
 
       this.cache = new PayloadCache(options.cache)
+    }
+
+    override async start (): Promise<void> {
+      log.verbose('CacheMixin', 'start()')
+      await super.start()
+      this.cache.start()
+    }
+
+    override async stop (): Promise<void> {
+      log.verbose('CacheMixin', 'stop()')
+      this.cache.stop()
+      await super.stop()
     }
 
   }
