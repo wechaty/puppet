@@ -55,14 +55,15 @@ enum Code {
   DATA_LOSS,
   UNAUTHENTICATED,
 }
+
 interface GrpcStatus {
-  code     : number
+  code     : Code
   message  : string
   details? : any[]
 }
 
 const isGrpcStatus = (payload: any): payload is GrpcStatus => payload instanceof Object
-  && typeof payload.code === 'number'
+  && typeof payload.code    === 'number'
   && typeof payload.message === 'string'
   && Array.isArray(payload.details)
 
