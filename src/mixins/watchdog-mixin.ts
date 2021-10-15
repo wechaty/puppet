@@ -4,20 +4,20 @@ import {
   log,
 }                   from '../config.js'
 import {
-  PuppetWatchdog,
-}                   from '../puppet-watchdog.js'
+  WatchdogAgent,
+}                   from '../agents/mod.js'
 
 const watchdogMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase) => {
 
   abstract class WatchdogMixin extends mixinBase {
 
-    watchdog: PuppetWatchdog
+    watchdog: WatchdogAgent
 
     constructor (...args: any[]) {
       super(...args)
       log.verbose('PuppetWatchdogMixin', 'constructor("%s")', JSON.stringify(args))
 
-      this.watchdog = new PuppetWatchdog(this)
+      this.watchdog = new WatchdogAgent(this)
     }
 
     override async start (): Promise<void> {

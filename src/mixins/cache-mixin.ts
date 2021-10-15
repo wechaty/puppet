@@ -3,7 +3,7 @@ import {
 }           from '../config.js'
 
 import type { PuppetOptions }   from '../schemas/puppet.js'
-import { PayloadCache }         from '../payload-cache.js'
+import { CacheAgent }           from '../agents/mod.js'
 
 import type { PuppetSkelton } from '../puppet/skelton.js'
 
@@ -11,7 +11,7 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
 
   abstract class CacheMixin extends mixinBase {
 
-    cache: PayloadCache
+    cache: CacheAgent
 
     constructor (...args: any[]) {
       super(...args)
@@ -19,7 +19,7 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
 
       const options: PuppetOptions = args[0] || {}
 
-      this.cache = new PayloadCache(options.cache)
+      this.cache = new CacheAgent(options.cache)
     }
 
     override async start (): Promise<void> {

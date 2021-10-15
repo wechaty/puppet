@@ -7,28 +7,28 @@ import {
 
 import {
   MemoryCard,
-}                 from './config.js'
+}                 from '../config.js'
 
 import {
   ContactGender,
   ContactPayload,
   ContactType,
-}                                 from './schemas/contact.js'
+}                                 from '../schemas/contact.js'
 import {
   MessagePayload,
   MessageQueryFilter,
   MessageType,
-}                                 from './schemas/message.js'
+}                                 from '../schemas/message.js'
 import type {
   RoomPayload,
-}                                 from './schemas/room.js'
+}                                 from '../schemas/room.js'
 
 /**
  * The Fixture
  */
 import {
   PuppetTest,
-}               from '../tests/fixtures/puppet-test/puppet-test.js'
+}               from '../../tests/fixtures/puppet-test/puppet-test.js'
 
 test('contactQueryFilterFunction()', async t => {
 
@@ -286,7 +286,12 @@ test('roomQueryFilterFunction()', async t => {
 //   t.same(roomIdList3, [ROOM_ID_2], 'should get room 2 for contact 3')
 // })
 
-test('reset event throttle for reset()', async t => {
+/**
+ * Huan(202110): the reset logic has been refactored
+ *  See: reset() method and 'reset' event breaking change #157
+ *    https://github.com/wechaty/puppet/issues/157
+ */
+test.skip('reset event throttle for reset()', async t => {
   const puppet = new PuppetTest({})
 
   const sandbox = sinon.createSandbox()
@@ -307,14 +312,6 @@ test('reset event throttle for reset()', async t => {
   t.equal(reset.callCount, 2, 'should call reset() again after 1 second')
 
   sandbox.restore()
-})
-
-test('setMemory() memory without name', async t => {
-  const puppet = new PuppetTest()
-  const memory = new MemoryCard()
-
-  t.doesNotThrow(() => { puppet.memory = memory }, 'should not throw when set a no-name memory first time ')
-  t.doesNotThrow(() => { puppet.memory = memory }, 'should not throw when set a no-name memory second time')
 })
 
 test('set memory() memory with a name', async t => {

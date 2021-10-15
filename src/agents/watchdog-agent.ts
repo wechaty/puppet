@@ -3,14 +3,14 @@ import {
   WatchdogFood,
 }                       from 'watchdog'
 
-import type { PuppetSkelton } from './puppet/skelton.js'
+import type { PuppetSkelton } from '../puppet/skelton.js'
 import {
   log,
-}           from './config.js'
+}           from '../config.js'
 
 const DEFAULT_WATCHDOG_TIMEOUT_SECONDS  = 60
 
-class PuppetWatchdog {
+class WatchdogAgent {
 
   protected readonly watchdog : Watchdog
 
@@ -26,7 +26,7 @@ class PuppetWatchdog {
   constructor (
     protected readonly puppet: PuppetSkelton,
   ) {
-    log.verbose('Watchdog', 'constructor(%s)', puppet)
+    log.verbose('WatchdogAgent', 'constructor(%s)', puppet)
 
     this.cleanCallbackList = []
 
@@ -36,7 +36,7 @@ class PuppetWatchdog {
      *  feed the watchdog by `this.emit('heartbeat', ...)`
      */
     const timeoutSeconds = puppet.options.timeoutSeconds || DEFAULT_WATCHDOG_TIMEOUT_SECONDS
-    log.verbose('PuppetWatchdog', 'constructor() watchdog timeout set to %d seconds', timeoutSeconds)
+    log.verbose('WatchdogAgent', 'constructor() watchdog timeout set to %d seconds', timeoutSeconds)
     this.watchdog = new Watchdog(1000 * timeoutSeconds, 'Puppet')
 
     // /**
@@ -44,7 +44,7 @@ class PuppetWatchdog {
     //   */
     // this.resetThrottleQueue = new ThrottleQueue<string>(1000)
     // this.resetThrottleQueue.subscribe(reason => {
-    //   log.silly('PuppetWatchdog', 'constructor() resetThrottleQueue.subscribe() reason: "%s"', reason)
+    //   log.silly('WatchdogAgent', 'constructor() resetThrottleQueue.subscribe() reason: "%s"', reason)
     //   puppet.reset(reason)
     // })
   }
@@ -66,10 +66,10 @@ class PuppetWatchdog {
      * watchdog event `reset` to reset() puppet
      */
     const reset = (lastFood: WatchdogFood) => {
-      log.warn('PuppetWatchdog', 'start() reset() reason: %s', JSON.stringify(lastFood))
+      log.warn('WatchdogAgent', 'start() reset() reason: %s', JSON.stringify(lastFood))
       this.puppet
-        .reset(`PuppetWatchdog reset: lastFood: "${JSON.stringify(lastFood)}"`)
-        .catch(e => log.error('PuppetWatchdog', 'start() reset() rejection: %s', e.message))
+        .reset(`WatchdogAgent reset: lastFood: "${JSON.stringify(lastFood)}"`)
+        .catch(e => log.error('WatchdogAgent', 'start() reset() rejection: %s', e.message))
     }
     this.watchdog.on('reset', reset)
     this.cleanCallbackList.push(() => this.puppet.off('reset', reset))
@@ -89,4 +89,4 @@ class PuppetWatchdog {
 
 }
 
-export { PuppetWatchdog }
+export { WatchdogAgent }

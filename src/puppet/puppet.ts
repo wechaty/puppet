@@ -23,28 +23,29 @@ import {
   log,
   NAME,
   VERSION,
-}                       from './config.js'
+}                       from '../config.js'
 
 import type {
   EventLoginPayload,
-}                                 from './schemas/event.js'
-import type {
   PuppetOptions,
-}                                 from './schemas/puppet.js'
-import { PayloadType }            from './schemas/payload.js'
+}                       from '../schemas/mod.js'
+import {
+  PayloadType,
+}                       from '../schemas/mod.js'
 
-import { contactMixin }         from './mixins/contact-mixin.js'
-import { friendshipMixin }      from './mixins/friendship-mixin.js'
-import { messageMixin }         from './mixins/message-mixin.js'
-import { roomInvitationMixin }  from './mixins/room-invitation-mixin.js'
-import { roomMixin }            from './mixins/room-mixin.js'
-import { tagMixin }             from './mixins/tag-mixin.js'
-import { memoryMixin } from './mixins/memory-mixin.js'
-import { cacheMixin } from './mixins/cache-mixin.js'
+import {
+  contactMixin,
+  friendshipMixin,
+  messageMixin,
+  roomInvitationMixin,
+  roomMixin,
+  tagMixin,
+  memoryMixin,
+  cacheMixin,
+  watchdogMixin,
+}                     from '../mixins/mod.js'
 
-import { PuppetWatchdog } from './puppet-watchdog.js'
-import { watchdogMixin } from './mixins/watchdog-mixin.js'
-import { PuppetSkelton } from './puppet/skelton.js'
+import { PuppetSkelton } from './skelton.js'
 
 let PUPPET_COUNTER = 0
 
@@ -108,8 +109,6 @@ abstract class Puppet extends MixinBase {
     log.verbose('Puppet', 'constructor(%s) #%d', JSON.stringify(options), this.counter)
 
     this.state    = new StateSwitch(this.constructor.name, { log })
-    this.watchdog = new PuppetWatchdog(this)
-
     {
       /* eslint  no-lone-blocks: off */
       // Huan(202108): remove this code block because it's unclear what it does
@@ -168,12 +167,12 @@ abstract class Puppet extends MixinBase {
    *
    */
   override async start () : Promise<void> {
+    log.verbose('Puppet', 'start()')
     await super.start()
-    this.watchdog.start()
   }
 
   override async stop (): Promise<void> {
-    this.watchdog.stop()
+    log.verbose('Puppet', 'stop()')
     await super.stop()
   }
 

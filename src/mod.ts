@@ -19,7 +19,7 @@ import {
 }                         from './loose-instance-of.js'
 import {
   Puppet,
-}                         from './puppet.js'
+}                         from './puppet/mod.js'
 import {
   throwUnsupportedError,
 }                             from './throw-unsupported-error.js'
@@ -79,7 +79,7 @@ import {
 
 import type {
   PuppetImplementation,
-}                         from './puppet.js'
+}                         from './puppet/mod.js'
 
 import {
   isEcmaError,
