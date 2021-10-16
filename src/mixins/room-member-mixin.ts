@@ -150,18 +150,6 @@ const roomMemberMixin = <MixinBase extends typeof PuppetSkelton & ContactMixin>(
       return payload
     }
 
-    async dirtyPayloadRoomMember (roomId: string): Promise<void> {
-      log.verbose('PuppetRoomMemberMixin', 'dirtyPayloadRoomMember(%s)', roomId)
-
-      const contactIdList = await this.roomMemberList(roomId)
-
-      let cacheKey
-      contactIdList.forEach(contactId => {
-        cacheKey = this.cache.roomMemberId(roomId, contactId)
-        this.cache.roomMember.delete(cacheKey)
-      })
-    }
-
   }
 
   return RoomMemberMixin

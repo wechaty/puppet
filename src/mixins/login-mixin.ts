@@ -29,6 +29,7 @@ const loginMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
       log.verbose('PuppetLoginMixin', 'stop()')
       await this.logout()
       await super.stop()
+      this.#currentUserId = undefined
     }
 
     /**

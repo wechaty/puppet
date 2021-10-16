@@ -48,6 +48,13 @@ import { PuppetSkelton }    from './skelton.js'
 /**
  * Huan(202110): use compose() to compose mixins
  */
+// const MixinBase = compose(
+//   messageMixin,
+//   roomInvitationMixin,
+//   ...,
+//   PuppetSkelton,
+// )
+
 const MixinBase = miscMixin(
   messageMixin(
     roomInvitationMixin(
@@ -94,13 +101,6 @@ abstract class Puppet extends MixinBase {
   // Huan(202108): Remove this property, because it the `hot-import` module is not a ESM compatible one
   // private readonly childPkg: normalize.Package
 
-  /**
-   *
-   *
-   * Constructor
-   *
-   *
-   */
   constructor (
     public override options: PuppetOptions = {},
   ) {
@@ -212,48 +212,6 @@ abstract class Puppet extends MixinBase {
        */
       this.state.off(true)
     }
-  }
-
-  /**
-   *
-   * dirty payload methods
-   *  See: https://github.com/Chatie/grpc/pull/79
-   *
-   */
-
-  async dirtyPayload (type: PayloadType, id: string): Promise<void> {
-    log.verbose('Puppet', 'dirtyPayload(%s<%s>, %s)', PayloadType[type], type, id)
-
-    switch (type) {
-      case PayloadType.Message:
-        return this.dirtyPayloadMessage(id)
-      case PayloadType.Contact:
-        return this.dirtyPayloadContact(id)
-      case PayloadType.Room:
-        return this.dirtyPayloadRoom(id)
-      case PayloadType.RoomMember:
-        return this.dirtyPayloadRoomMember(id)
-      case PayloadType.Friendship:
-        return this.dirtyPayloadFriendship(id)
-
-      default:
-        throw new Error('unknown payload type: ' + type)
-    }
-  }
-
-  // private async dirtyPayloadContact (contactId: string): Promise<void> {
-  //   log.verbose('Puppet', 'dirtyPayloadContact(%s)', contactId)
-  //   this.payloadCache.contact.delete(contactId)
-  // }
-
-  private async dirtyPayloadFriendship (friendshipId: string): Promise<void> {
-    log.verbose('Puppet', 'dirtyPayloadFriendship(%s)', friendshipId)
-    this.cache.friendship.delete(friendshipId)
-  }
-
-  private async dirtyPayloadMessage (messageId: string): Promise<void> {
-    log.verbose('Puppet', 'dirtyPayloadMessage(%s)', messageId)
-    this.cache.message.delete(messageId)
   }
 
 }

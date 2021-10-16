@@ -163,15 +163,6 @@ const contactMixin = <MixinBase extends CacheMixin & typeof PuppetSkelton>(mixin
     }
 
     /**
-     * Huan(202110): add the private back, or
-     *  TODO: redesign dirtyPayloadContact
-     */
-    async dirtyPayloadContact (contactId: string): Promise<void> {
-      log.verbose('PuppetContactMixin', 'dirtyPayloadContact(%s)', contactId)
-      this.cache.contact.delete(contactId)
-    }
-
-    /**
      * Issue #155 - https://github.com/wechaty/puppet/issues/155
      *
      * @protected

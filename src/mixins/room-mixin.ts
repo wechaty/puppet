@@ -218,15 +218,6 @@ const roomMixin = <MixinBase extends typeof PuppetSkelton & ContactMixin & RoomM
       return payload
     }
 
-    /**
-     * Huan(202110): FIXME: re-design the dirtyXXX
-     *  remove private temporary
-     */
-    async dirtyPayloadRoom (roomId: string): Promise<void> {
-      log.verbose('PuppetRoomMixin', 'dirtyPayloadRoom(%s)', roomId)
-      this.cache.room.delete(roomId)
-    }
-
   }
 
   return RoomMixin
