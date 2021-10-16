@@ -1,12 +1,12 @@
-import {
-  log,
-}           from '../config.js'
+import { log }  from '../config.js'
 
 import type { PuppetOptions }   from '../schemas/puppet.js'
+import { PayloadType }          from '../schemas/payload.js'
+
 import { CacheAgent }           from '../agents/mod.js'
 
-import type { PuppetSkelton } from '../puppet/skelton.js'
-import { PayloadType } from '../mod.js'
+import type { PuppetSkelton }   from '../puppet/skelton.js'
+import type { EventDirtyPayload } from '../mod.js'
 
 const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase) => {
 
@@ -14,12 +14,15 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
 
     cache: CacheAgent
 
+    cacheMixinCleanCallbackList: Function[]
+
     constructor (...args: any[]) {
       super(...args)
       log.verbose('PuppetCacheMixin', 'constructor("%s")', JSON.stringify(args))
 
       const options: PuppetOptions = args[0] || {}
 
+      this.cacheMixinCleanCallbackList = []
       this.cache = new CacheAgent(options.cache)
     }
 
@@ -27,11 +30,29 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
       log.verbose('PuppetCacheMixin', 'start()')
       await super.start()
       this.cache.start()
+
+      const onDirty = (payload: EventDirtyPayload) => this.onDirty(payload)
+      this.on('dirty', onDirty)
+      log.verbose('PuppetCacheMixin', 'start() event "dirty" listener added')
+
+      const cleanFn = () => {
+        this.off('dirty', onDirty)
+        log.verbose('PuppetCacheMixin', 'start() event "dirty" listener removed')
+      }
+      this.cacheMixinCleanCallbackList.push(cleanFn)
     }
 
     override async stop (): Promise<void> {
       log.verbose('PuppetCacheMixin', 'stop()')
       this.cache.stop()
+
+      while (this.cacheMixinCleanCallbackList.length) {
+        const fn = this.cacheMixinCleanCallbackList.shift()
+        if (fn) {
+          fn()
+        }
+      }
+
       await super.stop()
     }
 
@@ -39,43 +60,45 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
      * dirty payload methods
      *  @see https://github.com/wechaty/grpc/pull/79
      */
-    async dirtyPayload (type: PayloadType, id: string): Promise<void> {
+    async dirtyPayload (
+      type: PayloadType,
+      id: string,
+    ): Promise<void> {
       log.verbose('Puppet', 'dirtyPayload(%s<%s>, %s)', PayloadType[type], type, id)
+      this.emit('dirty', {
+        payloadId   : id,
+        payloadType : type,
+      })
+    }
 
-      switch (type) {
+    async onDirty ({ payloadType, payloadId }: EventDirtyPayload) {
+      switch (payloadType) {
         case PayloadType.Message:
-          this.cache.message.delete(id)
+          this.cache.message.delete(payloadId)
           break
         case PayloadType.Contact:
-          this.cache.contact.delete(id)
+          this.cache.contact.delete(payloadId)
           break
         case PayloadType.Room:
-          this.cache.room.delete(id)
+          this.cache.room.delete(payloadId)
           break
         case PayloadType.RoomMember:
-          const contactIdList = await this.roomMemberList(id)
+          const contactIdList = await this.roomMemberList(payloadId)
 
           for (let contactId of contactIdList) {
-            const cacheKey = this.cache.roomMemberId(id, contactId)
+            const cacheKey = this.cache.roomMemberId(payloadId, contactId)
             this.cache.roomMember.delete(cacheKey)
           }
 
           break
         case PayloadType.Friendship:
-          this.cache.friendship.delete(id)
+          this.cache.friendship.delete(payloadId)
           break
 
         default:
-          throw new Error('unknown payload type: ' + type)
+          throw new Error('unknown payload type: ' + payloadType)
       }
 
-      /**
-       * Propagate the dirty event to the puppet
-       */
-      this.emit('dirty', {
-        payloadId   : id,
-        payloadType : type,
-      })
     }
 
   }
@@ -87,6 +110,7 @@ type CacheMixin = ReturnType<typeof cacheMixin>
 
 type ProtectedPropertyCacheMixin = never
   | 'cache'
+  | 'onDirty'
 
 export type {
   CacheMixin,

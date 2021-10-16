@@ -20,15 +20,11 @@ import uuid from 'uuid'
 
 import {
   log,
-}                       from '../config.js'
-
-import type {
-  PuppetOptions,
-}                                 from '../schemas/puppet.js'
+}           from '../config.js'
 
 import {
   PuppetEventEmitter,
-}                                 from './events.js'
+}                       from './events.js'
 
 abstract class PuppetSkelton extends PuppetEventEmitter {
 
@@ -42,8 +38,6 @@ abstract class PuppetSkelton extends PuppetEventEmitter {
    */
   readonly id: string
 
-  options: PuppetOptions
-
   /**
    * Huan(202110): mixins required the constructor arguments to be `...args: any[]`
    * @param args
@@ -53,9 +47,7 @@ abstract class PuppetSkelton extends PuppetEventEmitter {
   ) {
     super()
     log.verbose('PuppetSkelton', 'constructor("%s")', JSON.stringify(args))
-
-    this.id      = uuid.v4()
-    this.options = args[0] || {}
+    this.id = uuid.v4()
   }
 
   /**

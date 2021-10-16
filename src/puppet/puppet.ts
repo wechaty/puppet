@@ -18,14 +18,10 @@
  */
 import {
   log,
-  VERSION,
 }                       from '../config.js'
 
 import type {
   PuppetOptions,
-}                       from '../schemas/mod.js'
-import {
-  PayloadType,
 }                       from '../schemas/mod.js'
 
 import {
@@ -90,40 +86,11 @@ const MixinBase = miscMixin(
  */
 abstract class Puppet extends MixinBase {
 
-  /**
-   * Must overwrite by child class to identify their version
-   */
-  static readonly VERSION = VERSION
-
-  /**
-   * childPkg stores the `package.json` that the NPM module who extends the `Puppet`
-   */
-  // Huan(202108): Remove this property, because it the `hot-import` module is not a ESM compatible one
-  // private readonly childPkg: normalize.Package
-
   constructor (
-    public override options: PuppetOptions = {},
+    public options: PuppetOptions = {},
   ) {
     super(options)
     log.verbose('Puppet', 'constructor(%s) #%d', JSON.stringify(options), this.counter)
-  }
-
-  override toString () {
-    let memoryName
-    try {
-      memoryName = this.memory.name
-    } catch (_) {}
-
-    return [
-      'Puppet#',
-      this.counter,
-      '<',
-      this.constructor.name,
-      '>',
-      '(',
-      memoryName || 'NOMEMORY',
-      ')',
-    ].join('')
   }
 
   /**

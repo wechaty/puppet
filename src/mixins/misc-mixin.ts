@@ -5,14 +5,47 @@ import {
 }                       from '../config.js'
 
 import type { PuppetSkelton }   from '../puppet/skelton.js'
+import type { MemoryMixin } from './memory-mixin.js'
+import type { StateMixin } from './state-mixin.js'
 
-const miscMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase) => {
+const miscMixin = <MixinBase extends typeof PuppetSkelton & MemoryMixin & StateMixin>(mixinBase: MixinBase) => {
 
   abstract class MiscMixin extends mixinBase {
+
+    /**
+     * Must overwrite by child class to identify their version
+     */
+    static readonly VERSION = VERSION
+
+    /**
+      * childPkg stores the `package.json` that the NPM module who extends the `Puppet`
+      */
+    // Huan(202108): Remove this property, because it the `hot-import` module is not a ESM compatible one
+    // private readonly childPkg: normalize.Package
 
     constructor (...args: any[]) {
       super(...args)
       log.verbose('PuppetMiscMixin', 'constructor()')
+    }
+
+    override toString () {
+      let memoryName
+      try {
+        memoryName = this.memory.name || 'NONAME'
+      } catch (_) {
+        memoryName = 'NOMEMORY'
+      }
+
+      return [
+        'Puppet#',
+        this.counter,
+        '<',
+        this.constructor.name,
+        '>',
+        '(',
+        memoryName,
+        ')',
+      ].join('')
     }
 
     /**

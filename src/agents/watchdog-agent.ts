@@ -50,7 +50,12 @@ class WatchdogAgent {
      */
     const feed = (food: WatchdogFood) => { this.watchdog.feed(food) }
     this.puppet.on('heartbeat', feed)
-    this.cleanCallbackList.push(() => this.puppet.off('heartbeat', feed))
+    log.verbose('WatchdogAgent', 'start() puppet event "heartbeat" listener added')
+
+    this.cleanCallbackList.push(() => {
+      this.puppet.off('heartbeat', feed)
+      log.verbose('WatchdogAgent', 'start() puppet event "heartbeat" listener removed')
+    })
 
     /**
      * watchdog event `reset` to reset() puppet
@@ -62,7 +67,12 @@ class WatchdogAgent {
         .catch(e => log.error('WatchdogAgent', 'start() reset() rejection: %s', e.message))
     }
     this.watchdog.on('reset', reset)
-    this.cleanCallbackList.push(() => this.puppet.off('reset', reset))
+    log.verbose('WatchdogAgent', 'start() watchdog event "reset" listener added')
+
+    this.cleanCallbackList.push(() => {
+      this.puppet.off('reset', reset)
+      log.verbose('WatchdogAgent', 'start() watchdog event "reset" listener removed')
+    })
 
     // this.puppet.on('reset', this.throttleReset)
   }
