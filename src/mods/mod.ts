@@ -13,22 +13,28 @@
 
  * This is due to the circler dependence, the deeper reason is still not clear.
  */
-import './interface-of.js'
+import '../puppet/interface-of.js'
 
-import { PuppetSkelton } from './puppet-skelton.js'
+import {
+  VERSION,
+  log,
+}                             from '../config.js'
 import {
   Puppet,
-}                         from './puppet-abstract.js'
-import type {
-  PuppetConstructor,
-  PuppetInterface,
-}                         from './interface.js'
+}                             from '../puppet/puppet-abstract.js'
+import {
+  throwUnsupportedError,
+}                             from '../throw-unsupported-error.js'
 
-export type {
-  PuppetConstructor,
-  PuppetInterface,
-}
 export {
+  log,
   Puppet,
-  PuppetSkelton,
+  throwUnsupportedError,
+  VERSION,
 }
+
+export * as payload from './mod-payload.js'
+export * as impl    from './mod-impl.js'
+export * as type    from './mod-type.js'
+export * as helper  from './mod-helper.js'
+export * as query   from './mod-query.js'
