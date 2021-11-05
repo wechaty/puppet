@@ -1,15 +1,17 @@
+import type {
+  FileBoxInterface,
+}                       from 'file-box'
+
 import {
-  FileBox,
   log,
 }                       from '../config.js'
-
 import type {
   RoomPayload,
   RoomPayloadFilterFunction,
   RoomQueryFilter,
 }                                 from '../schemas/room.js'
 
-import type { PuppetSkelton } from '../puppet/skelton.js'
+import type { PuppetSkelton } from '../puppet/puppet-skelton.js'
 import type { ContactMixin }  from './contact-mixin.js'
 import type { RoomMemberMixin } from './room-member-mixin.js'
 
@@ -28,7 +30,7 @@ const roomMixin = <MixinBase extends typeof PuppetSkelton & ContactMixin & RoomM
      *
      */
     abstract roomAdd (roomId: string, contactId: string, inviteOnly?: boolean) : Promise<void>
-    abstract roomAvatar (roomId: string)                                       : Promise<FileBox>
+    abstract roomAvatar (roomId: string)                                       : Promise<FileBoxInterface>
     abstract roomCreate (contactIdList: string[], topic?: string)              : Promise<string>
     abstract roomDel (roomId: string, contactId: string)                       : Promise<void>
     abstract roomList ()                                                       : Promise<string[]>
@@ -64,6 +66,24 @@ const roomMixin = <MixinBase extends typeof PuppetSkelton & ContactMixin & RoomM
     ): Promise<string[] /* Room Id List */> {
       log.verbose('PuppetRoomMixin', 'roomSearch(%s)', query ? JSON.stringify(query) : '')
 
+      /**
+       * Huan(202110): optimize for search id
+       */
+      if (query?.id) {
+        try {
+          // make sure the room id has valid payload
+          await this.roomPayload(query.id)
+          return [query.id]
+        } catch (e) {
+          log.verbose('PuppetRoomMixin', 'roomSearch() payload not found for id "%s"', query.id)
+          await this.dirtyPayloadRoom(query.id)
+          return []
+        }
+      }
+
+      /**
+       * Deal with non-id queries
+       */
       const allRoomIdList: string[] = await this.roomList()
       log.silly('PuppetRoomMixin', 'roomSearch() allRoomIdList.length=%d', allRoomIdList.length)
 
@@ -82,17 +102,25 @@ const roomMixin = <MixinBase extends typeof PuppetSkelton & ContactMixin & RoomM
           BATCH_SIZE * (batchIndex + 1),
         )
 
+        /**
+         * Huan(202110): TODO: use an iterator with works to control the concurrency of Promise.all.
+         *  @see https://stackoverflow.com/a/51020535/1123955
+         */
+
         const batchPayloads = (await Promise.all(
           batchRoomIds.map(
             async id => {
               try {
                 return await this.roomPayload(id)
               } catch (e) {
-                // compatible with {} payload
-                log.silly('PuppetRoomMixin', 'roomSearch() roomPayload exception: %s', (e as Error).message)
+                // log.silly('PuppetRoomMixin', 'roomSearch() roomPayload exception: %s', (e as Error).message)
+                this.emit('error', e)
+
                 // Remove invalid room id from cache to avoid getting invalid room payload again
                 await this.dirtyPayloadRoom(id)
                 await this.dirtyPayloadRoomMember(id)
+
+                // compatible with {} payload
                 return {} as any
               }
             },
@@ -225,7 +253,7 @@ const roomMixin = <MixinBase extends typeof PuppetSkelton & ContactMixin & RoomM
 
 type RoomMixin = ReturnType<typeof roomMixin>
 
-type ProtectedPropertyRoomMixin = never
+type ProtectedPropertyRoomMixin =
   | 'roomPayloadCache'
   | 'roomQueryFilterFactory'
   | 'roomRawPayload'

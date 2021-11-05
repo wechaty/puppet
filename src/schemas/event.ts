@@ -68,7 +68,7 @@ export interface EventDongPayload {
 
 export type EventErrorPayload = {
   data?: string,
-} & Error
+}
 
 export interface EventReadyPayload {
   data: string,
@@ -87,7 +87,7 @@ export interface EventDirtyPayload {
   payloadId   : string,
 }
 
-export type EventPayload = never
+export type EventPayload =
   | EventDirtyPayload
   | EventDongPayload
   | EventErrorPayload

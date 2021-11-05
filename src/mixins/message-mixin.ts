@@ -1,5 +1,10 @@
+// import {
+//   FileBox,
+// } from 'file-box'
+import type {
+  FileBoxInterface,
+}                     from 'file-box'
 import {
-  FileBox,
   log,
 }                       from '../config.js'
 
@@ -22,7 +27,7 @@ import type {
   LocationPayload,
 }                                 from '../schemas/location.js'
 
-import type { PuppetSkelton }        from '../puppet/skelton.js'
+import type { PuppetSkelton }        from '../puppet/puppet-skelton.js'
 import type { CacheMixin } from './cache-mixin.js'
 
 const messageMixin = <MinxinBase extends typeof PuppetSkelton & CacheMixin>(baseMixin: MinxinBase) => {
@@ -47,15 +52,15 @@ const messageMixin = <MinxinBase extends typeof PuppetSkelton & CacheMixin>(base
     *
     */
     abstract messageContact      (messageId: string)                       : Promise<string>
-    abstract messageFile         (messageId: string)                       : Promise<FileBox>
-    abstract messageImage        (messageId: string, imageType: ImageType) : Promise<FileBox>
+    abstract messageFile         (messageId: string)                       : Promise<FileBoxInterface>
+    abstract messageImage        (messageId: string, imageType: ImageType) : Promise<FileBoxInterface>
     abstract messageMiniProgram  (messageId: string)                       : Promise<MiniProgramPayload>
     abstract messageUrl          (messageId: string)                       : Promise<UrlLinkPayload>
     abstract messageLocation     (messageId: string)                       : Promise<LocationPayload>
 
     abstract messageForward         (conversationId: string, messageId: string,)                     : Promise<void | string>
     abstract messageSendContact     (conversationId: string, contactId: string)                      : Promise<void | string>
-    abstract messageSendFile        (conversationId: string, file: FileBox)                          : Promise<void | string>
+    abstract messageSendFile        (conversationId: string, file: FileBoxInterface)                 : Promise<void | string>
     abstract messageSendMiniProgram (conversationId: string, miniProgramPayload: MiniProgramPayload) : Promise<void | string>
     abstract messageSendText        (conversationId: string, text: string, mentionIdList?: string[]) : Promise<void | string>
     abstract messageSendUrl         (conversationId: string, urlLinkPayload: UrlLinkPayload)         : Promise<void | string>
@@ -136,6 +141,23 @@ const messageMixin = <MinxinBase extends typeof PuppetSkelton & CacheMixin>(base
     ): Promise<string[] /* Message Id List */> {
       log.verbose('PuppetMessageMixin', 'messageSearch(%s)', JSON.stringify(query))
 
+      /**
+       * Huan(202110): optimize for search id
+       */
+      if (query?.id) {
+        try {
+          // make sure the room id has valid payload
+          await this.messagePayload(query.id)
+          return [query.id]
+        } catch (e) {
+          log.verbose('PuppetMessageMixin', 'messageSearch() payload not found for id "%s"', query.id)
+          return []
+        }
+      }
+
+      /**
+       * Deal with non-id queries
+       */
       const allMessageIdList: string[] = this.messageList()
       log.silly('PuppetMessageMixin', 'messageSearch() allMessageIdList.length=%d', allMessageIdList.length)
 
@@ -161,7 +183,8 @@ const messageMixin = <MinxinBase extends typeof PuppetSkelton & CacheMixin>(base
     }
 
     /**
-     * Issue #155 - https://github.com/wechaty/puppet/issues/155
+     * Issue #155 - Mixin: Property 'messageRawPayload' of exported class expression may not be private or protected.ts(4094)
+     *  @seehttps://github.com/wechaty/puppet/issues/155
      *
      * @protected
      */
@@ -172,7 +195,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkelton & CacheMixin>(base
         JSON.stringify(query),
       )
 
-      if (Object.keys(query).length < 1) {
+      if (Object.keys(query).length <= 0) {
         throw new Error('query empty')
       }
 
@@ -210,7 +233,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkelton & CacheMixin>(base
 
 type MessageMixin = ReturnType<typeof messageMixin>
 
-type ProtectedPropertyMessageMixin = never
+type ProtectedPropertyMessageMixin =
   | 'messagePayloadCache'
   | 'messageQueryFilterFactory'
   | 'messageRawPayload'

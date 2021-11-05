@@ -1,12 +1,14 @@
 import { log }  from '../config.js'
 
-import type { PuppetOptions }   from '../schemas/puppet.js'
-import { PayloadType }          from '../schemas/payload.js'
+import type {
+  PuppetOptions,
+  EventDirtyPayload,
+}                               from '../schemas/mod.js'
+import { PayloadType }          from '../schemas/mod.js'
 
 import { CacheAgent }           from '../agents/mod.js'
 
-import type { PuppetSkelton }   from '../puppet/skelton.js'
-import type { EventDirtyPayload } from '../mod.js'
+import type { PuppetSkelton }   from '../puppet/mod.js'
 
 const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase) => {
 
@@ -18,7 +20,11 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
 
     constructor (...args: any[]) {
       super(...args)
-      log.verbose('PuppetCacheMixin', 'constructor("%s")', JSON.stringify(args))
+      log.verbose('PuppetCacheMixin', 'constructor(%s)',
+        args[0]?.cache
+          ? '{ cache: ' + JSON.stringify(args[0].cache) + ' }'
+          : '',
+      )
 
       const options: PuppetOptions = args[0] || {}
 
@@ -82,15 +88,16 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
         case PayloadType.Room:
           this.cache.room.delete(payloadId)
           break
-        case PayloadType.RoomMember:
+        case PayloadType.RoomMember: {
           const contactIdList = await this.roomMemberList(payloadId)
 
-          for (let contactId of contactIdList) {
+          for (const contactId of contactIdList) {
             const cacheKey = this.cache.roomMemberId(payloadId, contactId)
             this.cache.roomMember.delete(cacheKey)
           }
 
           break
+        }
         case PayloadType.Friendship:
           this.cache.friendship.delete(payloadId)
           break
@@ -108,7 +115,7 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
 
 type CacheMixin = ReturnType<typeof cacheMixin>
 
-type ProtectedPropertyCacheMixin = never
+type ProtectedPropertyCacheMixin =
   | 'cache'
   | 'onDirty'
 

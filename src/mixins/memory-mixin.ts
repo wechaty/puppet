@@ -2,7 +2,7 @@ import { MemoryCard }  from 'memory-card'
 
 import type {
   PuppetSkelton,
-}                   from '../puppet/skelton.js'
+}                   from '../puppet/puppet-skelton.js'
 
 import {
   log,
@@ -12,10 +12,10 @@ const memoryMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBas
 
   abstract class MemoryMixin extends mixinBase {
 
-    #memory: MemoryCard
+    _memory: MemoryCard
 
     get memory (): MemoryCard {
-      return this.#memory
+      return this._memory
     }
 
     constructor (...args: any[]) {
@@ -25,28 +25,31 @@ const memoryMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBas
        * Huan(202110): we init a un-named MemoryCard by default
        *  it can be replaced by `setMemory()` later.
        */
-      this.#memory = new MemoryCard()
+      this._memory = new MemoryCard()
     }
 
     override async start (): Promise<void> {
-      log.verbose('PuppetMemoryMixin', 'constructor()')
-      await this.memory.load()
+      log.verbose('PuppetMemoryMixin', 'start()')
+      try {
+        await this.memory.load()
+      } catch (_) {
+        log.silly('PuppetMemoryMixin', 'start() memory has already been loaded before')
+      }
       await super.start()
     }
 
     override async stop (): Promise<void> {
-      log.verbose('PuppetMemoryMixin', 'constructor()')
+      log.verbose('PuppetMemoryMixin', 'stop()')
       await super.stop()
     }
 
     setMemory (memory: MemoryCard): void {
       log.verbose('PuppetMemoryMixin', 'setMemory(%s)', memory.name)
 
-      if (this.#memory.name) {
-        throw new Error('can not replace a named memory: ' + this.#memory.name)
+      if (this._memory.name) {
+        throw new Error('Puppet memory can be only set once')
       }
-
-      this.#memory = memory
+      this._memory = memory
     }
 
   }
@@ -56,7 +59,8 @@ const memoryMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBas
 
 type MemoryMixin = ReturnType<typeof memoryMixin>
 
-type ProtectedPropertyMemoryMixin = never
+type ProtectedPropertyMemoryMixin =
+  | '_memory'
   | 'memory'
 
 export type {

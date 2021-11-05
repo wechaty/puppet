@@ -4,18 +4,13 @@ import {
   VERSION,
 }                       from '../config.js'
 
-import type { PuppetSkelton }   from '../puppet/skelton.js'
-import type { MemoryMixin } from './memory-mixin.js'
-import type { StateMixin } from './state-mixin.js'
+import type { PuppetSkelton }   from '../puppet/mod.js'
 
-const miscMixin = <MixinBase extends typeof PuppetSkelton & MemoryMixin & StateMixin>(mixinBase: MixinBase) => {
+import type { MemoryMixin } from './memory-mixin.js'
+
+const miscMixin = <MixinBase extends typeof PuppetSkelton & MemoryMixin>(mixinBase: MixinBase) => {
 
   abstract class MiscMixin extends mixinBase {
-
-    /**
-     * Must overwrite by child class to identify their version
-     */
-    static readonly VERSION = VERSION
 
     /**
       * childPkg stores the `package.json` that the NPM module who extends the `Puppet`
@@ -37,8 +32,7 @@ const miscMixin = <MixinBase extends typeof PuppetSkelton & MemoryMixin & StateM
       }
 
       return [
-        'Puppet#',
-        this.counter,
+        'Puppet',
         '<',
         this.constructor.name,
         '>',

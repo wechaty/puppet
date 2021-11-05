@@ -6,7 +6,7 @@ import type {
   RoomInvitationPayload,
 }                                 from '../schemas/room-invitation.js'
 
-import type { PuppetSkelton }        from '../puppet/skelton.js'
+import type { PuppetSkelton }        from '../puppet/puppet-skelton.js'
 import type { CacheMixin } from './cache-mixin.js'
 
 const roomInvitationMixin = <MixinBase extends typeof PuppetSkelton & CacheMixin>(mixinBase: MixinBase) => {
@@ -102,7 +102,7 @@ const roomInvitationMixin = <MixinBase extends typeof PuppetSkelton & CacheMixin
 
 type RoomInvitationMixin = ReturnType<typeof roomInvitationMixin>
 
-type ProtectedPropertyRoomInvitationMixin = never
+type ProtectedPropertyRoomInvitationMixin =
   | 'roomInvitationPayloadCache'
   | 'roomInvitationRawPayload'
   | 'roomInvitationRawPayloadParser'

@@ -1,45 +1,52 @@
 import {
   cacheMixin,
   ProtectedPropertyCacheMixin,
-}                                     from '../mixins/cache-mixin.js'
+}                                     from './cache-mixin.js'
 import {
   contactMixin,
   ProtectedPropertyContactMixin,
-}                                     from '../mixins/contact-mixin.js'
+}                                     from './contact-mixin.js'
 import {
   friendshipMixin,
   ProtectedPropertyFriendshipMixin,
-}                                     from '../mixins/friendship-mixin.js'
+}                                     from './friendship-mixin.js'
 import {
   loginMixin,
   ProtectedPropertyLoginMixin,
-}                                     from '../mixins/login-mixin.js'
+}                                     from './login-mixin.js'
 import {
   memoryMixin,
   ProtectedPropertyMemoryMixin,
-}                                     from '../mixins/memory-mixin.js'
+}                                     from './memory-mixin.js'
 import {
   messageMixin,
   ProtectedPropertyMessageMixin,
-}                                     from '../mixins/message-mixin.js'
+}                                     from './message-mixin.js'
 import { miscMixin }                  from './misc-mixin.js'
 import {
   roomInvitationMixin,
   ProtectedPropertyRoomInvitationMixin,
-}                                     from '../mixins/room-invitation-mixin.js'
+}                                     from './room-invitation-mixin.js'
 import {
   roomMemberMixin,
   ProtectedPropertyRoomMemberMixin,
-}                                     from '../mixins/room-member-mixin.js'
+}                                     from './room-member-mixin.js'
 import {
   roomMixin,
   ProtectedPropertyRoomMixin,
-}                                     from '../mixins/room-mixin.js'
+}                                     from './room-mixin.js'
 import {
-  stateMixin,
-  ProtectedPropertyStateMixin,
-}                                     from '../mixins/state-mixin.js'
-import { tagMixin }                   from '../mixins/tag-mixin.js'
+  serviceMixin,
+  ProtectedPropertyServiceMixin,
+}                                     from './service-mixin.js'
+import {
+  tagMixin,
+  ProtectedPropertyTagMixin,
+}                                     from './tag-mixin.js'
+import {
+  validateMixin,
+  ProtectedPropertyValidateMixin,
+}                                     from './validate-mixin.js'
 
 /**
  * Issue #155 - Mixin: Property 'messageRawPayload' of exported class expression
@@ -51,7 +58,7 @@ import { tagMixin }                   from '../mixins/tag-mixin.js'
  *    And Omit them from the Puppet typing defination
  *    to build a new PuppetInterface
  */
-type PuppetProtectedProperty = never
+type MixinProtectedProperty =
   | ProtectedPropertyCacheMixin
   | ProtectedPropertyContactMixin
   | ProtectedPropertyFriendshipMixin
@@ -61,10 +68,12 @@ type PuppetProtectedProperty = never
   | ProtectedPropertyRoomInvitationMixin
   | ProtectedPropertyRoomMemberMixin
   | ProtectedPropertyRoomMixin
-  | ProtectedPropertyStateMixin
+  | ProtectedPropertyServiceMixin
+  | ProtectedPropertyTagMixin
+  | ProtectedPropertyValidateMixin
 
 export type {
-  PuppetProtectedProperty,
+  MixinProtectedProperty,
 }
 export {
   cacheMixin,
@@ -77,6 +86,7 @@ export {
   roomInvitationMixin,
   roomMemberMixin,
   roomMixin,
-  stateMixin,
+  serviceMixin,
   tagMixin,
+  validateMixin,
 }

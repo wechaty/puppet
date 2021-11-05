@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --loader ts-node/esm
+#!/usr/bin/env -S node --no-warnings --loader ts-node/esm
 
 import {
   test,
@@ -318,8 +318,8 @@ test('set memory() memory with a name', async t => {
   const puppet = new PuppetTest()
   const memory = new MemoryCard({ name: 'name' })
 
-  t.doesNotThrow(() => { puppet.memory = memory }, 'should not throw when set a named memory first time ')
-  t.throws(()       => { puppet.memory = memory }, 'should throw when set a named memory second time')
+  t.doesNotThrow(() => puppet.setMemory(memory), 'should not throw when set a named memory first time ')
+  t.throws(()       => puppet.setMemory(memory), 'should throw when set a named memory second time')
 })
 
 test('messageQueryFilterFactory() one condition', async t => {
@@ -461,4 +461,18 @@ test('version()', async t => {
   const EXPECTED_VERSION = '1.0.0'
 
   t.equal(version, EXPECTED_VERSION, 'should get the child class package version')
+})
+
+test('PuppetSkelton: super.start()', async t => {
+  const puppet = new PuppetTest()
+  t.notOk(puppet._flagSkeltonStartCalled, 'should init start flag with false')
+  t.notOk(puppet._flagSkeltonStopCalled, 'should init stop flag with false')
+
+  await puppet.start()
+  t.ok(puppet._flagSkeltonStartCalled, 'should call the skelton start(), which means all mixin start()s are chained correctly')
+  t.notOk(puppet._flagSkeltonStopCalled, 'should keep stop flag with false')
+
+  await puppet.stop()
+  t.ok(puppet._flagSkeltonStartCalled, 'should keep start flag with true')
+  t.ok(puppet._flagSkeltonStopCalled, 'should call the skelton stop(), which means all mixin stops()s are chained correctly')
 })

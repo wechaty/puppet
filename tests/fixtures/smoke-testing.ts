@@ -1,39 +1,24 @@
 #!/usr/bin/env ts-node
 
 import assert from 'assert'
-import {
-  // ContactGender,
-  ContactPayload,
-  ContactQueryFilter,
-  // ContactType,
 
-  FileBox,
+import * as PUPPET    from 'wechaty-puppet'
+import type {
+  FileBoxInterface,
+}                     from 'file-box'
 
-  FriendshipPayload,
-  MessagePayload,
-  ImageType,
+import * as FILTERS   from 'wechaty-puppet/filters'
+import * as HELPERS   from 'wechaty-puppet/helpers'
+import * as IMPLS     from 'wechaty-puppet/impls'
+import * as PAYLOADS  from 'wechaty-puppet/payloads'
+import * as TYPES     from 'wechaty-puppet/types'
 
-  Puppet,
+class PuppetTest extends PUPPET.Puppet {
 
-  RoomInvitationPayload,
+  override async onStart () : Promise<void> { return {} as any }
+  override async onStop ()  : Promise<void> { return {} as any }
 
-  RoomMemberPayload,
-  RoomPayload,
-  RoomQueryFilter,
-
-  UrlLinkPayload,
-  MiniProgramPayload,
-  LocationPayload,
-
-  VERSION,
-}                             from 'wechaty-puppet'
-
-class PuppetTest extends Puppet {
-
-  override async tryStart () : Promise<void> { return {} as any }
-  override async tryStop ()  : Promise<void> { return {} as any }
-
-  override async ding (data?: string)   : Promise<void> { return data as any as void }
+  override async ding (data?: string): Promise<void> { return data as any as void }
   override async logout () : Promise<void> { return {} as any }
 
   /**
@@ -64,9 +49,9 @@ class PuppetTest extends Puppet {
   override async contactAlias (contactId: string, alias: string | null)  : Promise<void>
   override async contactAlias (contactId: string, alias?: string | null) : Promise<string | void> { return { alias, contactId } as any }
 
-  override async contactAvatar (contactId: string)                 : Promise<FileBox>
-  override async contactAvatar (contactId: string, file: FileBox)  : Promise<void>
-  override async contactAvatar (contactId: string, file?: FileBox) : Promise<void | FileBox> { return { contactId, file } as any }
+  override async contactAvatar (contactId: string)                 : Promise<FileBoxInterface>
+  override async contactAvatar (contactId: string, file: FileBoxInterface)  : Promise<void>
+  override async contactAvatar (contactId: string, file?: FileBoxInterface) : Promise<void | FileBoxInterface> { return { contactId, file } as any }
 
   override async contactPhone (contactId: string, phoneList: string[]): Promise<void> { return { contactId, phoneList } as any }
 
@@ -77,7 +62,7 @@ class PuppetTest extends Puppet {
   override async contactDescription (contactId: string, description: string | null): Promise<void> { return { contactId, description } as any }
 
   override async contactRawPayload (id: string)            : Promise<any> { return { id } as any }
-  override async contactRawPayloadParser (rawPayload: any) : Promise<ContactPayload> { return { rawPayload } as any }
+  override async contactRawPayloadParser (rawPayload: any) : Promise<PUPPET.payload.Contact> { return { rawPayload } as any }
 
   /**
    *
@@ -85,7 +70,7 @@ class PuppetTest extends Puppet {
    *
    */
   override async friendshipRawPayload (id: string)            : Promise<any> { return { id } as any }
-  override async friendshipRawPayloadParser (rawPayload: any) : Promise<FriendshipPayload> { return rawPayload }
+  override async friendshipRawPayloadParser (rawPayload: any) : Promise<PUPPET.payload.Friendship> { return rawPayload }
 
   override async friendshipSearchPhone (phone: string)             : Promise<string | null> { return phone }
   override async friendshipSearchWeixin (weixin: string)           : Promise<string | null> { return weixin }
@@ -97,25 +82,25 @@ class PuppetTest extends Puppet {
    * Message
    *
    */
-  override async messageFile (messageId: string)                        : Promise<FileBox> { return { messageId } as any }
-  override async messageUrl (messageId: string)                         : Promise<UrlLinkPayload> { return { messageId } as any }
-  override async messageImage (messageId: string, imageType: ImageType) : Promise<FileBox> { return { imageType, messageId } as any }
+  override async messageFile (messageId: string)                        : Promise<FileBoxInterface> { return { messageId } as any }
+  override async messageUrl (messageId: string)                         : Promise<PUPPET.payload.UrlLink> { return { messageId } as any }
+  override async messageImage (messageId: string, imageType: PUPPET.type.Image) : Promise<FileBoxInterface> { return { imageType, messageId } as any }
   override async messageContact (messageId: string)                     : Promise<string> { return { messageId } as any }
-  override async messageMiniProgram (messageId: string)                 : Promise<MiniProgramPayload> { return { messageId } as any }
-  override async messageLocation (messageId: string)                    : Promise<LocationPayload> { return { messageId } as any }
+  override async messageMiniProgram (messageId: string)                 : Promise<PUPPET.payload.MiniProgram> { return { messageId } as any }
+  override async messageLocation (messageId: string)                    : Promise<PUPPET.payload.Location> { return { messageId } as any }
 
   override async messageForward (to: string, messageId: string)                                 : Promise<void | string> { return { messageId, to } as any }
   override async messageSendContact (receiver: string, contactId: string)                       : Promise<void | string> { return { contactId, receiver } as any }
-  override async messageSendFile (to: string, file: FileBox)                                    : Promise<void | string> { return { file, to } as any }
+  override async messageSendFile (to: string, file: FileBoxInterface)                           : Promise<void | string> { return { file, to } as any }
   override async messageSendText (to: string, text: string)                                     : Promise<void | string> { return { text, to } as any }
-  override async messageSendUrl (to: string, urlLinkPayload: UrlLinkPayload)                    : Promise<void | string> { return { to, urlLinkPayload } as any }
-  override async messageSendMiniProgram (to: string, miniProgramPayload: MiniProgramPayload)    : Promise<void> { return { miniProgramPayload, to } as any }
-  override async messageSendLocation (conversationId: string, locationPayload: LocationPayload) : Promise<void | string> { return { conversationId, locationPayload } as any }
+  override async messageSendUrl (to: string, urlLinkPayload: PUPPET.payload.UrlLink)                    : Promise<void | string> { return { to, urlLinkPayload } as any }
+  override async messageSendMiniProgram (to: string, miniProgramPayload: PUPPET.payload.MiniProgram)    : Promise<void> { return { miniProgramPayload, to } as any }
+  override async messageSendLocation (conversationId: string, locationPayload: PUPPET.payload.Location) : Promise<void | string> { return { conversationId, locationPayload } as any }
 
   override async messageRecall (messageId: string) : Promise<boolean> { void messageId; return true }
 
   override async messageRawPayload (id: string)            : Promise<any> { return { id } as any }
-  override async messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload> { return { rawPayload } as any }
+  override async messageRawPayloadParser (rawPayload: any) : Promise<PUPPET.payload.Message> { return { rawPayload } as any }
 
   /**
    *
@@ -132,7 +117,7 @@ class PuppetTest extends Puppet {
   override async roomInvitationAccept (roomInvitationId: string): Promise<void> { void roomInvitationId }
 
   override async roomInvitationRawPayload (roomInvitationId: string) : Promise<any> { return { roomInvitationId } as any }
-  override async roomInvitationRawPayloadParser (rawPayload: any)    : Promise<RoomInvitationPayload> { return rawPayload }
+  override async roomInvitationRawPayloadParser (rawPayload: any)    : Promise<PUPPET.payload.RoomInvitation> { return rawPayload }
 
   /**
    *
@@ -144,7 +129,7 @@ class PuppetTest extends Puppet {
   override async roomAnnounce (roomId: string, text?: string) : Promise<void | string> { return { roomId, text } as any }
 
   override async roomAdd (roomId: string, contactId: string)          : Promise<void> { return { contactId, roomId } as any }
-  override async roomAvatar (roomId: string)                          : Promise<FileBox> { return { roomId } as any }
+  override async roomAvatar (roomId: string)                          : Promise<FileBoxInterface> { return { roomId } as any }
   override async roomCreate (contactIdList: string[], topic?: string) : Promise<string> { return { contactIdList, topic } as any }
   override async roomDel (roomId: string, contactId: string)          : Promise<void> { return { contactId, roomId } as any }
   override async roomQuit (roomId: string)                            : Promise<void> { return { roomId } as any }
@@ -158,22 +143,22 @@ class PuppetTest extends Puppet {
   override async roomMemberList (roomId: string) : Promise<string[]> { return { roomId } as any }
 
   override async roomRawPayload (id: string)            : Promise<any> { return { id } as any }
-  override async roomRawPayloadParser (rawPayload: any) : Promise<RoomPayload> { return { rawPayload } as any }
+  override async roomRawPayloadParser (rawPayload: any) : Promise<PUPPET.payload.Room> { return { rawPayload } as any }
 
   override async roomMemberRawPayload (roomId: string, contactId: string) : Promise<any> { return { contactId, roomId } as any }
-  override async roomMemberRawPayloadParser (rawPayload: any)             : Promise<RoomMemberPayload> { return rawPayload }
+  override async roomMemberRawPayloadParser (rawPayload: any)             : Promise<PUPPET.payload.RoomMember> { return rawPayload }
 
   /**
    * expose to public for internal methods:
    */
   public override roomQueryFilterFactory (
-    query: RoomQueryFilter,
+    query: PUPPET.filter.Room,
   ): any {
     return super.roomQueryFilterFactory(query)
   }
 
   public override contactQueryFilterFactory (
-    query: ContactQueryFilter,
+    query: PUPPET.filter.Contact,
   ): any {
     return super.contactQueryFilterFactory(query)
   }
@@ -181,13 +166,28 @@ class PuppetTest extends Puppet {
 }
 
 async function main () {
-  const puppet = new PuppetTest()
+  const puppetInstance: PUPPET.Puppet = new PuppetTest()
 
-  assert.strictEqual(puppet.name(), 'wechaty-puppet', 'should get base class name')
-  assert.notStrictEqual(puppet.version(), '0.0.0', 'version should not be 0.0.0 when publishing')
-  assert.notStrictEqual(VERSION, '0.0.0', 'version should not be 0.0.0 when publishing')
+  const payload: PAYLOADS.EventHeartbeat = { data: 'payload' }
+  const type: TYPES.ContactGender        = TYPES.ContactGender.Male
+  const filter: FILTERS.Contact          = { id: 'id' }
+  const fileBox                          = HELPERS.FileBox.fromQRCode('qrcode')
+  const puppet: IMPLS.Puppet             = puppetInstance
 
-  console.info(`Puppet v${puppet.version()} smoking test passed.`)
+  assert.ok(payload,  'should get valid PAYLOADS')
+  assert.ok(type,     'should get valid TYPES')
+  assert.ok(filter,   'should get valid FilTERS')
+  assert.ok(fileBox,  'should get valid FileBox')
+  assert.ok(puppet,   'should get valid IMPLS')
+
+  if (PUPPET.VERSION === '0.0.0' || puppetInstance.name() === 'NONAME') {
+    throw new Error('the `src/package-json.ts` has not been generated correctly.')
+  }
+
+  assert.strictEqual(puppetInstance.name(), 'wechaty-puppet', 'should get base class name')
+  assert.notStrictEqual(puppetInstance.version(), '0.0.0', 'version should not be 0.0.0 when publishing')
+
+  console.info(`Puppet v${puppetInstance.version()} smoking test passed.`)
   return 0
 }
 
