@@ -1,7 +1,7 @@
 import {
-  dirtyMixin,
-  ProtectedPropertyDirtyMixin,
-}                                     from './dirty-mixin.js'
+  cacheMixin,
+  ProtectedPropertyCacheMixin,
+}                                     from './cache-mixin.js'
 import {
   contactMixin,
   ProtectedPropertyContactMixin,
@@ -59,7 +59,7 @@ import {
  *    to build a new PuppetInterface
  */
 type MixinProtectedProperty =
-  | ProtectedPropertyDirtyMixin
+  | ProtectedPropertyCacheMixin
   | ProtectedPropertyContactMixin
   | ProtectedPropertyFriendshipMixin
   | ProtectedPropertyLoginMixin
@@ -76,7 +76,7 @@ export type {
   MixinProtectedProperty,
 }
 export {
-  dirtyMixin,
+  cacheMixin,
   contactMixin,
   friendshipMixin,
   loginMixin,

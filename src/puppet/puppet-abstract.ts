@@ -26,7 +26,7 @@ import type {
 }                       from '../schemas/mod.js'
 
 import {
-  dirtyMixin,
+  cacheMixin,
   contactMixin,
   friendshipMixin,
   loginMixin,
@@ -65,7 +65,7 @@ const MixinBase = miscMixin(
                 roomMemberMixin(
                   contactMixin(
                     loginMixin(
-                      dirtyMixin(
+                      cacheMixin(
                         memoryMixin(
                           PuppetSkelton,
                         ),

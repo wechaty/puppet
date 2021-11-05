@@ -28,9 +28,9 @@ import type {
 }                                 from '../schemas/location.js'
 
 import type { PuppetSkelton }        from '../puppet/puppet-skelton.js'
-import type { DirtyMixin } from './dirty-mixin.js'
+import type { CacheMixin } from './cache-mixin.js'
 
-const messageMixin = <MinxinBase extends typeof PuppetSkelton & DirtyMixin>(baseMixin: MinxinBase) => {
+const messageMixin = <MinxinBase extends typeof PuppetSkelton & CacheMixin>(baseMixin: MinxinBase) => {
 
   abstract class MessageMixin extends baseMixin {
 

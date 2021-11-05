@@ -7,9 +7,9 @@ import type {
 }                                 from '../schemas/room-invitation.js'
 
 import type { PuppetSkelton }        from '../puppet/puppet-skelton.js'
-import type { DirtyMixin } from './dirty-mixin.js'
+import type { CacheMixin } from './cache-mixin.js'
 
-const roomInvitationMixin = <MixinBase extends typeof PuppetSkelton & DirtyMixin>(mixinBase: MixinBase) => {
+const roomInvitationMixin = <MixinBase extends typeof PuppetSkelton & CacheMixin>(mixinBase: MixinBase) => {
 
   abstract class RoomInvitationMixin extends mixinBase {
 
