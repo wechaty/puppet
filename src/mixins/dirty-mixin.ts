@@ -10,9 +10,17 @@ import { CacheAgent }           from '../agents/mod.js'
 
 import type { PuppetSkelton }   from '../puppet/mod.js'
 
-const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase) => {
+/**
+ *
+ * Huan(202111) Issue #158 - Refactoring the 'dirty' event, dirtyPayload(),
+ *  and XXXPayloadDirty() methods logic & spec
+ *
+ *    @see https://github.com/wechaty/puppet/issues/158
+ *
+ */
+const dirtyMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase) => {
 
-  abstract class CacheMixin extends mixinBase {
+  abstract class DirtyMixin extends mixinBase {
 
     cache: CacheAgent
 
@@ -20,7 +28,7 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
 
     constructor (...args: any[]) {
       super(...args)
-      log.verbose('PuppetCacheMixin', 'constructor(%s)',
+      log.verbose('PuppetDirtyMixin', 'constructor(%s)',
         args[0]?.cache
           ? '{ cache: ' + JSON.stringify(args[0].cache) + ' }'
           : '',
@@ -33,23 +41,23 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
     }
 
     override async start (): Promise<void> {
-      log.verbose('PuppetCacheMixin', 'start()')
+      log.verbose('PuppetDirtyMixin', 'start()')
       await super.start()
       this.cache.start()
 
       const onDirty = (payload: EventDirtyPayload) => this.onDirty(payload)
       this.on('dirty', onDirty)
-      log.verbose('PuppetCacheMixin', 'start() event "dirty" listener added')
+      log.verbose('PuppetDirtyMixin', 'start() event "dirty" listener added')
 
       const cleanFn = () => {
         this.off('dirty', onDirty)
-        log.verbose('PuppetCacheMixin', 'start() event "dirty" listener removed')
+        log.verbose('PuppetDirtyMixin', 'start() event "dirty" listener removed')
       }
       this.cacheMixinCleanCallbackList.push(cleanFn)
     }
 
     override async stop (): Promise<void> {
-      log.verbose('PuppetCacheMixin', 'stop()')
+      log.verbose('PuppetDirtyMixin', 'stop()')
       this.cache.stop()
 
       while (this.cacheMixinCleanCallbackList.length) {
@@ -77,11 +85,6 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
       })
     }
 
-    /**
-     * Huan(202111) Issue #158 - Refactoring the 'dirty' event, dirtyPayload(),
-     *  and XXXPayloadDirty() methods logic & spec
-     *    @see https://github.com/wechaty/puppet/issues/158
-     */
     async onDirty ({ payloadType, payloadId }: EventDirtyPayload) {
       switch (payloadType) {
         case PayloadType.Message:
@@ -115,17 +118,17 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
 
   }
 
-  return CacheMixin
+  return DirtyMixin
 }
 
-type CacheMixin = ReturnType<typeof cacheMixin>
+type DirtyMixin = ReturnType<typeof dirtyMixin>
 
-type ProtectedPropertyCacheMixin =
+type ProtectedPropertyDirtyMixin =
   | 'cache'
   | 'onDirty'
 
 export type {
-  CacheMixin,
-  ProtectedPropertyCacheMixin,
+  DirtyMixin,
+  ProtectedPropertyDirtyMixin,
 }
-export { cacheMixin }
+export { dirtyMixin }

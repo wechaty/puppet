@@ -12,9 +12,9 @@ import type {
   ContactQueryFilter,
 }                                 from '../schemas/contact.js'
 
-import type { CacheMixin }    from './cache-mixin.js'
+import type { DirtyMixin }    from './dirty-mixin.js'
 
-const contactMixin = <MixinBase extends CacheMixin & typeof PuppetSkelton>(mixinBase: MixinBase) => {
+const contactMixin = <MixinBase extends DirtyMixin & typeof PuppetSkelton>(mixinBase: MixinBase) => {
 
   abstract class ContactMixin extends mixinBase {
 

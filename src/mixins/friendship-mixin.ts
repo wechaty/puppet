@@ -8,9 +8,9 @@ import type {
 }                                 from '../schemas/friendship.js'
 
 import type { PuppetSkelton }        from '../puppet/puppet-skelton.js'
-import type { CacheMixin } from './cache-mixin.js'
+import type { DirtyMixin } from './dirty-mixin.js'
 
-const friendshipMixin = <MixinBase extends typeof PuppetSkelton & CacheMixin>(mixinBase: MixinBase) => {
+const friendshipMixin = <MixinBase extends typeof PuppetSkelton & DirtyMixin>(mixinBase: MixinBase) => {
 
   abstract class FriendshipMixin extends mixinBase {
 
