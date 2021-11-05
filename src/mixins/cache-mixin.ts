@@ -77,6 +77,11 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
       })
     }
 
+    /**
+     * Huan(202111) Issue #158 - Refactoring the 'dirty' event, dirtyPayload(),
+     *  and XXXPayloadDirty() methods logic & spec
+     *    @see https://github.com/wechaty/puppet/issues/158
+     */
     async onDirty ({ payloadType, payloadId }: EventDirtyPayload) {
       switch (payloadType) {
         case PayloadType.Message:

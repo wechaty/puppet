@@ -41,7 +41,7 @@ class CacheAgent {
   constructor (
     protected options?: PayloadCacheOptions,
   ) {
-    log.verbose('CacheAgent', 'constructor(%s)',
+    log.verbose('PuppetCacheAgent', 'constructor(%s)',
       options
         ? JSON.stringify(options)
         : '',
@@ -77,12 +77,12 @@ class CacheAgent {
   }
 
   start (): void {
-    log.verbose('CacheAgent', 'start()')
+    log.verbose('PuppetCacheAgent', 'start()')
     this.clear()
   }
 
   stop (): void {
-    log.verbose('CacheAgent', 'stop()')
+    log.verbose('PuppetCacheAgent', 'stop()')
     this.clear()
   }
 
@@ -97,7 +97,7 @@ class CacheAgent {
    *  Huan(2021-08-28): clear the cache when stop
    */
   clear (): void {
-    log.verbose('CacheAgent', 'clear()')
+    log.verbose('PuppetCacheAgent', 'clear()')
 
     this.contact.clear()
     this.friendship.clear()
