@@ -29,6 +29,10 @@ import type {
 
 type PayloadCacheOptions = Required<PuppetOptions>['cache']
 
+interface LruRoomMemberPayload {
+  [memberContactId: string]: RoomMemberPayload
+}
+
 class CacheAgent {
 
   readonly contact        : QuickLru<string, ContactPayload>
@@ -36,7 +40,7 @@ class CacheAgent {
   readonly message        : QuickLru<string, MessagePayload>
   readonly room           : QuickLru<string, RoomPayload>
   readonly roomInvitation : QuickLru<string, RoomInvitationPayload>
-  readonly roomMember     : QuickLru<string, RoomMemberPayload>
+  readonly roomMember     : QuickLru<string, LruRoomMemberPayload>
 
   constructor (
     protected options?: PayloadCacheOptions,
@@ -67,7 +71,7 @@ class CacheAgent {
     this.roomInvitation = new QuickLru<string, RoomInvitationPayload>(lruOptions(
       envVars.WECHATY_PUPPET_LRU_CACHE_SIZE_ROOM_INVITATION(options?.roomInvitation)),
     )
-    this.roomMember = new QuickLru<string, RoomMemberPayload>(lruOptions(
+    this.roomMember = new QuickLru<string, LruRoomMemberPayload>(lruOptions(
       envVars.WECHATY_PUPPET_LRU_CACHE_SIZE_ROOM_MEMBER(options?.roomMember)),
     )
     this.room = new QuickLru<string, RoomPayload>(lruOptions(
@@ -105,16 +109,6 @@ class CacheAgent {
     this.room.clear()
     this.roomInvitation.clear()
     this.roomMember.clear()
-  }
-
-  /**
-   * Concat roomId & contactId to one string
-   */
-  roomMemberId (
-    roomId   : string,
-    memberId : string,
-  ): string {
-    return roomId + '-' + memberId
   }
 
 }

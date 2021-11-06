@@ -14,6 +14,7 @@ import type {
 import type { PuppetSkelton } from '../puppet/puppet-skelton.js'
 import type { ContactMixin }  from './contact-mixin.js'
 import type { RoomMemberMixin } from './room-member-mixin.js'
+import { PayloadType } from '../schemas/payload.js'
 
 const roomMixin = <MixinBase extends typeof PuppetSkelton & ContactMixin & RoomMemberMixin>(mixinBase: MixinBase) => {
 
@@ -76,7 +77,7 @@ const roomMixin = <MixinBase extends typeof PuppetSkelton & ContactMixin & RoomM
           return [query.id]
         } catch (e) {
           log.verbose('PuppetRoomMixin', 'roomSearch() payload not found for id "%s"', query.id)
-          await this.dirtyPayloadRoom(query.id)
+          await this.roomPayloadDirty(query.id)
           return []
         }
       }
@@ -117,8 +118,8 @@ const roomMixin = <MixinBase extends typeof PuppetSkelton & ContactMixin & RoomM
                 this.emit('error', e)
 
                 // Remove invalid room id from cache to avoid getting invalid room payload again
-                await this.dirtyPayloadRoom(id)
-                await this.dirtyPayloadRoomMember(id)
+                await this.roomPayloadDirty(id)
+                await this.roomMemberPayloadDirty(id)
 
                 // compatible with {} payload
                 return {} as any
@@ -244,6 +245,17 @@ const roomMixin = <MixinBase extends typeof PuppetSkelton & ContactMixin & RoomM
       log.silly('PuppetRoomMixin', 'roomPayload(%s) cache SET', roomId)
 
       return payload
+    }
+
+    async roomPayloadDirty (
+      id: string,
+    ): Promise<void> {
+      log.verbose('PuppetRoomMixin', 'roomPayloadDirty(%s)', id)
+
+      await this.dirtyPayloadAwait(
+        PayloadType.Room,
+        id,
+      )
     }
 
   }

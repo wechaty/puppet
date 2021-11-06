@@ -37,7 +37,6 @@ const loginMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
       log.verbose('PuppetLoginMixin', 'stop()')
       await this.logout()
       await super.stop()
-      this.#currentUserId = undefined
     }
 
     /**
@@ -70,13 +69,16 @@ const loginMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
         return
       }
 
-      const currentUserId = this.currentUserId
-      this._currentUserId = undefined
-
       this.emit('logout', {
-        contactId : currentUserId,
+        contactId : this.currentUserId,
         data      : reason,
       })
+
+      /**
+       * Huan(202111): We postpone the `this._currentUserId = undefined` to here,
+       *  in case of the `logout` event listener need to check the `this.currentUserId`
+       */
+      setImmediate(() => { this._currentUserId = undefined })
     }
 
     /**
