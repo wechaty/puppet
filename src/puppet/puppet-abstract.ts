@@ -54,6 +54,26 @@ import { PuppetSkelton } from './puppet-skelton.js'
 //   PuppetSkelton,
 // )
 
+const mixinCompose = (...args: any) => (args.reverse().reduce((a: any, b: any) => b(a())))
+
+const MixinBase = mixinCompose(
+  miscMixin,
+  serviceMixin,
+  validateMixin,
+  messageMixin,
+  roomInvitationMixin,
+  tagMixin,
+  friendshipMixin,
+  roomMixin,
+  roomMemberMixin,
+  contactMixin,
+  loginMixin,
+  cacheMixin,
+  memoryMixin,
+  () => PuppetSkelton,
+)
+
+/*
 const MixinBase = miscMixin(
   serviceMixin(
     validateMixin(
