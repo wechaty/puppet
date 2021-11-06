@@ -46,7 +46,8 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
       await super.start()
       this.cache.start()
 
-      const onDirty = (payload: EventDirtyPayload) => this.onDirty(payload)
+      const onDirty = this.onDirty.bind(this)
+
       this.on('dirty', onDirty)
       log.verbose('PuppetCacheMixin', 'start() "dirty" event listener added')
 
@@ -92,7 +93,7 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
 
     /**
      * OnDirty will be registered as a `dirty` event listener,
-     *  in charge of invalidating the cache.
+     *  and it is in charge of invalidating the cache.
      */
     async onDirty ({ payloadType, payloadId }: EventDirtyPayload) {
       log.verbose('PuppetCacheMixin', 'onDirty(%s<%s>, %s)', PayloadType[payloadType], payloadType, payloadId)
@@ -117,8 +118,8 @@ const cacheMixin = <MixinBase extends typeof PuppetSkelton>(mixinBase: MixinBase
      *  and we need to wait for the `dirty` event so we can make sure the cache has been invalidated.
      */
     async dirtyPayloadAwait (
-      type: PayloadType,
-      id: string,
+      type : PayloadType,
+      id   : string,
     ): Promise<void> {
       log.verbose('PuppetCacheMixin', 'dirtyPayloadAwait(%s<%s>, %s)', PayloadType[type], type, id)
 
