@@ -43,44 +43,20 @@ import {
 
 import { PuppetSkeleton } from './puppet-skeleton.js'
 
-/**
- * Huan(202110): use compose() to compose mixins
- */
-
-// const MixinBase = compose(
-//   messageMixin,
-//   roomInvitationMixin,
-//   ...,
-//   PuppetSkeleton,
-// )
-
-const MixinBase = miscMixin(
-  serviceMixin(
-    validateMixin(
-      messageMixin(
-        roomInvitationMixin(
-          tagMixin(
-            friendshipMixin(
-              roomMixin(
-                roomMemberMixin(
-                  contactMixin(
-                    loginMixin(
-                      cacheMixin(
-                        memoryMixin(
-                          PuppetSkeleton,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    ),
-  ),
-)
+const MixinBase = PuppetSkeleton
+  .chain(memoryMixin)
+  .chain(cacheMixin)
+  .chain(loginMixin)
+  .chain(contactMixin)
+  .chain(roomMemberMixin)
+  .chain(roomMixin)
+  .chain(friendshipMixin)
+  .chain(tagMixin)
+  .chain(roomInvitationMixin)
+  .chain(messageMixin)
+  .chain(validateMixin)
+  .chain(serviceMixin)
+  .chain(miscMixin)
 
 /**
  *

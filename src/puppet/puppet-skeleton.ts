@@ -56,8 +56,8 @@ abstract class PuppetSkeleton extends PuppetEventEmitter {
    */
   readonly id: string
 
-  _flagSkeletonStartCalled : boolean
-  _flagSkeletonStopCalled  : boolean
+  _flagSkeletonStartCalled: boolean
+  _flagSkeletonStopCalled: boolean
 
   readonly options: PuppetOptions
 
@@ -86,11 +86,11 @@ abstract class PuppetSkeleton extends PuppetEventEmitter {
         : '',
     )
 
-    this.id       = UUID.v4()
-    this.options  = args[0] || {}
+    this.id = UUID.v4()
+    this.options = args[0] || {}
 
     this._flagSkeletonStartCalled = false
-    this._flagSkeletonStopCalled  = false
+    this._flagSkeletonStopCalled = false
   }
 
   /**
@@ -107,7 +107,7 @@ abstract class PuppetSkeleton extends PuppetEventEmitter {
 
   async stop (): Promise<void> {
     log.verbose('PuppetSkeleton', 'stop()')
-    this._flagSkeletonStopCalled  = true
+    this._flagSkeletonStopCalled = true
   }
 
   /**
@@ -137,6 +137,10 @@ abstract class PuppetSkeleton extends PuppetEventEmitter {
     }
 
     return super.emit('error', payload)
+  }
+
+  static chain<T, Derived> (this: T, fn: (base: T) => Derived): Derived {
+    return fn(this)
   }
 
 }
