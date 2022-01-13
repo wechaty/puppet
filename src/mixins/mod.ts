@@ -23,8 +23,9 @@ import {
   ProtectedPropertyMessageMixin,
 }                                     from './message-mixin.js'
 import { miscMixin }                  from './misc-mixin.js'
-import { ProtectedPropertyReadyMixin,
-  readyMixin
+import {
+  ProtectedPropertyReadyMixin,
+  readyMixin,
 }                                     from './ready-mixin.js'
 import {
   roomInvitationMixin,

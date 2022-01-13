@@ -10,12 +10,12 @@ const readyMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBas
 
     isReady: boolean = false
 
-    constructor(...args: any[]) {
+    constructor (...args: any[]) {
       super(...args)
       log.verbose('ReadyMixin', 'constructor()')
     }
 
-    override async start(): Promise<void> {
+    override async start (): Promise<void> {
       log.verbose('ReadyMixin', 'start()')
       await super.start()
       this.on('ready', () => {
@@ -23,7 +23,7 @@ const readyMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBas
       })
     }
 
-    override async stop(): Promise<void> {
+    override async stop (): Promise<void> {
       log.verbose('ReadyMixin', 'stop()')
       await super.stop()
     }
