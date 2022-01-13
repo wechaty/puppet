@@ -18,14 +18,24 @@ const readyMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBas
     override async start (): Promise<void> {
       log.verbose('ReadyMixin', 'start()')
       await super.start()
+
       this.on('ready', () => {
         this.isReady = true
       })
+
+      this.on('logout', () => {
+        this.isReady = false
+      })
+      this.on('reset', () => {
+        this.isReady = false
+      })
+
     }
 
     override async stop (): Promise<void> {
       log.verbose('ReadyMixin', 'stop()')
       await super.stop()
+      this.isReady = false
     }
 
   }
