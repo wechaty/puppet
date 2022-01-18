@@ -24,7 +24,6 @@ import {
 }                                     from './message-mixin.js'
 import { miscMixin }                  from './misc-mixin.js'
 import {
-  ProtectedPropertyReadyMixin,
   readyMixin,
 }                                     from './ready-mixin.js'
 import {
@@ -75,7 +74,6 @@ type MixinProtectedProperty =
   | ProtectedPropertyServiceMixin
   | ProtectedPropertyTagMixin
   | ProtectedPropertyValidateMixin
-  | ProtectedPropertyReadyMixin
 
 export type {
   MixinProtectedProperty,

@@ -54,11 +54,7 @@ const readyMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBas
 
 type ReadyMixin = ReturnType<typeof readyMixin>
 
-type ProtectedPropertyReadyMixin =
-  | 'readyIndicator'
-
 export type {
   ReadyMixin,
-  ProtectedPropertyReadyMixin,
 }
 export { readyMixin }
