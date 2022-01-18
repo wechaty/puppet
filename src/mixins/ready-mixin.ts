@@ -1,3 +1,5 @@
+import { BooleanIndicator } from 'state-switch'
+
 import {
   log,
 } from '../config.js'
@@ -8,11 +10,13 @@ const readyMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBas
 
   abstract class ReadyMixin extends mixinBase {
 
-    isReady: boolean = false
+    readyIndicator: BooleanIndicator
 
     constructor (...args: any[]) {
       super(...args)
       log.verbose('ReadyMixin', 'constructor()')
+
+      this.readyIndicator = new BooleanIndicator()
     }
 
     override async start (): Promise<void> {
@@ -20,22 +24,27 @@ const readyMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBas
       await super.start()
 
       this.on('ready', () => {
-        this.isReady = true
+        this.readyIndicator.value(true)
       })
 
       this.on('logout', () => {
-        this.isReady = false
+        this.readyIndicator.value(false)
       })
       this.on('reset', () => {
-        this.isReady = false
+        this.readyIndicator.value(false)
       })
 
     }
 
     override async stop (): Promise<void> {
       log.verbose('ReadyMixin', 'stop()')
+      this.readyIndicator.value(false)
+
+      /**
+       * Huan(202201) NOTE: super.stop() should be the last line of this method
+       *  becasue we should keep the reverse order of logic in start()
+       */
       await super.stop()
-      this.isReady = false
     }
 
   }
@@ -46,7 +55,7 @@ const readyMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBas
 type ReadyMixin = ReturnType<typeof readyMixin>
 
 type ProtectedPropertyReadyMixin =
-  | 'isReady'
+  | 'readyIndicator'
 
 export type {
   ReadyMixin,
