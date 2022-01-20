@@ -1,11 +1,15 @@
 import type {
-  SayablePayloadNoPost,
+  SayablePayload,
   sayableTypes,
 }                             from './sayable.js'
 
 /**
  * Huan(202201): Recursive type references
  *  @link https://github.com/microsoft/TypeScript/pull/33050#issuecomment-1002455128
+ *
+ * The same as `createAction(sayableTypes.Post, payloadPost)()`
+ *  but reference the `PostPayload` in interface directly
+ *  to prevent the ts(2502) error
  */
  interface SayablePayloadPost {
   type: typeof sayableTypes.Post
@@ -19,8 +23,8 @@ import type {
  * There have three types of a Post:
  *
  *  1. Original (原创)
- *  2. Reply (评论, comment)
- *  3. RePost (转发, retweet)
+ *  2. Reply    (评论, comment)
+ *  3. RePost   (转发, retweet)
  *
  *  | Type     | Root ID  | Parent ID  |
  *  | ---------| -------- | ---------- |
@@ -35,16 +39,16 @@ interface PostPayloadBase {
 }
 
 interface PostPayloadClient extends PostPayloadBase {
-  id?        : undefined
+  id?: undefined
   /**
    * Recursive type references
    * @link https://github.com/microsoft/TypeScript/pull/33050#issuecomment-1002455128
    */
-  sayableList: (SayablePayloadNoPost | SayablePayloadPost)[]
+  sayableList: SayablePayload[]
 }
 
 interface PostPayloadServer extends PostPayloadBase {
-  id         : string
+  id: string
   sayableList: string[]  // The message id(s) for this post.
 
   contactId: string
