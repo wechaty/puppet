@@ -107,9 +107,10 @@ const isPostPayloadServer = (payload: PostPayload): payload is PostPayloadServer
  */
 interface PostQueryFilter {
   contactId? : string
+  id?        : string
   orderBy?   : string
-  parentId?  : string // two type of `undefined`: see above comments
-  rootId?    : string // two type of `undefined`: see above comments
+  parentId?  : string    // two type of `undefined`: see above comments
+  rootId?    : string    // two type of `undefined`: see above comments
   type?      : PostType
 }
 

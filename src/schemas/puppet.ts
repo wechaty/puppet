@@ -19,6 +19,7 @@ export const CHAT_EVENT_DICT = {
   login         : 'puppet had logged in',
   logout        : 'puppet had logged out',
   message       : 'received a new message',
+  post          : 'received a new post',
   'room-invite' : 'received a room invitation',
   'room-join'   : 'be added to a room',
   'room-leave'  : 'leave or be removed from a room',

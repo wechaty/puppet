@@ -26,13 +26,19 @@ import type {
   MessagePayloadTo,
   MiniProgramPayload,
   PostPayload,
+  PostPayloadClient,
+  PostPayloadServer,
   RoomInvitationPayload,
   RoomMemberPayload,
   RoomPayload,
   TapPayload,
   UrlLinkPayload,
   SayablePayload,
+}                           from '../schemas/mod.js'
+import {
   sayablePayloads,
+  isPostPayloadServer,
+  isPostPayloadClient,
 }                           from '../schemas/mod.js'
 
 export type {
@@ -63,6 +69,8 @@ export type {
   MessagePayloadTo          as MessageTo,
   MiniProgramPayload        as MiniProgram,
   PostPayload               as Post,
+  PostPayloadClient         as PostClient,
+  PostPayloadServer         as PostServer,
   RoomInvitationPayload     as RoomInvitation,
   RoomMemberPayload         as RoomMember,
   RoomPayload               as Room,
@@ -72,4 +80,6 @@ export type {
 }
 export {
   sayablePayloads as sayable, // Sayable payload creators
+  isPostPayloadServer as isPostServer,
+  isPostPayloadClient as isPostClient,
 }

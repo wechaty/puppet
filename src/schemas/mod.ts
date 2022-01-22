@@ -42,14 +42,13 @@ import {
 import {
   type PostPayload,
   PostType,
+  isPostPayloadClient,
+  isPostPayloadServer,
   type PostQueryFilter,
-}                       from './post.js'
+  type PostPayloadClient,
+  type PostPayloadServer,
+}                         from './post.js'
 
-/********************
- *
- * Import Typings
- *
- ********************/
 import type {
   EventDirtyPayload,
   EventDongPayload,
@@ -110,6 +109,8 @@ export {
   FriendshipSceneType,
   FriendshipType,
   ImageType,
+  isPostPayloadClient,
+  isPostPayloadServer,
   MessageType,
   PaginationRequest,
   PaginationResponse,
@@ -151,6 +152,8 @@ export {
   type MessageQueryFilter,
   type MiniProgramPayload,
   type PostPayload,
+  type PostPayloadClient,
+  type PostPayloadServer,
   type PostQueryFilter,
   type PuppetEventName,
   type PuppetOptions,

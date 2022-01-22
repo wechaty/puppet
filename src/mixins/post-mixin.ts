@@ -73,19 +73,19 @@ const postMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(baseMi
     }
 
     /**
-     * Send a post
+     * Create a post
      */
-    abstract postSend (payload: PostPayload): Promise<void | string>
+    abstract postCreate (payload: PostPayload): Promise<void | string>
 
     /**
      * Search from the server.
      *
      * @param postId
-     * @param query
+     * @param filter
      * @param pagination
      */
     abstract postSearch (
-      query       : PostQueryFilter,
+      filter      : PostQueryFilter,
       pagination? : PaginationRequest,
     ): Promise<PaginationResponse<string[]>>
 
