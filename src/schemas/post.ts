@@ -13,7 +13,10 @@ enum PostType {
 }
 
 /**
- * Huan(202201): Recursive type references
+ * Huan(202201): Error: referenced directly or indirectly in its own type annotation. ts(2502) #180
+ *  @link https://github.com/wechaty/puppet/issues/180
+ *
+ * Recursive type references
  *  @link https://github.com/microsoft/TypeScript/pull/33050#issuecomment-1002455128
  *
  * The same as `createAction(sayableTypes.Post, payloadPost)()`
@@ -35,11 +38,11 @@ enum PostType {
  *  2. Reply    (评论, comment)
  *  3. RePost   (转发, retweet)
  *
- *  | Type     | Root ID  | Parent ID  |
- *  | ---------| -------- | ---------- |
- *  | Original | n/a      | n/a        |
- *  | Reply    | `rootId` | `parentId` |
- *  | Repost   | n/a      | `parentId` |
+ *  | Type     | Root ID     | Parent ID   |
+ *  | ---------| ----------- | ----------- |
+ *  | Original | `undefined` | `undefined` |
+ *  | Reply    | rootId      | parentId    |
+ *  | Repost   | `undefined` | parentId    |
  *
  */
 interface PostPayloadBase {

@@ -1,9 +1,7 @@
-import type {
-  FriendshipAddOptions,
-  PuppetEventName,
-  ChatEventName,
-}                           from '../schemas/mod.js'
 import {
+  type FriendshipAddOptions,
+  type PuppetEventName,
+  type ChatEventName,
   ContactGender,
   ContactType,
   DirtyType,

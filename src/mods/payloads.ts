@@ -31,6 +31,8 @@ import type {
   RoomPayload,
   TapPayload,
   UrlLinkPayload,
+  SayablePayload,
+  sayablePayloads,
 }                           from '../schemas/mod.js'
 
 export type {
@@ -64,6 +66,10 @@ export type {
   RoomInvitationPayload     as RoomInvitation,
   RoomMemberPayload         as RoomMember,
   RoomPayload               as Room,
+  SayablePayload            as Sayable,
   TapPayload                as Tap,
   UrlLinkPayload            as UrlLink,
+}
+export {
+  sayablePayloads as sayable, // Sayable payload creators
 }
