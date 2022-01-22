@@ -1,19 +1,19 @@
 import {
   ContactGender,
   ContactType,
-  ContactPayload,
-  ContactQueryFilter,
+  type ContactPayload,
+  type ContactQueryFilter,
 }                             from './contact.js'
 import {
   ScanStatus,
 }                             from './event.js'
 import {
-  FriendshipAddOptions,
-  FriendshipPayload,
-  FriendshipPayloadConfirm,
-  FriendshipPayloadReceive,
-  FriendshipPayloadVerify,
-  FriendshipSearchQueryFilter,
+  type FriendshipAddOptions,
+  type FriendshipPayload,
+  type FriendshipPayloadConfirm,
+  type FriendshipPayloadReceive,
+  type FriendshipPayloadVerify,
+  type FriendshipSearchQueryFilter,
   FriendshipType,
   FriendshipSceneType,
 }                             from './friendship.js'
@@ -21,11 +21,11 @@ import {
   ImageType,
 }                             from './image.js'
 import {
-  MessagePayload,
-  MessagePayloadBase,
-  MessagePayloadRoom,
-  MessagePayloadTo,
-  MessageQueryFilter,
+  type MessagePayload,
+  type MessagePayloadBase,
+  type MessagePayloadRoom,
+  type MessagePayloadTo,
+  type MessageQueryFilter,
   MessageType,
 }                             from './message.js'
 import { DirtyType }         from './dirty.js'
@@ -35,12 +35,14 @@ import {
   YOU,
 }                       from './puppet.js'
 import {
-  TapPayload,
+  type TapPayload,
   TapType,
+  type TapQueryFilter,
 }                       from './tap.js'
 import {
-  PostPayload,
+  type PostPayload,
   PostType,
+  type PostQueryFilter,
 }                       from './post.js'
 
 /********************
@@ -149,6 +151,7 @@ export {
   type MessageQueryFilter,
   type MiniProgramPayload,
   type PostPayload,
+  type PostQueryFilter,
   type PuppetEventName,
   type PuppetOptions,
   type RoomInvitationPayload,
@@ -158,6 +161,7 @@ export {
   type RoomQueryFilter,
   type SayablePayload,
   type TapPayload,
+  type TapQueryFilter,
   type UrlLinkPayload,
   YOU,
 }

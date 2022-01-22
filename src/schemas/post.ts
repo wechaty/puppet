@@ -101,7 +101,7 @@ const isPostPayloadServer = (payload: PostPayload): payload is PostPayloadServer
  *    in this case, we filter `rootId` as `undefined`, which means that the post must be the root node
  *
  */
-interface PostSearchOptions {
+interface PostQueryFilter {
   contactId? : string
   orderBy?   : string
   parentId?  : string // two type of `undefined`: see above comments
@@ -113,7 +113,7 @@ export {
   isPostPayloadClient,
   isPostPayloadServer,
   PostType,
-  type PostSearchOptions,
+  type PostQueryFilter,
   type SayablePayloadPost,
   type PostPayload,
   type PostPayloadClient,

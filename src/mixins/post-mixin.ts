@@ -4,7 +4,7 @@ import {
 
 import type {
   PostPayload,
-  PostSearchOptions,
+  PostQueryFilter,
   PostType,
 }                                 from '../schemas/post.js'
 
@@ -86,7 +86,7 @@ const postMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(baseMi
      * @param pagination
      */
     abstract postSearch (
-      options     : PostSearchOptions,
+      query       : PostQueryFilter,
       pagination? : PaginationRequest,
     ): Promise<PaginationResponse<string[]>>
 

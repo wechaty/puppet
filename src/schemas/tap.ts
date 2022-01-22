@@ -14,7 +14,7 @@ type TapPayload = {
   }
 }
 
-interface TapSearchOptions {
+interface TapQueryFilter {
   contactId? : string,
   type?      : TapType,
 }
@@ -22,5 +22,5 @@ interface TapSearchOptions {
 export {
   TapType,
   type TapPayload,
-  type TapSearchOptions,
+  type TapQueryFilter,
 }

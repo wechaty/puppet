@@ -4,7 +4,7 @@ import {
 
 import type {
   TapPayload,
-  TapSearchOptions,
+  TapQueryFilter,
   TapType,
 }                                 from '../schemas/tap.js'
 
@@ -26,18 +26,10 @@ const tapMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(baseMix
     }
 
     /**
-     * Query whether the bot has tapped the post (any types).
+     * 1. Query whether the bot has tapped the post (any types).
+     * 2. Query whether the bot has tapped the post with `type`
+     * 3. Update the `postId` tapped with `type` by the bot
      */
-    abstract tap (postId: string): Promise<boolean>
-    /**
-     * Query whether the bot has tapped the post with `type`
-     */
-    abstract tap (postId: string, type?: TapType): Promise<boolean>
-    /**
-     * Update the `postId` tapped with `type` by the bot
-     */
-    abstract tap (postId: string, type: TapType, tap: boolean): Promise<void>
-
     abstract tap (
       postId : string,
       type?  : TapType,
@@ -47,12 +39,12 @@ const tapMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(baseMix
     /**
      * Search for taps for a post
      *
-     * @param options
+     * @param query
      * @param pagination
      */
     abstract tapSearch (
       postId      : string,
-      options?    : TapSearchOptions,
+      query?      : TapQueryFilter,
       pagination? : PaginationRequest,
     ): Promise<PaginationResponse<TapPayload>>
 
