@@ -4,7 +4,7 @@
  *
  * Huan(202201): rename it to DirtyType for a better name?
  */
-export enum PayloadType {
+export enum DirtyType {
   Unspecified = 0,
   Message     = 1,
   Contact     = 2,

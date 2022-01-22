@@ -28,14 +28,20 @@ import {
   MessageQueryFilter,
   MessageType,
 }                             from './message.js'
-
-import { PayloadType }         from './payload.js'
+import { DirtyType }         from './dirty.js'
 import {
   CHAT_EVENT_DICT,
   PUPPET_EVENT_DICT,
-
   YOU,
 }                       from './puppet.js'
+import {
+  TapPayload,
+  TapType,
+}                       from './tap.js'
+import {
+  PostPayload,
+  PostType,
+}                       from './post.js'
 
 /********************
  *
@@ -98,17 +104,19 @@ export {
   CHAT_EVENT_DICT,
   ContactGender,
   ContactType,
+  DirtyType,
   FriendshipSceneType,
   FriendshipType,
   ImageType,
   MessageType,
   PaginationRequest,
   PaginationResponse,
-  PayloadType,
+  PostType,
   PUPPET_EVENT_DICT,
   sayablePayloads,
   sayableTypes,
   ScanStatus,
+  TapType,
   type ChatEventName,
   type ContactPayload,
   type ContactQueryFilter,
@@ -140,6 +148,7 @@ export {
   type MessagePayloadTo,
   type MessageQueryFilter,
   type MiniProgramPayload,
+  type PostPayload,
   type PuppetEventName,
   type PuppetOptions,
   type RoomInvitationPayload,
@@ -148,6 +157,7 @@ export {
   type RoomPayload,
   type RoomQueryFilter,
   type SayablePayload,
+  type TapPayload,
   type UrlLinkPayload,
   YOU,
 }

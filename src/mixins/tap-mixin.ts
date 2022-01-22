@@ -4,7 +4,7 @@ import {
 
 import type {
   TapPayload,
-  TapQueryFilter,
+  TapSearchOptions,
   TapType,
 }                                 from '../schemas/tap.js'
 
@@ -47,12 +47,12 @@ const tapMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(baseMix
     /**
      * Search for taps for a post
      *
-     * @param query
+     * @param options
      * @param pagination
      */
     abstract tapSearch (
       postId      : string,
-      query?      : TapQueryFilter,
+      options?    : TapSearchOptions,
       pagination? : PaginationRequest,
     ): Promise<PaginationResponse<TapPayload>>
 

@@ -54,6 +54,7 @@ export interface PuppetOptions {
     contact?        : number
     friendship?     : number
     message?        : number
+    post?           : number
     room?           : number
     roomInvitation? : number
     roomMember?     : number

@@ -25,9 +25,11 @@ import type {
   MessagePayloadRoom,
   MessagePayloadTo,
   MiniProgramPayload,
+  PostPayload,
   RoomInvitationPayload,
   RoomMemberPayload,
   RoomPayload,
+  TapPayload,
   UrlLinkPayload,
 }                           from '../schemas/mod.js'
 
@@ -58,8 +60,10 @@ export type {
   MessagePayloadRoom        as MessageRoom,
   MessagePayloadTo          as MessageTo,
   MiniProgramPayload        as MiniProgram,
+  PostPayload               as Post,
   RoomInvitationPayload     as RoomInvitation,
   RoomMemberPayload         as RoomMember,
   RoomPayload               as Room,
+  TapPayload                as Tap,
   UrlLinkPayload            as UrlLink,
 }

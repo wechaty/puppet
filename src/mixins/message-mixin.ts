@@ -30,7 +30,7 @@ import type {
 }                                 from '../schemas/post.js'
 
 import type { PuppetSkeleton }    from '../puppet/puppet-skeleton.js'
-import { PayloadType }            from '../schemas/payload.js'
+import { DirtyType }              from '../schemas/dirty.js'
 
 import type { CacheMixin }        from './cache-mixin.js'
 import {
@@ -243,7 +243,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
       log.verbose('PuppetMessageMixin', 'messagePayloadDirty(%s)', id)
 
       await this.__dirtyPayloadAwait(
-        PayloadType.Message,
+        DirtyType.Message,
         id,
       )
     }

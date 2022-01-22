@@ -4,6 +4,15 @@ import type {
 }                             from './sayable.js'
 
 /**
+ * Huan(202201): numbers must be keep unchanged across versions
+ */
+enum PostType {
+  Unspecified = 0,
+  Moment  = 1,  // <- WeChat Moments (朋友圈)
+  Channel = 2,  // <- WeChat Channel (视频号)
+}
+
+/**
  * Huan(202201): Recursive type references
  *  @link https://github.com/microsoft/TypeScript/pull/33050#issuecomment-1002455128
  *
@@ -80,28 +89,33 @@ const isPostPayloadServer = (payload: PostPayload): payload is PostPayloadServer
     && typeof payload.sayableList[0] === 'string'
 
 /**
- * Huan(202201): This enum type value MUST be keep unchanged across versions
- *  because the puppet service client/server might has different versions of the puppet
+ * orderBy: Sort order - https://cloud.google.com/apis/design/design_patterns#list_pagination
+ *  the order-by name should be exactly match the keys of the QueryFilter interface
+ *
+ * The rootId & parentId: when they are `undefined`, there have two cases:
+ *
+ *  1. `'rootId' in options === false`
+ *    in this case, we do not filter `rootId` at all
+ *
+ *  2. `'rootId' in options === true`
+ *    in this case, we filter `rootId` as `undefined`, which means that the post must be the root node
+ *
  */
-enum PostTapType {
-  Unspecified = 0,
-  Like        = 1,
-}
-
-type PostTapListPayload = {
-  [key in PostTapType]?: {
-    contactId: string[]
-    timestamp: number[]
-  }
+interface PostSearchOptions {
+  contactId? : string
+  orderBy?   : string
+  parentId?  : string // two type of `undefined`: see above comments
+  rootId?    : string // two type of `undefined`: see above comments
+  type?      : PostType
 }
 
 export {
   isPostPayloadClient,
   isPostPayloadServer,
-  PostTapType,
+  PostType,
+  type PostSearchOptions,
   type SayablePayloadPost,
   type PostPayload,
   type PostPayloadClient,
   type PostPayloadServer,
-  type PostTapListPayload,
 }
