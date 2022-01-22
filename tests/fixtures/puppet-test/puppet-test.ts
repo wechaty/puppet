@@ -195,7 +195,7 @@ class PuppetTest extends PUPPET.Puppet {
     return { pagination, query } as any
   }
 
-  override postCreate (payload: PUPPET.payloads.Post): Promise<void | string> {
+  override postPublish (payload: PUPPET.payloads.Post): Promise<void | string> {
     return { payload } as any
   }
 
