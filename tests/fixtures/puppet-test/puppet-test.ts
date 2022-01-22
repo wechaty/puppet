@@ -195,8 +195,8 @@ class PuppetTest extends PUPPET.Puppet {
     return { pagination, query } as any
   }
 
-  override postSend (type: PUPPET.types.Post, payload: PUPPET.payloads.Post): Promise<void | string> {
-    return { payload, type } as any
+  override postSend (payload: PUPPET.payloads.Post): Promise<void | string> {
+    return { payload } as any
   }
 
   /**
