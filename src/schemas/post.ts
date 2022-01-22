@@ -46,8 +46,9 @@ enum PostType {
  *
  */
 interface PostPayloadBase {
-  parentId? : string  // `undefined` means it's original
-  rootId?   : string  // `undefined` means it's not a reply (original or repost)
+  parentId? : string    // `undefined` means it's original
+  rootId?   : string    // `undefined` means it's not a reply (original or repost)
+  type?     : PostType
 }
 
 interface PostPayloadClient extends PostPayloadBase {

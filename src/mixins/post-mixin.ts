@@ -5,7 +5,6 @@ import {
 import type {
   PostPayload,
   PostQueryFilter,
-  PostType,
 }                                 from '../schemas/post.js'
 
 import type { PuppetSkeleton }    from '../puppet/puppet-skeleton.js'
@@ -74,9 +73,9 @@ const postMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(baseMi
     }
 
     /**
-     * Send a post as `type` (Moments, Channel).
+     * Send a post
      */
-    abstract postSend (type: PostType, payload: PostPayload): Promise<void | string>
+    abstract postSend (payload: PostPayload): Promise<void | string>
 
     /**
      * Search from the server.

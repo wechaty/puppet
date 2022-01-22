@@ -29,6 +29,10 @@ export interface EventMessagePayload {
   messageId: string,
 }
 
+export interface EventPostPayload {
+  postId: string,
+}
+
 export interface EventRoomInvitePayload {
   roomInvitationId: string,
 }
