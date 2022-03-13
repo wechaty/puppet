@@ -10,14 +10,15 @@ export interface RoomQueryFilter {
 }
 
 export interface RoomPayload {
-  id : string,
+  id : string
 
-  topic        : string,
-  avatar?      : string,
-  memberIdList : string[],
-  ownerId?     : string,
-  adminIdList  : string[],
-  external?    : boolean,
+  topic        : string
+  avatar?      : string
+  handle?      : string
+  memberIdList : string[]
+  ownerId?     : string
+  adminIdList  : string[]
+  external?    : boolean
 }
 
 export interface RoomMemberPayload {
