@@ -14,6 +14,7 @@ import type {
   MessagePayload,
   MessagePayloadFilterFunction,
   MessageQueryFilter,
+  MessageSendOptions,
   MessageType,
 }                                 from '../schemas/message.js'
 import type {
@@ -68,14 +69,14 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
     abstract messageUrl          (messageId: string)                       : Promise<UrlLinkPayload>
     abstract messageLocation     (messageId: string)                       : Promise<LocationPayload>
 
-    abstract messageForward         (conversationId: string, messageId: string,)                     : Promise<void | string>
-    abstract messageSendContact     (conversationId: string, contactId: string)                      : Promise<void | string>
-    abstract messageSendFile        (conversationId: string, file: FileBoxInterface)                 : Promise<void | string>
-    abstract messageSendLocation    (conversationId: string, locationPayload: LocationPayload)       : Promise<void | string>
-    abstract messageSendMiniProgram (conversationId: string, miniProgramPayload: MiniProgramPayload) : Promise<void | string>
-    abstract messageSendPost        (conversationId: string, postPayload: PostPayload)               : Promise<void | string>
-    abstract messageSendText        (conversationId: string, text: string, mentionIdList?: string[]) : Promise<void | string>
-    abstract messageSendUrl         (conversationId: string, urlLinkPayload: UrlLinkPayload)         : Promise<void | string>
+    abstract messageForward        (conversationId: string, messageId: string,)                                                   : Promise<void | string>
+    abstract messageSendContact    (conversationId: string, contactId: string, options?: MessageSendOptions)                      : Promise<void | string>
+    abstract messageSendFile       (conversationId: string, file: FileBoxInterface, options?: MessageSendOptions)                 : Promise<void | string>
+    abstract messageSendLocation   (conversationId: string, locationPayload: LocationPayload, options?: MessageSendOptions)       : Promise<void | string>
+    abstract messageSendMiniProgram(conversationId: string, miniProgramPayload: MiniProgramPayload, options?: MessageSendOptions) : Promise<void | string>
+    abstract messageSendPost       (conversationId: string, postPayload: PostPayload, options?: MessageSendOptions)               : Promise<void | string>
+    abstract messageSendText       (conversationId: string, text: string, options?: MessageSendOptions)                           : Promise<void | string>
+    abstract messageSendUrl        (conversationId: string, urlLinkPayload: UrlLinkPayload, options?: MessageSendOptions)         : Promise<void | string>
 
     abstract messageRecall (messageId: string) : Promise<boolean>
 

@@ -159,6 +159,13 @@ export interface MessageQueryFilter {
   type?   : MessageType,
 }
 
+interface MessageSendOptionsObject {
+  quoteId?: string,
+  mentionIdList?: string[]
+}
+
+export type MessageSendOptions = string[] | MessageSendOptionsObject
+
 /** @hidden */
 export type MessagePayloadFilterFunction = (payload: MessagePayload)    => boolean
 

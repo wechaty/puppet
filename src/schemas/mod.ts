@@ -26,6 +26,7 @@ import {
   type MessagePayloadRoom,
   type MessagePayloadTo,
   type MessageQueryFilter,
+  type MessageSendOptions,
   MessageType,
 }                             from './message.js'
 import { DirtyType }         from './dirty.js'
@@ -152,6 +153,7 @@ export {
   type MessagePayloadRoom,
   type MessagePayloadTo,
   type MessageQueryFilter,
+  type MessageSendOptions,
   type MiniProgramPayload,
   type PostPayload,
   type PostPayloadClient,
