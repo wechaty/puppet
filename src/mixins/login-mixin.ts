@@ -84,7 +84,7 @@ const loginMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBas
     override async stop (): Promise<void> {
       log.verbose('PuppetLoginMixin', 'stop()')
       // await this.logout()
-      if (this.isLoggedIn){
+      if (this.isLoggedIn) {
         this.emit('logout', {
           contactId: this.currentUserId,
           data: 'puppet stop()',
