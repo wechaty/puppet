@@ -61,6 +61,8 @@ const roomMixin = <MixinBase extends typeof PuppetSkeleton & ContactMixin & Room
       */
     abstract roomAnnounce (roomId: string)               : Promise<string>
     abstract roomAnnounce (roomId: string, text: string) : Promise<void>
+    abstract roomAnnounce (roomId: string, text: string, isAnnounce: boolean) : Promise<string | void>
+    abstract roomAnnounce (roomId: string, text: string, isAnnounce: false, mentionList: string[]) : Promise<string>
 
     async roomSearch (
       query?: RoomQueryFilter,
