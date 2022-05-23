@@ -37,6 +37,7 @@ import {
   type SayablePayload,
   sayableTypes,
 }                                 from '../schemas/sayable.js'
+import type { ChannelPayload } from '../schemas/channel.js'
 
 const filebox = (filebox: string | FileBoxInterface) => typeof filebox === 'string' ? FileBox.fromJSON(filebox) : filebox
 
@@ -65,6 +66,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
     abstract messageFile         (messageId: string)                       : Promise<FileBoxInterface>
     abstract messageImage        (messageId: string, imageType: ImageType) : Promise<FileBoxInterface>
     abstract messageMiniProgram  (messageId: string)                       : Promise<MiniProgramPayload>
+    abstract messageChannel      (messageId: string)                       : Promise<ChannelPayload>
     abstract messageUrl          (messageId: string)                       : Promise<UrlLinkPayload>
     abstract messageLocation     (messageId: string)                       : Promise<LocationPayload>
 
@@ -73,6 +75,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
     abstract messageSendFile        (conversationId: string, file: FileBoxInterface)                 : Promise<void | string>
     abstract messageSendLocation    (conversationId: string, locationPayload: LocationPayload)       : Promise<void | string>
     abstract messageSendMiniProgram (conversationId: string, miniProgramPayload: MiniProgramPayload) : Promise<void | string>
+    abstract messageSendChannel     (conversationId: string, channelPayload: ChannelPayload)         : Promise<void | string>
     abstract messageSendPost        (conversationId: string, postPayload: PostPayload)               : Promise<void | string>
     abstract messageSendText        (conversationId: string, text: string, mentionIdList?: string[]) : Promise<void | string>
     abstract messageSendUrl         (conversationId: string, urlLinkPayload: UrlLinkPayload)         : Promise<void | string>
@@ -274,6 +277,8 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
           return this.messageSendLocation(conversationId, sayable.payload)
         case sayableTypes.MiniProgram:
           return this.messageSendMiniProgram(conversationId, sayable.payload)
+        case sayableTypes.Channel:
+          return this.messageSendChannel(conversationId, sayable.payload)
         case sayableTypes.Url:
           return this.messageSendUrl(conversationId, sayable.payload)
         case sayableTypes.Text:

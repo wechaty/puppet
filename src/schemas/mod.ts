@@ -92,6 +92,10 @@ import type {
   ChatEventName,
 }                         from './puppet.js'
 
+import type {
+  ChannelPayload,
+}                              from './channel.js'
+
 import {
   sayablePayloads,
   sayableTypes,
@@ -156,6 +160,7 @@ export {
   type PostPayload,
   type PostPayloadClient,
   type PostPayloadServer,
+  type ChannelPayload,
   type PostQueryFilter,
   type PuppetEventName,
   type PuppetOptions,
