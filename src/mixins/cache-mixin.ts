@@ -1,6 +1,6 @@
-import {
-  timeoutPromise,
-}                           from 'gerror'
+// import {
+//   timeoutPromise,
+// }                           from 'gerror'
 
 import { log }  from '../config.js'
 
@@ -132,61 +132,64 @@ const cacheMixin = <MixinBase extends typeof PuppetSkeleton & LoginMixin>(mixinB
     ): Promise<void> {
       log.verbose('PuppetCacheMixin', '__dirtyPayloadAwait(%s<%s>, %s)', DirtyType[type], type, id)
 
-      if (!this.__currentUserId) {
-        log.verbose('PuppetCacheMixin', '__dirtyPayloadAwait() will not dirty any payload when the puppet is not logged in')
-        return
-      }
+      // comment __await logic for 0.x puppet compatibility
+      // if (!this.__currentUserId) {
+      //   log.verbose('PuppetCacheMixin', '__dirtyPayloadAwait() will not dirty any payload when the puppet is not logged in')
+      //   return
+      // }
 
-      const isCurrentDirtyEvent = (event: EventDirtyPayload) =>
-        event.payloadId === id && event.payloadType === type
+      // const isCurrentDirtyEvent = (event: EventDirtyPayload) =>
+      //   event.payloadId === id && event.payloadType === type
 
-      const onDirtyResolve = (resolve: () => void) => {
-        const onDirty = (event: EventDirtyPayload) => {
-          if (isCurrentDirtyEvent(event)) {
-            resolve()
-          }
-        }
-        return onDirty
-      }
+      // const onDirtyResolve = (resolve: () => void) => {
+      //   const onDirty = (event: EventDirtyPayload) => {
+      //     if (isCurrentDirtyEvent(event)) {
+      //       resolve()
+      //     }
+      //   }
+      //   return onDirty
+      // }
 
-      let onDirty: ReturnType<typeof onDirtyResolve>
+      // let onDirty: ReturnType<typeof onDirtyResolve>
 
-      const future = new Promise<void>(resolve => {
-        onDirty = onDirtyResolve(resolve)
-        this.on('dirty', onDirty)
-      })
+      // const future = new Promise<void>(resolve => {
+      //   onDirty = onDirtyResolve(resolve)
+      //   this.on('dirty', onDirty)
+      // })
 
       /**
        * 1. call for sending the `dirty` event
        */
       this.dirtyPayload(type, id)
+      // eslint-disable-next-line sort-keys
+      this.onDirty({ payloadType: type, payloadId: id })
 
       /**
        * 2. wait for the `dirty` event arrive, with a 5 seconds timeout
        */
-      try {
-        await timeoutPromise(future, 5 * 1000)
-          .finally(() => this.off('dirty', onDirty))
+      // try {
+      //   await timeoutPromise(future, 5 * 1000)
+      //     .finally(() => this.off('dirty', onDirty))
 
-      } catch (e) {
-        // timeout, log warning & ignore it
-        log.warn('PuppetCacheMixin',
-          [
-            '__dirtyPayloadAwait() timeout.',
-            'The `dirty` event should be received but no one found.',
-            'Learn more from https://github.com/wechaty/puppet/issues/158',
-            'payloadType: %s(%s)',
-            'payloadId: %s',
-            'error: %s',
-            'stack: %s',
-          ].join('\n  '),
-          DirtyType[type],
-          type,
-          id,
-          (e as Error).message,
-          (e as Error).stack,
-        )
-      }
+      // } catch (e) {
+      //   // timeout, log warning & ignore it
+      //   log.warn('PuppetCacheMixin',
+      //     [
+      //       '__dirtyPayloadAwait() timeout.',
+      //       'The `dirty` event should be received but no one found.',
+      //       'Learn more from https://github.com/wechaty/puppet/issues/158',
+      //       'payloadType: %s(%s)',
+      //       'payloadId: %s',
+      //       'error: %s',
+      //       'stack: %s',
+      //     ].join('\n  '),
+      //     DirtyType[type],
+      //     type,
+      //     id,
+      //     (e as Error).message,
+      //     (e as Error).stack,
+      //   )
+      // }
 
       /**
        * Huan(202111): wait for all the taks in the event loop queue to be executed
