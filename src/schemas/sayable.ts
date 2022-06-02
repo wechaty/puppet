@@ -14,6 +14,7 @@ import type {
 const payloadContact     = (contactId: string)                      => ({ contactId })
 const payloadFilebox     = (filebox: string | FileBoxInterface)     => ({ filebox })
 const payloadText        = (text: string, mentions: string[] = [])  => ({ text, mentions })
+const payloadSystem      = (text: string)  => ({ text })
 /**
  * expand/merge the payload altogether
  */
@@ -61,6 +62,7 @@ const location    = createAction(sayableTypes.Location,    payloadLocation)()
 const miniProgram = createAction(sayableTypes.MiniProgram, payloadMiniProgram)()
 const url         = createAction(sayableTypes.Url,         payloadUrlLink)()
 const post        = createAction(sayableTypes.Post,        payloadPost)()
+const system      = createAction(sayableTypes.System,      payloadSystem)()
 
 /**
  * Huan(202201): Recursive type references
@@ -77,6 +79,7 @@ const sayablePayloadsNoPost = {
   text,
   url,
   video,
+  system,
 } as const
 
 /**
