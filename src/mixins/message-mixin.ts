@@ -37,6 +37,7 @@ import {
   type SayablePayload,
   sayableTypes,
 }                                 from '../schemas/sayable.js'
+import type { ChannelPayload } from '../schemas/channel.js'
 
 const filebox = (filebox: string | FileBoxInterface) => typeof filebox === 'string' ? FileBox.fromJSON(filebox) : filebox
 
@@ -67,6 +68,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
     abstract messageMiniProgram  (messageId: string)                       : Promise<MiniProgramPayload>
     abstract messageUrl          (messageId: string)                       : Promise<UrlLinkPayload>
     abstract messageLocation     (messageId: string)                       : Promise<LocationPayload>
+    abstract messageChannel      (messageId: string)                       : Promise<ChannelPayload>
 
     abstract messageForward         (conversationId: string, messageId: string,)                     : Promise<void | string>
     abstract messageSendContact     (conversationId: string, contactId: string)                      : Promise<void | string>
@@ -76,6 +78,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
     abstract messageSendPost        (conversationId: string, postPayload: PostPayload)               : Promise<void | string>
     abstract messageSendText        (conversationId: string, text: string, mentionIdList?: string[]) : Promise<void | string>
     abstract messageSendUrl         (conversationId: string, urlLinkPayload: UrlLinkPayload)         : Promise<void | string>
+    abstract messageSendChannel     (conversationId: string, channelPayload: ChannelPayload)         : Promise<void | string>
 
     abstract messageRecall (messageId: string) : Promise<boolean>
 
@@ -280,6 +283,8 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
           return this.messageSendText(conversationId, sayable.payload.text, sayable.payload.mentions)
         case sayableTypes.Post:
           return this.messageSendPost(conversationId, sayable.payload)
+        case sayableTypes.Channel:
+          return this.messageSendChannel(conversationId, sayable.payload)
         default:
           throw new Error('unsupported sayable payload: ' + JSON.stringify(sayable))
       }
