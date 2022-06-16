@@ -181,7 +181,7 @@ async function main () {
     throw new Error('the `src/package-json.ts` has not been generated correctly.')
   }
 
-  assert.strictEqual(puppetInstance.name(), 'wechaty-puppet', 'should get base class name')
+  assert.strictEqual(puppetInstance.name(), '@juzi/wechaty-puppet', 'should get base class name')
   assert.notStrictEqual(puppetInstance.version(), '0.0.0', 'version should not be 0.0.0 when publishing')
 
   console.info(`Puppet v${puppetInstance.version()} smoking test passed.`)
