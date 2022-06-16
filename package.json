@@ -1,5 +1,5 @@
 {
-  "name": "wechaty-puppet",
+  "name": "@juzi/wechaty-puppet",
   "version": "1.20.2",
   "description": "Abstract Puppet for Wechaty",
   "type": "module",
@@ -69,7 +69,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wechaty/puppet.git"
+    "url": "git+https://github.com/juzibot/wechaty-puppet.git"
   },
   "keywords": [
     "chatie",
@@ -82,12 +82,11 @@
   "author": "Huan LI <zixia@zixia.net>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/wechaty/puppet/issues"
+    "url": "https://github.com/juzibot/wechaty-puppet/issues"
   },
-  "homepage": "https://github.com/wechaty/puppet#readme",
+  "homepage": "https://github.com/juzibot/wechaty-puppet#readme",
   "devDependencies": {
     "@chatie/eslint-config": "^1.0.4",
-    "@chatie/git-scripts": "^0.6.2",
     "@chatie/semver": "^0.4.7",
     "@chatie/tsconfig": "^4.6.2",
     "@swc/core": "^1.2.113",
@@ -120,10 +119,5 @@
   "publishConfig": {
     "access": "public",
     "tag": "next"
-  },
-  "git": {
-    "scripts": {
-      "pre-push": "npx git-scripts-pre-push"
-    }
   }
 }
