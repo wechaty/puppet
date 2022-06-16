@@ -2,15 +2,15 @@
 
 import assert from 'assert'
 
-import * as PUPPET    from 'wechaty-puppet'
+import * as PUPPET from '@juzi/wechaty-puppet'
 import type {
   FileBoxInterface,
 }                     from 'file-box'
 
-import * as FILTERS   from 'wechaty-puppet/filters'
-import * as IMPLS     from 'wechaty-puppet/impls'
-import * as PAYLOADS  from 'wechaty-puppet/payloads'
-import * as TYPES     from 'wechaty-puppet/types'
+import * as FILTERS from '@juzi/wechaty-puppet/filters'
+import * as IMPLS from '@juzi/wechaty-puppet/impls'
+import * as PAYLOADS from '@juzi/wechaty-puppet/payloads'
+import * as TYPES from '@juzi/wechaty-puppet/types'
 
 class PuppetTest extends PUPPET.Puppet {
 
