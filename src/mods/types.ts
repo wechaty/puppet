@@ -1,5 +1,6 @@
 import {
   type FriendshipAddOptions,
+  type MessageSendTextOptions,
   type PuppetEventName,
   type ChatEventName,
   ContactGender,
@@ -43,6 +44,7 @@ export {
 export {
   ScanStatus,
   type FriendshipAddOptions,
+  type MessageSendTextOptions,
   YOU,
   CHAT_EVENT_DICT,
   PUPPET_EVENT_DICT,

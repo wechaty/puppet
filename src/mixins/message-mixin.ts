@@ -15,6 +15,7 @@ import type {
   MessagePayloadFilterFunction,
   MessageQueryFilter,
   MessageType,
+  MessageSendTextOptions,
 }                                 from '../schemas/message.js'
 import type {
   UrlLinkPayload,
@@ -76,7 +77,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
     abstract messageSendLocation    (conversationId: string, locationPayload: LocationPayload)       : Promise<void | string>
     abstract messageSendMiniProgram (conversationId: string, miniProgramPayload: MiniProgramPayload) : Promise<void | string>
     abstract messageSendPost        (conversationId: string, postPayload: PostPayload)               : Promise<void | string>
-    abstract messageSendText        (conversationId: string, text: string, mentionIdList?: string[]) : Promise<void | string>
+    abstract messageSendText        (conversationId: string, text: string, options?: MessageSendTextOptions) : Promise<void | string>
     abstract messageSendUrl         (conversationId: string, urlLinkPayload: UrlLinkPayload)         : Promise<void | string>
     abstract messageSendChannel     (conversationId: string, channelPayload: ChannelPayload)         : Promise<void | string>
 
