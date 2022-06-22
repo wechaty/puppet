@@ -170,22 +170,25 @@ const cacheMixin = <MixinBase extends typeof PuppetSkeleton & LoginMixin>(mixinB
 
       } catch (e) {
         // timeout, log warning & ignore it
-        log.warn('PuppetCacheMixin',
-          [
-            '__dirtyPayloadAwait() timeout.',
-            'The `dirty` event should be received but no one found.',
-            'Learn more from https://github.com/wechaty/puppet/issues/158',
-            'payloadType: %s(%s)',
-            'payloadId: %s',
-            'error: %s',
-            'stack: %s',
-          ].join('\n  '),
-          DirtyType[type],
-          type,
-          id,
-          (e as Error).message,
-          (e as Error).stack,
-        )
+
+        log.warn('PuppetCacheMixin', '__dirtyPayloadAwait() timeout, probably because the server is using wechaty 0')
+
+        // log.warn('PuppetCacheMixin',
+        //   [
+        //     '__dirtyPayloadAwait() timeout.',
+        //     'The `dirty` event should be received but no one found.',
+        //     'Learn more from https://github.com/wechaty/puppet/issues/158',
+        //     'payloadType: %s(%s)',
+        //     'payloadId: %s',
+        //     'error: %s',
+        //     'stack: %s',
+        //   ].join('\n  '),
+        //   DirtyType[type],
+        //   type,
+        //   id,
+        //   (e as Error).message,
+        //   (e as Error).stack,
+        // )
       }
 
       /**
