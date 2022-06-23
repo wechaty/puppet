@@ -30,6 +30,7 @@ const sayableMixin = <MixinBase extends typeof PuppetSkeleton & MessageMixin & P
 
       switch (payload.type) {
         case MessageType.Text:
+        case MessageType.System:
           return sayablePayloads.text(payload.text || '')
 
         case MessageType.Image:
