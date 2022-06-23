@@ -15,6 +15,7 @@ import type {
 const payloadContact     = (contactId: string)                      => ({ contactId })
 const payloadFilebox     = (filebox: string | FileBoxInterface)     => ({ filebox })
 const payloadText        = (text: string, mentions: string[] = [])  => ({ text, mentions })
+const payloadSystem      = (text: string)                           => ({ text })
 /**
  * expand/merge the payload altogether
  */
@@ -46,11 +47,12 @@ const sayableTypes = (() => ({
  */
 const contact = createAction(sayableTypes.Contact, payloadContact)()
 const text    = createAction(sayableTypes.Text,    payloadText)()
+const system  = createAction(sayableTypes.System, payloadSystem)()
 // (conversationId: string, text: string, mentionIdList?: string[]) => ({ conversationId, mentionIdList, text }
 /**
  * FileBoxs
  */
-const attatchment = createAction(sayableTypes.Attachment,  payloadFilebox)()
+const attachment  = createAction(sayableTypes.Attachment,  payloadFilebox)()
 const audio       = createAction(sayableTypes.Audio,       payloadFilebox)()
 const emoticon    = createAction(sayableTypes.Emoticon,    payloadFilebox)()
 const image       = createAction(sayableTypes.Image,       payloadFilebox)()
@@ -70,7 +72,7 @@ const channel     = createAction(sayableTypes.Channel,     payloadChannel)()
  *  @link https://github.com/microsoft/TypeScript/pull/33050#issuecomment-1002455128
  */
 const sayablePayloadsNoPost = {
-  attatchment,
+  attachment,
   audio,
   contact,
   emoticon,
@@ -81,6 +83,7 @@ const sayablePayloadsNoPost = {
   url,
   video,
   channel,
+  system,
 } as const
 
 /**

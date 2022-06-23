@@ -38,7 +38,7 @@ const friendshipMixin = <MixinBase extends typeof PuppetSkeleton & CacheMixin>(m
      */
     friendshipSearchWeixin (weixin: string) : Promise<null | string> {
       log.warn('Puppet', 'friendshipSearchWeixin() is deprecated. use `friendshipSearchHandle()` instead.')
-      console.error(new Error().stack)
+      // console.error(new Error().stack)
       return this.friendshipSearchHandle(weixin)
     }
 
