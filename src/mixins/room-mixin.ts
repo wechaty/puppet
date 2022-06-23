@@ -119,7 +119,9 @@ const roomMixin = <MixinBase extends typeof PuppetSkeleton & ContactMixin & Room
 
                 // Remove invalid room id from cache to avoid getting invalid room payload again
                 await this.roomPayloadDirty(id)
-                await this.roomMemberPayloadDirty(id)
+
+                // should not dirty roomMember payload with room id
+                // await this.roomMemberPayloadDirty(id)
 
                 // compatible with {} payload
                 return {} as any
