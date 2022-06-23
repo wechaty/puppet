@@ -50,7 +50,7 @@ const text    = createAction(sayableTypes.Text,    payloadText)()
 /**
  * FileBoxs
  */
-const attatchment = createAction(sayableTypes.Attachment,  payloadFilebox)()
+const attachment  = createAction(sayableTypes.Attachment,  payloadFilebox)()
 const audio       = createAction(sayableTypes.Audio,       payloadFilebox)()
 const emoticon    = createAction(sayableTypes.Emoticon,    payloadFilebox)()
 const image       = createAction(sayableTypes.Image,       payloadFilebox)()
@@ -70,7 +70,7 @@ const channel     = createAction(sayableTypes.Channel,     payloadChannel)()
  *  @link https://github.com/microsoft/TypeScript/pull/33050#issuecomment-1002455128
  */
 const sayablePayloadsNoPost = {
-  attatchment,
+  attachment,
   audio,
   contact,
   emoticon,

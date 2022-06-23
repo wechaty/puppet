@@ -38,7 +38,7 @@ const sayableMixin = <MixinBase extends typeof PuppetSkeleton & MessageMixin & P
         case MessageType.Video:
         case MessageType.Emoticon: {
           const fileBox = await this.messageFile(sayableId)
-          return sayablePayloads.attatchment(fileBox)
+          return sayablePayloads.attachment(fileBox)
         }
         case MessageType.Contact: {
           const contactId = await this.messageContact(sayableId)
