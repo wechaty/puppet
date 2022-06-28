@@ -88,7 +88,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
      * @protected
      */
 
-    abstract messageCoverage (messageId: string): Promise<FileBoxInterface>
+    abstract messagePreview (messageId: string): Promise<FileBoxInterface | undefined>
 
     /**
      * Issue #155 - https://github.com/wechaty/puppet/issues/155
@@ -310,7 +310,7 @@ type ProtectedPropertyMessageMixin =
   | 'messageQueryFilterFactory'
   | 'messageRawPayload'
   | 'messageRawPayloadParser'
-  | 'messageCoverage'
+  | 'messagePreview'
 
 export type {
   MessageMixin,
