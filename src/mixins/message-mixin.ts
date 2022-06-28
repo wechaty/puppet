@@ -84,6 +84,13 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
     abstract messageRecall (messageId: string) : Promise<boolean>
 
     /**
+     * https://github.com/juzibot/wechaty-puppet-wxwork/issues/892
+     * @protected
+     */
+
+    abstract messageCoverage (messageId: string): Promise<FileBoxInterface>
+
+    /**
      * Issue #155 - https://github.com/wechaty/puppet/issues/155
      *
      * @protected
@@ -303,6 +310,7 @@ type ProtectedPropertyMessageMixin =
   | 'messageQueryFilterFactory'
   | 'messageRawPayload'
   | 'messageRawPayloadParser'
+  | 'messageCoverage'
 
 export type {
   MessageMixin,
