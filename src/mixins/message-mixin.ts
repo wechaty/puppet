@@ -85,7 +85,6 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
 
     /**
      * https://github.com/juzibot/wechaty-puppet-wxwork/issues/892
-     * @protected
      */
 
     abstract messagePreview (messageId: string): Promise<FileBoxInterface | undefined>
@@ -310,7 +309,6 @@ type ProtectedPropertyMessageMixin =
   | 'messageQueryFilterFactory'
   | 'messageRawPayload'
   | 'messageRawPayloadParser'
-  | 'messagePreview'
 
 export type {
   MessageMixin,
