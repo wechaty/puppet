@@ -26,6 +26,11 @@ export interface RoomPayload {
   ownerId?     : string
   adminIdList  : string[]
   external?    : boolean
+
+  /**
+ * a stringified JSON object to handle any IM specific data
+ */
+  additionalInfo?: string
 }
 
 export interface RoomMemberPayload {
@@ -34,6 +39,11 @@ export interface RoomMemberPayload {
   inviterId? : string,   // "wxid_7708837087612",
   avatar     : string,
   name       : string,
+
+  /**
+ * a stringified JSON object to handle any IM specific data
+ */
+  additionalInfo?: string
 }
 
 /** @hidden */

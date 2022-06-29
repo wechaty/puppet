@@ -53,6 +53,11 @@ interface ContactPayload {
   title?       : string
   description? : string
   coworker?    : boolean
+
+  /**
+   * a stringified JSON object to handle any IM specific data
+   */
+  additionalInfo?: string
 }
 
 /** @hidden */
