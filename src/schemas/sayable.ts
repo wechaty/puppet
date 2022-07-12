@@ -16,6 +16,7 @@ const payloadContact     = (contactId: string)                      => ({ contac
 const payloadFilebox     = (filebox: string | FileBoxInterface)     => ({ filebox })
 const payloadText        = (text: string, mentions: string[] = [])  => ({ text, mentions })
 const payloadSystem      = (text: string)                           => ({ text })
+const payloadMarkdown    = (text: string)                           => ({ text })
 /**
  * expand/merge the payload altogether
  */
@@ -45,9 +46,10 @@ const sayableTypes = (() => ({
 /**
  * Simple data
  */
-const contact = createAction(sayableTypes.Contact, payloadContact)()
-const text    = createAction(sayableTypes.Text,    payloadText)()
-const system  = createAction(sayableTypes.System, payloadSystem)()
+const contact  = createAction(sayableTypes.Contact, payloadContact)()
+const text     = createAction(sayableTypes.Text,    payloadText)()
+const system   = createAction(sayableTypes.System, payloadSystem)()
+const markdown = createAction(sayableTypes.Markdown, payloadMarkdown)()
 // (conversationId: string, text: string, mentionIdList?: string[]) => ({ conversationId, mentionIdList, text }
 /**
  * FileBoxs
@@ -84,6 +86,7 @@ const sayablePayloadsNoPost = {
   video,
   channel,
   system,
+  markdown,
 } as const
 
 /**
