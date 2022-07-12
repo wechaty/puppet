@@ -22,6 +22,7 @@ export enum MessageType {
   Post        = 16,   // Moment, Channel, Tweet, etc
   Channel     = 17,   // Channel
   System      = 18,   // System Message
+  Markdown    = 19,   // Markdown Message
 }
 
 /**
