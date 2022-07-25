@@ -10,6 +10,7 @@ import type { MessagePayloadFilterFunction, MessageSendTextOptions } from '../..
 import type { RoomPayloadFilterFunction }     from '../../../src/schemas/room.js'
 import type { ContactPayloadFilterFunction }  from '../../../src/schemas/contact.js'
 import type { FriendshipAddOptions }          from '../../../src/schemas/friendship.js'
+import type { CorpTagGroupPayload, CorpTagPayload } from '../../../src/schemas/mod.js'
 
 class PuppetTest extends PUPPET.Puppet {
 
@@ -46,6 +47,49 @@ class PuppetTest extends PUPPET.Puppet {
   override async tagContactRemove (tagId: string, contactId: string) : Promise<void> { void { contactId, tagId } }
   override async tagContactDelete (tagId: string) : Promise<void> { void { tagId } }
   override async tagContactList (contactId?: string) : Promise<string[]> { return [contactId || ''] }
+
+  /**
+   *
+   * CorpTag
+   *
+   */
+  override async corpTagContactAdd (corpTagGroupId: string, corpTagId: string, contactId: string): Promise<void> {
+    void { corpTagGroupId, corpTagId, contactId }
+  }
+
+  override async corpTagContactRemove (corpTagGroupId: string, corpTagId: string, contactId: string): Promise<void> {
+    void { corpTagGroupId, corpTagId, contactId }
+  }
+
+  override async corpTagGroupAdd (corpTagGroupName: string): Promise<string | void> {
+    return corpTagGroupName
+  }
+
+  override async corpTagGroupDelete (corpTagGroupId: string): Promise<void> {
+    void { corpTagGroupId }
+  }
+
+  override async corpTagAdd (corpTagGroupId: string, corpTagName: string): Promise<string | void> {
+    return `${corpTagGroupId} - ${corpTagName}`
+  }
+
+  override async corpTagDelete (corpTagGroupId: string, corpTagId: string): Promise<void> {
+    void { corpTagGroupId, corpTagId }
+  }
+
+  override async corpTagGroupList (): Promise<CorpTagGroupPayload[]> {
+    return []
+  }
+
+  override async corpTagList (corpTagGroupId: string): Promise<CorpTagPayload[]> {
+    void { corpTagGroupId  }
+    return []
+  }
+
+  override async corpTagContactList (contactId: string): Promise<CorpTagPayload[]> {
+    void { contactId }
+    return []
+  }
 
   /**
    *
