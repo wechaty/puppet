@@ -1,10 +1,10 @@
-export interface CorpTag {
+export interface CorpTagPayload {
   id: string,
   name: string,
   groupId: string,
 }
 
-export interface CorpTagGroup {
+export interface CorpTagGroupPayload {
   id: string,
   name: string,
 }

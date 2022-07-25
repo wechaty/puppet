@@ -1,7 +1,7 @@
 import { log } from '../config.js'
 
 import type { PuppetSkeleton } from '../puppet/puppet-skeleton.js'
-import type { CorpTagGroup, CorpTag } from '../schemas/corpTag.js'
+import type { CorpTagPayload, CorpTagGroupPayload } from '../schemas/corpTag.js'
 
 const corpTagMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBase) => {
 
@@ -31,10 +31,10 @@ const corpTagMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinB
     abstract corpTagGroupAdd(corpTagGroupName: string): Promise<string | void>
     abstract corpTagGroupDelete(corpTagGroupId: string): Promise<void>
     abstract corpTagAdd(corpTagGroupId: string, corpTagName: string): Promise<string | void>
-    abstract corpTagDelete(corpTagGroudId: string, corpTagId: string): Promise<void>
-    abstract corpTagGroupList(): Promise<CorpTagGroup[]>
-    abstract corpTagList(corpTagGroupId: string): Promise<CorpTag[]>
-    abstract corpTagContactList(contactId: string): Promise<CorpTag[]>
+    abstract corpTagDelete(corpTagGroupId: string, corpTagId: string): Promise<void>
+    abstract corpTagGroupList(): Promise<CorpTagGroupPayload[]>
+    abstract corpTagList(corpTagGroupId: string): Promise<CorpTagPayload[]>
+    abstract corpTagContactList(contactId: string): Promise<CorpTagPayload[]>
 
   }
 
