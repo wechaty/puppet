@@ -15,26 +15,26 @@ const corpTagMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinB
     /**
      *
      * CorpTag - tags in groups
-     *  corpTagContactAdd - add a tag for a Contact. Tag must exist.
-     *  corpTagContactRemove - remove a tag from a Contact
+     *  corpTagContactTagAdd - add a tag for a Contact. Tag must exist.
+     *  corpTagContactTagRemove - remove a tag from a Contact
      *  corpTagGroupAdd - add a tag group from IM
      *  corpTagGroupDelete - delete a tag group from IM
-     *  corpTagAdd - add a tag in a group from IM
-     *  corpTagDelete - delete a tag in a group from IM
+     *  corpTagTagAdd - add a tag in a group from IM
+     *  corpTagTagDelete - delete a tag in a group from IM
      *  corpTagGroupList - get a list of tag groups
-     *  corpTagList - get a list of tags in a group
-     *  corpTagContactList(id) - get tags from a specific Contact
+     *  corpTagTagList - get a list of tags in a group
+     *  corpTagContactTagList(id) - get tags from a specific Contact
      *
      */
-    abstract corpTagContactAdd(corpTagGroupId: string, corpTagId: string, contactId: string): Promise<void>
-    abstract corpTagContactRemove(corpTagGroupId: string, corpTagId: string, contactId: string): Promise<void>
-    abstract corpTagGroupAdd(corpTagGroupName: string): Promise<string | void>
+    abstract corpTagContactTagAdd(corpTagGroupId: string, corpTagId: string, contactId: string): Promise<void>
+    abstract corpTagContactTagRemove(corpTagGroupId: string, corpTagId: string, contactId: string): Promise<void>
+    abstract corpTagGroupAdd(corpTagGroupName: string): Promise<CorpTagGroupPayload | void>
     abstract corpTagGroupDelete(corpTagGroupId: string): Promise<void>
-    abstract corpTagAdd(corpTagGroupId: string, corpTagName: string): Promise<string | void>
-    abstract corpTagDelete(corpTagGroupId: string, corpTagId: string): Promise<void>
+    abstract corpTagTagAdd(corpTagGroupId: string, corpTagName: string): Promise<CorpTagPayload | void>
+    abstract corpTagTagDelete(corpTagGroupId: string, corpTagId: string): Promise<void>
     abstract corpTagGroupList(): Promise<CorpTagGroupPayload[]>
-    abstract corpTagList(corpTagGroupId: string): Promise<CorpTagPayload[]>
-    abstract corpTagContactList(contactId: string): Promise<CorpTagPayload[]>
+    abstract corpTagTagList(corpTagGroupId: string): Promise<CorpTagPayload[]>
+    abstract corpTagContactTagList(contactId: string): Promise<CorpTagPayload[]>
 
   }
 
