@@ -45,6 +45,7 @@ import {
   postMixin,
   sayableMixin,
   tapMixin,
+  corpTagMixin,
 }                        from '../mixins/mod.js'
 
 import { PuppetSkeleton } from './puppet-skeleton.js'
@@ -63,6 +64,7 @@ const PipedBase = FP.pipe(
   roomMixin,
   friendshipMixin,
   tagMixin,
+  corpTagMixin,
   roomInvitationMixin,
   messageMixin,
   miscMixin,
