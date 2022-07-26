@@ -1,6 +1,6 @@
 enum TagType {
   Personal = 0,
-  Cooperation = 1,
+  Corporation = 1,
 }
 
 interface TagPayload {
