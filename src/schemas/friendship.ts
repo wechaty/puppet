@@ -3,6 +3,8 @@ export enum FriendshipType {
   Confirm,
   Receive,
   Verify,
+  Delete,
+  Remove,
 }
 
 /**
@@ -50,9 +52,21 @@ export type FriendshipPayloadVerify = FriendshipPayloadBase & {
   type      : FriendshipType.Verify,
 }
 
+/** @hidden */
+export type FriendshipPayloadDelete = FriendshipPayloadBase & {
+  type      : FriendshipType.Delete,
+}
+
+/** @hidden */
+export type FriendshipPayloadRemove = FriendshipPayloadBase & {
+  type      : FriendshipType.Remove,
+}
+
 export type FriendshipPayload = FriendshipPayloadConfirm
                                   | FriendshipPayloadReceive
                                   | FriendshipPayloadVerify
+                                  | FriendshipPayloadDelete
+                                  | FriendshipPayloadRemove
 
 export interface FriendshipSearchCondition {
   phone: string,
