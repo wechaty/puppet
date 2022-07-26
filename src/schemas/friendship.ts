@@ -4,7 +4,7 @@ export enum FriendshipType {
   Receive,
   Verify,
   Delete,
-  Remove,
+  Removed,
 }
 
 /**
@@ -59,7 +59,7 @@ export type FriendshipPayloadDelete = FriendshipPayloadBase & {
 
 /** @hidden */
 export type FriendshipPayloadRemove = FriendshipPayloadBase & {
-  type      : FriendshipType.Remove,
+  type      : FriendshipType.Removed,
 }
 
 export type FriendshipPayload = FriendshipPayloadConfirm
