@@ -34,11 +34,52 @@ class PuppetTest extends PUPPET.Puppet {
    * Tag
    *
    */
-  override async tagContactAdd (id: string, contactId: string) : Promise<void> { return void { contactId, id } }
-  override async tagContactRemove (id: string, contactId: string) : Promise<void> { return void { contactId, id } }
-  override async tagContactDelete (id: string) : Promise<void> { return void { id } }
-  override async tagContactList (contactId?: string) : Promise<string[]> { return [contactId || ''] }
+  override async tagContactTagAdd(tagGroupId: string | undefined, tagId: string, contactId: string): Promise<void> {
+    void { tagGroupId, tagId, contactId }
+  }
 
+  override async tagContactTagRemove(tagGroupId: string | undefined, tagId: string, contactId: string): Promise<void> {
+    void { tagGroupId, tagId, contactId }
+  }
+
+  override async tagGroupAdd(tagGroupName: string): Promise<PAYLOADS.TagGroup | void> {
+    void { tagGroupName }
+  }
+
+  override async tagGroupDelete(tagGroupId: string): Promise<void> {
+    void { tagGroupId }
+  }
+
+  override async tagTagAdd(tagGroupId: string | undefined, tagName: string): Promise<PAYLOADS.Tag | void> {
+    void { tagGroupId, tagName }
+  }
+
+  override async tagTagDelete(tagGroupId: string, tagId: string): Promise<void> {
+    void { tagGroupId, tagId }
+  }
+
+  override async tagGroupList(): Promise<PAYLOADS.TagGroup[]> {
+    return []
+  }
+
+  override async tagGroupTagList(tagGroupId: string): Promise<PAYLOADS.Tag[]> {
+    void { tagGroupId }
+    return []
+  }
+
+  override async tagTagList(): Promise<PAYLOADS.Tag[]> {
+    return []
+  }
+
+  override async tagContactTagList(contactId: string): Promise<PAYLOADS.Tag[]> {
+    void { contactId }
+    return []
+  }
+
+  override async tagTagContactList(tagGroupId: string | undefined, tagId: string): Promise<string[]> {
+    void { tagGroupId, tagId }
+    return []
+  }
   /**
    *
    * Contact

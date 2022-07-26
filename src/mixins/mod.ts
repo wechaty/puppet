@@ -47,10 +47,6 @@ import {
   ProtectedPropertyTagMixin,
 }                                     from './tag-mixin.js'
 import {
-  corpTagMixin,
-  ProtectedPropertyCorpTagMixin,
-}                                     from './corp-tag-mixin.js'
-import {
   tapMixin,
   ProtectedPropertyTapMixin,
 }                                     from './tap-mixin.js'
@@ -90,7 +86,6 @@ type MixinProtectedProperty =
   | ProtectedPropertyRoomMixin
   | ProtectedPropertyServiceMixin
   | ProtectedPropertyTagMixin
-  | ProtectedPropertyCorpTagMixin
   | ProtectedPropertyTapMixin
   | ProtectedPropertySayableMixin
   | ProtectedPropertyValidateMixin
@@ -111,7 +106,6 @@ export {
   roomMixin,
   serviceMixin,
   tagMixin,
-  corpTagMixin,
   tapMixin,
   sayableMixin,
   validateMixin,
