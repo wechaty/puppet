@@ -3,10 +3,13 @@ enum TagType {
   Corporation = 1,
 }
 
-interface TagPayload {
-  id: string,
-  name: string,
+export interface TagIdentifier {
   groupId?: string,
+  id: string,
+}
+
+interface TagPayload extends TagIdentifier {
+  name: string,
   type: TagType
 }
 

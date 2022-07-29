@@ -34,36 +34,36 @@ class PuppetTest extends PUPPET.Puppet {
    * Tag
    *
    */
-  override async tagContactTagAdd(tagGroupId: string | undefined, tagId: string, contactId: string): Promise<void> {
-    void { tagGroupId, tagId, contactId }
+  override async tagContactTagAdd(tags: FILTERS.TagIdentifier[], contactIds: string[]): Promise<void> {
+    void { tags, contactIds }
   }
 
-  override async tagContactTagRemove(tagGroupId: string | undefined, tagId: string, contactId: string): Promise<void> {
-    void { tagGroupId, tagId, contactId }
+  override async tagContactTagRemove(tag: FILTERS.TagIdentifier[], contactIds: string[]): Promise<void> {
+    void { tag, contactIds }
   }
 
-  override async tagGroupAdd(tagGroupName: string): Promise<PAYLOADS.TagGroup | void> {
-    void { tagGroupName }
+  override async tagGroupAdd(groupName: string): Promise<PAYLOADS.TagGroup | void> {
+    void { groupName }
   }
 
-  override async tagGroupDelete(tagGroupId: string): Promise<void> {
-    void { tagGroupId }
+  override async tagGroupDelete(groupId: string): Promise<void> {
+    void { groupId }
   }
 
-  override async tagTagAdd(tagGroupId: string | undefined, tagName: string): Promise<PAYLOADS.Tag | void> {
-    void { tagGroupId, tagName }
+  override async tagTagAdd(tagName: string, groupId?: string): Promise<PAYLOADS.Tag | void> {
+    void { groupId, tagName }
   }
 
-  override async tagTagDelete(tagGroupId: string, tagId: string): Promise<void> {
-    void { tagGroupId, tagId }
+  override async tagTagDelete(tag: FILTERS.TagIdentifier): Promise<void> {
+    void { tag }
   }
 
   override async tagGroupList(): Promise<PAYLOADS.TagGroup[]> {
     return []
   }
 
-  override async tagGroupTagList(tagGroupId: string): Promise<PAYLOADS.Tag[]> {
-    void { tagGroupId }
+  override async tagGroupTagList(groupId?: string): Promise<PAYLOADS.Tag[]> {
+    void { groupId }
     return []
   }
 
@@ -76,8 +76,8 @@ class PuppetTest extends PUPPET.Puppet {
     return []
   }
 
-  override async tagTagContactList(tagGroupId: string | undefined, tagId: string): Promise<string[]> {
-    void { tagGroupId, tagId }
+  override async tagTagContactList(tag: FILTERS.TagIdentifier): Promise<string[]> {
+    void { tag }
     return []
   }
   /**

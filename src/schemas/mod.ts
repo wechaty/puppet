@@ -100,6 +100,7 @@ import type {
 import {
   type TagGroupPayload,
   type TagPayload,
+  type TagIdentifier,
   TagType,
 } from './tag.js'
 
@@ -184,5 +185,6 @@ export {
   type ChannelPayload,
   type TagGroupPayload,
   type TagPayload,
+  type TagIdentifier,
   YOU,
 }

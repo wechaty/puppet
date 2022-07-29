@@ -1,7 +1,7 @@
 import { log } from '../config.js'
 
 import type { PuppetSkeleton }   from '../puppet/puppet-skeleton.js'
-import type { TagPayload, TagGroupPayload } from '../schemas/tag.js'
+import type { TagPayload, TagGroupPayload, TagIdentifier } from '../schemas/tag.js'
 
 const tagMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBase) => {
 
@@ -29,17 +29,19 @@ const tagMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBase)
      *
      */
 
-    abstract tagContactTagAdd(tagGroupId: string | string[] | undefined, tagId: string | string[], contactId: string | string[]): Promise<void>
-    abstract tagContactTagRemove(tagGroupId: string | undefined, tagId: string, contactId: string): Promise<void>
-    abstract tagGroupAdd(tagGroupName: string): Promise<TagGroupPayload | void>
-    abstract tagGroupDelete(tagGroupId: string): Promise<void>
-    abstract tagTagAdd(tagGroupId: string | undefined, tagName: string): Promise<TagPayload | void>
-    abstract tagTagDelete(tagGroupId: string | undefined, tagId: string): Promise<void>
-    abstract tagGroupList(): Promise<TagGroupPayload[]>
-    abstract tagGroupTagList(tagGroupId: string | undefined): Promise<TagPayload[]>
-    abstract tagTagList(): Promise<TagPayload[]>
+    abstract tagContactTagAdd(tags: TagIdentifier[], contactIds: string[]): Promise<void>
+    abstract tagContactTagRemove(tag: TagIdentifier[], contactIds: string[]): Promise<void>
     abstract tagContactTagList(contactId: string): Promise<TagPayload[]>
-    abstract tagTagContactList(tagGroupId: string | undefined, tagId: string): Promise<string[]>
+
+    abstract tagGroupAdd(groupName: string): Promise<TagGroupPayload | void>
+    abstract tagGroupDelete(groupId: string): Promise<void>
+    abstract tagGroupList(): Promise<TagGroupPayload[]>
+    abstract tagGroupTagList(groupId?: string): Promise<TagPayload[]>
+
+    abstract tagTagAdd(tagName: string, groupId?: string): Promise<TagPayload | void>
+    abstract tagTagDelete(tag: TagIdentifier): Promise<void>
+    abstract tagTagList(): Promise<TagPayload[]>
+    abstract tagTagContactList(tag: TagIdentifier): Promise<string[]>
 
   }
 
