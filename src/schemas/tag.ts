@@ -15,6 +15,11 @@ interface TagGroupPayload {
   name: string,
 }
 
+export interface TagIdentifier {
+  tagGroupId?: string,
+  tagId: string,
+}
+
 export {
   type TagPayload,
   type TagGroupPayload,

@@ -1,7 +1,7 @@
 import { log } from '../config.js'
 
 import type { PuppetSkeleton }   from '../puppet/puppet-skeleton.js'
-import type { TagPayload, TagGroupPayload } from '../schemas/tag.js'
+import type { TagPayload, TagGroupPayload, TagIdentifier } from '../schemas/tag.js'
 
 const tagMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBase) => {
 
@@ -29,7 +29,7 @@ const tagMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBase)
      *
      */
 
-    abstract tagContactTagAdd(tags: {tagGroupId?: string, tagId: string}[], contactId: string | string[]): Promise<void>
+    abstract tagContactTagAdd(tags: TagIdentifier | TagIdentifier[], contactId: string | string[]): Promise<void>
     abstract tagContactTagRemove(tagGroupId: string | undefined, tagId: string, contactId: string): Promise<void>
     abstract tagGroupAdd(tagGroupName: string): Promise<TagGroupPayload | void>
     abstract tagGroupDelete(tagGroupId: string): Promise<void>
