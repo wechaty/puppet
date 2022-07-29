@@ -11,6 +11,7 @@ import type { RoomPayloadFilterFunction }     from '../../../src/schemas/room.js
 import type { ContactPayloadFilterFunction }  from '../../../src/schemas/contact.js'
 import type { FriendshipAddOptions }          from '../../../src/schemas/friendship.js'
 import type { TagGroupPayload, TagPayload } from '../../../src/schemas/mod.js'
+import type { TagIdentifier } from '../../../src/schemas/tag.js'
 
 class PuppetTest extends PUPPET.Puppet {
 
@@ -44,8 +45,8 @@ class PuppetTest extends PUPPET.Puppet {
    *
    */
 
-  override async tagContactTagAdd (tagGroupId: string | undefined, tagId: string, contactId: string): Promise<void> {
-    void { tagGroupId, tagId, contactId }
+  override async tagContactTagAdd (tags: TagIdentifier | TagIdentifier[], contactId: string): Promise<void> {
+    void { tags, contactId }
   }
 
   override async tagContactTagRemove (tagGroupId: string | undefined, tagId: string, contactId: string): Promise<void> {
