@@ -30,7 +30,7 @@ const tagMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBase)
      */
 
     abstract tagContactTagAdd(tags: TagIdentifier[], contactIds: string[]): Promise<void>
-    abstract tagContactTagRemove(tag: TagIdentifier[], contactIds: string[]): Promise<void>
+    abstract tagContactTagRemove(tags: TagIdentifier[], contactIds: string[]): Promise<void>
     abstract tagContactTagList(contactId: string): Promise<TagPayload[]>
 
     abstract tagGroupAdd(groupName: string): Promise<TagGroupPayload | void>
