@@ -58,6 +58,7 @@ interface ContactPayload {
    * a stringified JSON object to handle any IM specific data
    */
   additionalInfo?: string
+  tags?: string[]
 }
 
 /** @hidden */
