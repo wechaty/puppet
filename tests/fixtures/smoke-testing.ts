@@ -67,7 +67,7 @@ class PuppetTest extends PUPPET.Puppet {
     return []
   }
 
-  override async tagGroupPayloadPuppet(tagGroup: string): Promise<TagGroupPayload> {
+  override async tagGroupPayloadPuppet(tagGroup: string): Promise<PAYLOADS.TagGroup> {
     return tagGroup as any
   }
 
@@ -85,7 +85,7 @@ class PuppetTest extends PUPPET.Puppet {
     return []
   }
 
-  override async tagPayloadPuppet(tag: TagIdentifier): Promise<TagPayload> {
+  override async tagPayloadPuppet(tag: FILTERS.TagIdentifier): Promise<PAYLOADS.Tag> {
     return tag as any
   }
   /**
