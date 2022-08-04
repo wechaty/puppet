@@ -1,3 +1,12 @@
+enum TagEventType {
+  TagCreate = 10,
+  TagDelete = 11,
+  TagRename = 12,
+  TagGroupCreate = 20,
+  TagGroupDelete = 21,
+  TagGroupRename = 22,
+}
+
 enum TagType {
   Personal = 0,
   Corporation = 1,
@@ -22,4 +31,5 @@ export {
   type TagPayload,
   type TagGroupPayload,
   TagType,
+  TagEventType,
 }

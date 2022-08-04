@@ -13,6 +13,7 @@ import {
   PostType,
   TapType,
   TagType,
+  TagEventType,
   sayableTypes,
 
   CHAT_EVENT_DICT,
@@ -25,6 +26,7 @@ import {
 export {
   type PuppetEventName,
   type ChatEventName,
+  type TagEventType,
   ContactGender,
   ContactType         as Contact,
   FriendshipSceneType as FriendshipScene,

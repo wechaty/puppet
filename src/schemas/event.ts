@@ -1,4 +1,5 @@
 import type { DirtyType } from './dirty.js'
+import type { TagEventType } from './mod.js'
 
 /**
  * The event `scan` status number.
@@ -97,6 +98,12 @@ export interface EventHeartbeatPayload {
 export interface EventDirtyPayload {
   payloadType : DirtyType,
   payloadId   : string,
+}
+
+export interface EventTagPayload {
+  tagEventType: TagEventType,
+  tagId?: string,
+  tagGroupId?: string
 }
 
 export type EventPayload =
