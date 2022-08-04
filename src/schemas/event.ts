@@ -100,11 +100,22 @@ export interface EventDirtyPayload {
   payloadId   : string,
 }
 
-export interface EventTagPayload {
-  tagEventType: TagEventType,
-  tagId?: string,
-  tagGroupId?: string
+type EventTag = {
+  tagEventType: TagEventType.TagCreate | TagEventType.TagDelete | TagEventType.TagRename,
+  tagEventPayload: {
+    tagId: string,
+    tagGroupId?: string,
+  }[]
 }
+
+type EventTagGroup = {
+  tagEventType: TagEventType.TagGroupCreate | TagEventType.TagGroupDelete | TagEventType.TagGroupRename,
+  tagEventPayload: {
+    tagGroupId: string,
+  }[]
+}
+
+export type EventTagPayload = EventTag | EventTagGroup
 
 export type EventPayload =
   | EventDirtyPayload
@@ -122,3 +133,4 @@ export type EventPayload =
   | EventRoomLeavePayload
   | EventRoomTopicPayload
   | EventScanPayload
+  | EventTagPayload
