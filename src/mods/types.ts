@@ -3,6 +3,7 @@ import {
   type MessageSendTextOptions,
   type PuppetEventName,
   type ChatEventName,
+  type TagEventType,
   ContactGender,
   ContactType,
   DirtyType,
@@ -13,7 +14,6 @@ import {
   PostType,
   TapType,
   TagType,
-  TagEventType,
   sayableTypes,
 
   CHAT_EVENT_DICT,
