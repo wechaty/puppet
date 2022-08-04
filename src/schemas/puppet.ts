@@ -59,6 +59,8 @@ export interface PuppetOptions {
     room?           : number
     roomInvitation? : number
     roomMember?     : number
+    tag?            : number
+    tagGroup?       : number
   }
 
   [ puppetOptionKey: string ]: unknown,
