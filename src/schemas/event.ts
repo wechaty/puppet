@@ -115,7 +115,7 @@ type EventTagGroup = {
   }[]
 }
 
-type EventTagPayload = EventTag | EventTagGroup
+export type EventTagPayload = EventTag | EventTagGroup
 
 export type EventPayload =
   | EventDirtyPayload
