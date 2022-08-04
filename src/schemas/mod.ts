@@ -67,6 +67,7 @@ import type {
   EventRoomLeavePayload,
   EventRoomTopicPayload,
   EventScanPayload,
+  EventTagPayload,
 }                             from './event.js'
 import type {
   RoomPayload,
@@ -154,6 +155,7 @@ export {
   type EventRoomLeavePayload,
   type EventRoomTopicPayload,
   type EventScanPayload,
+  type EventTagPayload,
   type FriendshipAddOptions,
   type FriendshipPayload,
   type FriendshipPayloadConfirm,
