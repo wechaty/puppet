@@ -42,7 +42,7 @@ class PuppetTest extends PUPPET.Puppet {
     void { tag, contactIds }
   }
 
-  override async tagGroupAdd(groupName: string): Promise<PAYLOADS.TagGroup | void> {
+  override async tagGroupAdd(groupName: string): Promise<string | void> {
     void { groupName }
   }
 
@@ -50,7 +50,7 @@ class PuppetTest extends PUPPET.Puppet {
     void { groupId }
   }
 
-  override async tagTagAdd(tagName: string, groupId?: string): Promise<PAYLOADS.Tag | void> {
+  override async tagTagAdd(tagName: string, groupId?: string): Promise<FILTERS.TagIdentifier | void> {
     void { groupId, tagName }
   }
 
@@ -58,11 +58,11 @@ class PuppetTest extends PUPPET.Puppet {
     void { tag }
   }
 
-  override async tagGroupList(): Promise<PAYLOADS.TagGroup[]> {
+  override async tagGroupList(): Promise<string[]> {
     return []
   }
 
-  override async tagGroupTagList(groupId?: string): Promise<PAYLOADS.Tag[]> {
+  override async tagGroupTagList(groupId?: string): Promise<FILTERS.TagIdentifier[]> {
     void { groupId }
     return []
   }
@@ -71,11 +71,11 @@ class PuppetTest extends PUPPET.Puppet {
     return tagGroup as any
   }
 
-  override async tagTagList(): Promise<PAYLOADS.Tag[]> {
+  override async tagTagList(): Promise<FILTERS.TagIdentifier[]> {
     return []
   }
 
-  override async tagContactTagList(contactId: string): Promise<PAYLOADS.Tag[]> {
+  override async tagContactTagList(contactId: string): Promise<FILTERS.TagIdentifier[]> {
     void { contactId }
     return []
   }

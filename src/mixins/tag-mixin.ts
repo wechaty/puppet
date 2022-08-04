@@ -32,17 +32,17 @@ const tagMixin = <MixinBase extends CacheMixin & typeof PuppetSkeleton>(mixinBas
 
     abstract tagContactTagAdd(tags: TagIdentifier[], contactIds: string[]): Promise<void>
     abstract tagContactTagRemove(tags: TagIdentifier[], contactIds: string[]): Promise<void>
-    abstract tagContactTagList(contactId: string): Promise<TagPayload[]>
+    abstract tagContactTagList(contactId: string): Promise<TagIdentifier[]>
 
-    abstract tagGroupAdd(groupName: string): Promise<TagGroupPayload | void>
+    abstract tagGroupAdd(groupName: string): Promise<string | void>
     abstract tagGroupDelete(groupId: string): Promise<void>
-    abstract tagGroupList(): Promise<TagGroupPayload[]>
-    abstract tagGroupTagList(groupId?: string): Promise<TagPayload[]>
+    abstract tagGroupList(): Promise<string[]>
+    abstract tagGroupTagList(groupId?: string): Promise<TagIdentifier[]>
     abstract tagGroupPayloadPuppet(groupId: string): Promise<TagGroupPayload>
 
-    abstract tagTagAdd(tagName: string, groupId?: string): Promise<TagPayload | void>
+    abstract tagTagAdd(tagName: string, groupId?: string): Promise<TagIdentifier | void>
     abstract tagTagDelete(tag: TagIdentifier): Promise<void>
-    abstract tagTagList(): Promise<TagPayload[]>
+    abstract tagTagList(): Promise<TagIdentifier[]>
     abstract tagTagContactList(tag: TagIdentifier): Promise<string[]>
     abstract tagPayloadPuppet(tag: TagIdentifier): Promise<TagPayload>
 
