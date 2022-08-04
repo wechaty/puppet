@@ -2,8 +2,9 @@ import { log } from '../config.js'
 
 import type { PuppetSkeleton }   from '../puppet/puppet-skeleton.js'
 import type { TagPayload, TagGroupPayload, TagIdentifier } from '../schemas/tag.js'
+import type { CacheMixin } from './cache-mixin.js'
 
-const tagMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBase) => {
+const tagMixin = <MixinBase extends CacheMixin & typeof PuppetSkeleton>(mixinBase: MixinBase) => {
 
   abstract class TagMixin extends mixinBase {
 
@@ -37,11 +38,57 @@ const tagMixin = <MixinBase extends typeof PuppetSkeleton>(mixinBase: MixinBase)
     abstract tagGroupDelete(groupId: string): Promise<void>
     abstract tagGroupList(): Promise<TagGroupPayload[]>
     abstract tagGroupTagList(groupId?: string): Promise<TagPayload[]>
+    abstract tagGroupPayloadPuppet(groupId: string): Promise<TagPayload>
 
     abstract tagTagAdd(tagName: string, groupId?: string): Promise<TagPayload | void>
     abstract tagTagDelete(tag: TagIdentifier): Promise<void>
     abstract tagTagList(): Promise<TagPayload[]>
     abstract tagTagContactList(tag: TagIdentifier): Promise<string[]>
+    abstract tagPayloadPuppet(tag: TagIdentifier): Promise<TagPayload>
+
+    tagPayloadCache (tag: TagIdentifier): undefined | TagPayload {
+
+      const cachedPayload = this.cache.tag.get(tag)
+      if (!cachedPayload) {
+        log.silly('PuppetTagMixin', 'tagPayloadCache(%s) cache MISS', JSON.stringify(tag))
+      }
+
+      return cachedPayload
+    }
+
+    async tagPayload (tag: TagIdentifier): Promise<TagPayload> {
+      const cachedPayload = this.tagPayloadCache(tag)
+      if (cachedPayload) {
+        return cachedPayload
+      }
+
+      const payload = await this.tagPayloadPuppet(tag)
+      this.cache.tag.set(tag, payload)
+      log.silly('PuppetTagMixin', 'tagPayload(%s) cache SET', JSON.stringify(tag))
+      return payload
+    }
+
+    tagGroupPayloadCache (tagGroup: string): undefined | TagGroupPayload {
+
+      const cachedPayload = this.cache.tagGroup.get(tagGroup)
+      if (!cachedPayload) {
+        log.silly('PuppetTagMixin', 'tagGroupPayloadCache(%s) cache MISS', tagGroup)
+      }
+
+      return cachedPayload
+    }
+
+    async tagGroupPayload (tagGroup: string): Promise<TagGroupPayload> {
+      const cachedPayload = this.tagGroupPayloadCache(tagGroup)
+      if (cachedPayload) {
+        return cachedPayload
+      }
+
+      const payload = await this.tagGroupPayloadPuppet(tagGroup)
+      this.cache.tagGroup.set(tagGroup, payload)
+      log.silly('PuppetTagMixin', 'tagGroupPayload(%s) cache SET', tagGroup)
+      return payload
+    }
 
   }
 
