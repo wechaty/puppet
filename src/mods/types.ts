@@ -3,6 +3,7 @@ import {
   type MessageSendTextOptions,
   type PuppetEventName,
   type ChatEventName,
+  type TagEventType,
   ContactGender,
   ContactType,
   DirtyType,
@@ -25,6 +26,7 @@ import {
 export {
   type PuppetEventName,
   type ChatEventName,
+  type TagEventType,
   ContactGender,
   ContactType         as Contact,
   FriendshipSceneType as FriendshipScene,

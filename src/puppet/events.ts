@@ -18,6 +18,7 @@ import type {
   EventScanPayload,
   EventReadyPayload,
   EventHeartbeatPayload,
+  EventTagPayload,
 }                                 from '../schemas/event.js'
 
 export type PuppetDirtyListener      = (payload: EventDirtyPayload)       => void | Promise<void>
@@ -36,6 +37,7 @@ export type PuppetRoomJoinListener   = (payload: EventRoomJoinPayload)    => voi
 export type PuppetRoomLeaveListener  = (payload: EventRoomLeavePayload)   => void | Promise<void>
 export type PuppetRoomTopicListener  = (payload: EventRoomTopicPayload)   => void | Promise<void>
 export type PuppetScanListener       = (payload: EventScanPayload)        => void | Promise<void>
+export type PuppetTagListener        = (payload: EventTagPayload)         => void | Promise<void>
 
 export type PuppetStartListener      = () => void | Promise<void>
 export type PuppetStopListener       = () => void | Promise<void>
@@ -59,6 +61,7 @@ interface PuppetEventListener {
   scan          : PuppetScanListener
   start         : PuppetStartListener,
   stop          : PuppetStopListener,
+  tag           : PuppetTagListener,
 }
 
 const PuppetEventEmitter = EventEmitter as unknown as new () =>

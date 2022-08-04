@@ -67,6 +67,10 @@ class PuppetTest extends PUPPET.Puppet {
     return []
   }
 
+  override async tagGroupPayloadPuppet(tagGroup: string): Promise<PAYLOADS.TagGroup> {
+    return tagGroup as any
+  }
+
   override async tagTagList(): Promise<PAYLOADS.Tag[]> {
     return []
   }
@@ -79,6 +83,10 @@ class PuppetTest extends PUPPET.Puppet {
   override async tagTagContactList(tag: FILTERS.TagIdentifier): Promise<string[]> {
     void { tag }
     return []
+  }
+
+  override async tagPayloadPuppet(tag: FILTERS.TagIdentifier): Promise<PAYLOADS.Tag> {
+    return tag as any
   }
   /**
    *
