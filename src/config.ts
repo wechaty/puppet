@@ -16,6 +16,7 @@ if (logLevel) {
 
 const VERSION = packageJson.version || '0.0.0'
 const NAME    = packageJson.name    || 'NONAME'
+export const FOUR_PER_EM_SPACE = String.fromCharCode(0x2005)
 
 export {
   envVars,

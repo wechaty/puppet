@@ -29,7 +29,7 @@ import type {
 import type {
   PostPayload,
 }                         from '../schemas/post.js'
-import type { TagGroupPayload, TagIdentifier, TagPayload } from '../schemas/tag.js'
+import type { TagGroupPayload, TagPayload } from '../schemas/tag.js'
 
 type PayloadCacheOptions = Required<PuppetOptions>['cache']
 
@@ -46,7 +46,7 @@ class CacheAgent {
   readonly room           : QuickLru<string, RoomPayload>
   readonly roomInvitation : QuickLru<string, RoomInvitationPayload>
   readonly roomMember     : QuickLru<string, LruRoomMemberPayload>
-  readonly tag            : QuickLru<TagIdentifier, TagPayload>
+  readonly tag            : QuickLru<string, TagPayload>
   readonly tagGroup       : QuickLru<string, TagGroupPayload>
 
   constructor (
@@ -87,7 +87,7 @@ class CacheAgent {
     this.post = new QuickLru<string, PostPayload>(lruOptions(
       envVars.WECHATY_PUPPET_LRU_CACHE_SIZE_POST(options?.post)),
     )
-    this.tag = new QuickLru<TagIdentifier, TagPayload>(lruOptions(
+    this.tag = new QuickLru<string, TagPayload>(lruOptions(
       envVars.WECHATY_PUPPET_LRU_CACHE_SIZE_TAG(options?.tag)),
     )
     this.tagGroup = new QuickLru<string, TagPayload>(lruOptions(

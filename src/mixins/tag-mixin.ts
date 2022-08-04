@@ -1,4 +1,4 @@
-import { log } from '../config.js'
+import { FOUR_PER_EM_SPACE, log } from '../config.js'
 
 import type { PuppetSkeleton }   from '../puppet/puppet-skeleton.js'
 import type { TagPayload, TagGroupPayload, TagIdentifier } from '../schemas/tag.js'
@@ -47,8 +47,8 @@ const tagMixin = <MixinBase extends CacheMixin & typeof PuppetSkeleton>(mixinBas
     abstract tagPayloadPuppet(tag: TagIdentifier): Promise<TagPayload>
 
     tagPayloadCache (tag: TagIdentifier): undefined | TagPayload {
-
-      const cachedPayload = this.cache.tag.get(tag)
+      const key = tag.groupId || '' + FOUR_PER_EM_SPACE + tag.id
+      const cachedPayload = this.cache.tag.get(key)
       if (!cachedPayload) {
         log.silly('PuppetTagMixin', 'tagPayloadCache(%s) cache MISS', JSON.stringify(tag))
       }
@@ -63,7 +63,8 @@ const tagMixin = <MixinBase extends CacheMixin & typeof PuppetSkeleton>(mixinBas
       }
 
       const payload = await this.tagPayloadPuppet(tag)
-      this.cache.tag.set(tag, payload)
+      const key = tag.groupId || '' + FOUR_PER_EM_SPACE + tag.id
+      this.cache.tag.set(key, payload)
       log.silly('PuppetTagMixin', 'tagPayload(%s) cache SET', JSON.stringify(tag))
       return payload
     }
