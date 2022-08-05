@@ -93,20 +93,19 @@ const tagMixin = <MixinBase extends CacheMixin & typeof PuppetSkeleton>(mixinBas
     }
 
     async tagPayloadDirty (
-      tag: TagIdentifier | string,
+      tagKey: string,
     ): Promise<void> {
-      log.verbose('PuppetTagMixin', 'tagPayloadDirty(%s)', JSON.stringify(tag))
-      const key = typeof tag === 'object' ? getTagKey(tag) : tag
+      log.verbose('PuppetTagMixin', 'tagPayloadDirty(%s)', tagKey)
       await this.__dirtyPayloadAwait(
         DirtyType.Tag,
-        key,
+        tagKey,
       )
     }
 
     async tagGroupPayloadDirty (
       id: string,
     ): Promise<void> {
-      log.verbose('PuppetTagMixin', 'tagGroupPayloadDirty(%s)', JSON.stringify(id))
+      log.verbose('PuppetTagMixin', 'tagGroupPayloadDirty(%s)', id)
       await this.__dirtyPayloadAwait(
         DirtyType.TagGroup,
         id,
