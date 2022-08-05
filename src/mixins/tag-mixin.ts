@@ -1,6 +1,7 @@
 import { FOUR_PER_EM_SPACE, log } from '../config.js'
 
 import type { PuppetSkeleton }   from '../puppet/puppet-skeleton.js'
+import { DirtyType } from '../schemas/mod.js'
 import type { TagPayload, TagGroupPayload, TagIdentifier } from '../schemas/tag.js'
 import type { CacheMixin } from './cache-mixin.js'
 
@@ -91,9 +92,34 @@ const tagMixin = <MixinBase extends CacheMixin & typeof PuppetSkeleton>(mixinBas
       return payload
     }
 
+    async tagPayloadDirty (
+      tag: TagIdentifier | string,
+    ): Promise<void> {
+      log.verbose('PuppetTagMixin', 'tagPayloadDirty(%s)', JSON.stringify(tag))
+      const key = typeof tag === 'object' ? getTagKey(tag) : tag
+      await this.__dirtyPayloadAwait(
+        DirtyType.Tag,
+        key,
+      )
+    }
+
+    async tagGroupPayloadDirty (
+      id: string,
+    ): Promise<void> {
+      log.verbose('PuppetTagMixin', 'tagGroupPayloadDirty(%s)', JSON.stringify(id))
+      await this.__dirtyPayloadAwait(
+        DirtyType.TagGroup,
+        id,
+      )
+    }
+
   }
 
   return TagMixin
+}
+
+export const getTagKey = (tag: TagIdentifier): string => {
+  return tag.groupId || '' + FOUR_PER_EM_SPACE + tag.id
 }
 
 type ProtectedPropertyTagMixin = never
