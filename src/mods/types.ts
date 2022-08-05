@@ -3,7 +3,7 @@ import {
   type MessageSendTextOptions,
   type PuppetEventName,
   type ChatEventName,
-  type TagEventType,
+  TagEventType,
   ContactGender,
   ContactType,
   DirtyType,
@@ -26,7 +26,6 @@ import {
 export {
   type PuppetEventName,
   type ChatEventName,
-  type TagEventType,
   ContactGender,
   ContactType         as Contact,
   FriendshipSceneType as FriendshipScene,
@@ -37,6 +36,7 @@ export {
   TapType             as Tap,
   TagType             as Tag,
   sayableTypes        as Sayable,
+  TagEventType        as TagEvent,
   /**
    * Huan(202201): `DirtyType as Payload` will be removed after Dec 31, 2023
    * @deprecated: use Dirty instead of Payload

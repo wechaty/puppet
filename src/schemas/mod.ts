@@ -189,6 +189,6 @@ export {
   type TagGroupPayload,
   type TagPayload,
   type TagIdentifier,
-  type TagEventType,
+  TagEventType,
   YOU,
 }
