@@ -10,6 +10,11 @@ import {
   resolvePuppet,
 }                   from '../puppet/puppet-resolver.js'
 
+import {
+  getTagKey,
+} from '../mixins/tag-mixin.js'
+
 export {
   resolvePuppet,
+  getTagKey,
 }

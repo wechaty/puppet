@@ -12,4 +12,6 @@ export enum DirtyType {
   RoomMember  = 4,
   Friendship  = 5,
   Post        = 6,  // Issue #2245 - https://github.com/wechaty/wechaty/issues/2245
+  Tag         = 7,
+  TagGroup    = 8,
 }

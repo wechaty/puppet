@@ -19,12 +19,13 @@ export interface TagIdentifier {
 
 interface TagPayload extends TagIdentifier {
   name: string,
-  type: TagType
+  type: TagType,
 }
 
 interface TagGroupPayload {
   id: string,
   name: string,
+  type: TagType,
 }
 
 export {
