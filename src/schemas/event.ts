@@ -1,5 +1,6 @@
 import type { DirtyType } from './dirty.js'
 import type { TagEventType } from './mod.js'
+import type { TagGroupEventType } from './tag.js'
 
 /**
  * The event `scan` status number.
@@ -100,7 +101,7 @@ export interface EventDirtyPayload {
   payloadId   : string,
 }
 
-type EventTag = {
+export interface EventTagPayload {
   tagEventType: TagEventType.TagCreate | TagEventType.TagDelete | TagEventType.TagRename,
   tagEventPayload: {
     tagId: string,
@@ -108,14 +109,12 @@ type EventTag = {
   }[]
 }
 
-type EventTagGroup = {
-  tagEventType: TagEventType.TagGroupCreate | TagEventType.TagGroupDelete | TagEventType.TagGroupRename,
+export interface EventTagGroupPayload {
+  tagEventType: TagGroupEventType.TagGroupCreate | TagGroupEventType.TagGroupDelete | TagGroupEventType.TagGroupRename,
   tagEventPayload: {
     tagGroupId: string,
   }[]
 }
-
-export type EventTagPayload = EventTag | EventTagGroup
 
 export type EventPayload =
   | EventDirtyPayload
@@ -134,3 +133,4 @@ export type EventPayload =
   | EventRoomTopicPayload
   | EventScanPayload
   | EventTagPayload
+  | EventTagGroupPayload

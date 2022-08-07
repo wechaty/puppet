@@ -1,15 +1,19 @@
 enum TagEventType {
-  TagCreate = 10,
-  TagDelete = 11,
-  TagRename = 12,
-  TagGroupCreate = 20,
-  TagGroupDelete = 21,
-  TagGroupRename = 22,
+  TagCreate = 0,
+  TagDelete = 1,
+  TagRename = 2,
+}
+
+enum TagGroupEventType {
+  TagGroupCreate = 0,
+  TagGroupDelete = 1,
+  TagGroupRename = 2,
 }
 
 enum TagType {
-  Personal = 0,
-  Corporation = 1,
+  Unspecific = 0,
+  Personal = 1,
+  Corporation = 2,
 }
 
 export interface TagIdentifier {
@@ -33,4 +37,5 @@ export {
   type TagGroupPayload,
   TagType,
   TagEventType,
+  TagGroupEventType,
 }
