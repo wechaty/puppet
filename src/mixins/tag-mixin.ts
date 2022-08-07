@@ -118,7 +118,7 @@ const tagMixin = <MixinBase extends CacheMixin & typeof PuppetSkeleton>(mixinBas
 }
 
 export const getTagKey = (tag: TagIdentifier): string => {
-  return tag.groupId || '' + FOUR_PER_EM_SPACE + tag.id
+  return (tag.groupId || '') + FOUR_PER_EM_SPACE + tag.id
 }
 
 type ProtectedPropertyTagMixin = never
