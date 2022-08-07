@@ -25,7 +25,8 @@ export const CHAT_EVENT_DICT = {
   'room-leave'  : 'leave or be removed from a room',
   'room-topic'  : 'room topic had been changed',
   scan          : 'a QR Code scan is required',
-  tag           : 'tag create, remove or changed',
+  tag           : 'tag created, deleted or changed',
+  'tag-group'   : 'tag group created, deleted or changed',
 }
 export type ChatEventName = keyof typeof CHAT_EVENT_DICT
 
