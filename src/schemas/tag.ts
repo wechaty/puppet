@@ -29,10 +29,22 @@ interface TagGroupPayload {
   type: TagType,
 }
 
+interface TagQueryFilter {
+  name?: string | RegExp,
+  id?: string,
+}
+
+interface TagGroupQueryFilter {
+  name?: string | RegExp,
+  id?: string,
+}
+
 export {
   type TagPayload,
   type TagGroupPayload,
   TagType,
   TagEventType,
   TagGroupEventType,
+  type TagQueryFilter,
+  type TagGroupQueryFilter,
 }

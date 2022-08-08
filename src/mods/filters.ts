@@ -8,6 +8,8 @@ import type {
   RoomMemberQueryFilter,
   RoomQueryFilter,
   TapQueryFilter,
+  TagQueryFilter,
+  TagGroupQueryFilter,
 }                           from '../schemas/mod.js'
 
 export type {
@@ -20,4 +22,6 @@ export type {
   RoomMemberQueryFilter       as RoomMember,
   RoomQueryFilter             as Room,
   TapQueryFilter              as Tap,
+  TagQueryFilter              as Tag,
+  TagGroupQueryFilter         as TagGroup,
 }
