@@ -5,9 +5,9 @@ enum TagEventType {
 }
 
 enum TagGroupEventType {
-  TagGroupCreate = 0,
-  TagGroupDelete = 1,
-  TagGroupRename = 2,
+  TagGroupCreate = 10,
+  TagGroupDelete = 11,
+  TagGroupRename = 12,
 }
 
 enum TagType {
