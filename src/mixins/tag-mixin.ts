@@ -1,8 +1,7 @@
-import { FOUR_PER_EM_SPACE, log } from '../config.js'
-
+import { log } from '../config.js'
 import type { PuppetSkeleton }   from '../puppet/puppet-skeleton.js'
 import { DirtyType } from '../schemas/mod.js'
-import type { TagPayload, TagGroupPayload, TagIdentifier } from '../schemas/tag.js'
+import type { TagPayload, TagGroupPayload } from '../schemas/tag.js'
 import type { CacheMixin } from './cache-mixin.js'
 
 const tagMixin = <MixinBase extends CacheMixin & typeof PuppetSkeleton>(mixinBase: MixinBase) => {
@@ -31,74 +30,72 @@ const tagMixin = <MixinBase extends CacheMixin & typeof PuppetSkeleton>(mixinBas
      *
      */
 
-    abstract tagContactTagAdd(tags: TagIdentifier[], contactIds: string[]): Promise<void>
-    abstract tagContactTagRemove(tags: TagIdentifier[], contactIds: string[]): Promise<void>
-    abstract tagContactTagList(contactId: string): Promise<TagIdentifier[]>
+    abstract tagContactTagAdd(tagIds: string[], contactIds: string[]): Promise<void>
+    abstract tagContactTagRemove(tagIds: string[], contactIds: string[]): Promise<void>
+    abstract tagContactTagList(contactId: string): Promise<string[]>
 
     abstract tagGroupAdd(groupName: string): Promise<string | void>
     abstract tagGroupDelete(groupId: string): Promise<void>
     abstract tagGroupList(): Promise<string[]>
-    abstract tagGroupTagList(groupId?: string): Promise<TagIdentifier[]>
+    abstract tagGroupTagList(groupId?: string): Promise<string[]>
     abstract tagGroupPayloadPuppet(groupId: string): Promise<TagGroupPayload>
 
-    abstract tagTagAdd(tagName: string, groupId?: string): Promise<TagIdentifier | void>
-    abstract tagTagDelete(tag: TagIdentifier): Promise<void>
-    abstract tagTagList(): Promise<TagIdentifier[]>
-    abstract tagTagContactList(tag: TagIdentifier): Promise<string[]>
-    abstract tagPayloadPuppet(tag: TagIdentifier): Promise<TagPayload>
+    abstract tagTagAdd(tagName: string, groupId?: string): Promise<string | void>
+    abstract tagTagDelete(tagId: string): Promise<void>
+    abstract tagTagList(): Promise<string[]>
+    abstract tagTagContactList(tag: string): Promise<string[]>
+    abstract tagPayloadPuppet(tag: string): Promise<TagPayload>
 
-    tagPayloadCache (tag: TagIdentifier): undefined | TagPayload {
-      const key = tag.groupId || '' + FOUR_PER_EM_SPACE + tag.id
-      const cachedPayload = this.cache.tag.get(key)
+    tagPayloadCache (id: string): undefined | TagPayload {
+      const cachedPayload = this.cache.tag.get(id)
       if (!cachedPayload) {
-        log.silly('PuppetTagMixin', 'tagPayloadCache(%s) cache MISS', JSON.stringify(tag))
+        log.silly('PuppetTagMixin', 'tagPayloadCache(%s) cache MISS', id)
       }
 
       return cachedPayload
     }
 
-    async tagPayload (tag: TagIdentifier): Promise<TagPayload> {
-      const cachedPayload = this.tagPayloadCache(tag)
+    async tagPayload (id: string): Promise<TagPayload> {
+      const cachedPayload = this.tagPayloadCache(id)
       if (cachedPayload) {
         return cachedPayload
       }
 
-      const payload = await this.tagPayloadPuppet(tag)
-      const key = tag.groupId || '' + FOUR_PER_EM_SPACE + tag.id
-      this.cache.tag.set(key, payload)
-      log.silly('PuppetTagMixin', 'tagPayload(%s) cache SET', JSON.stringify(tag))
+      const payload = await this.tagPayloadPuppet(id)
+      this.cache.tag.set(id, payload)
+      log.silly('PuppetTagMixin', 'tagPayload(%s) cache SET', id)
       return payload
     }
 
-    tagGroupPayloadCache (tagGroup: string): undefined | TagGroupPayload {
+    tagGroupPayloadCache (id: string): undefined | TagGroupPayload {
 
-      const cachedPayload = this.cache.tagGroup.get(tagGroup)
+      const cachedPayload = this.cache.tagGroup.get(id)
       if (!cachedPayload) {
-        log.silly('PuppetTagMixin', 'tagGroupPayloadCache(%s) cache MISS', tagGroup)
+        log.silly('PuppetTagMixin', 'tagGroupPayloadCache(%s) cache MISS', id)
       }
 
       return cachedPayload
     }
 
-    async tagGroupPayload (tagGroup: string): Promise<TagGroupPayload> {
-      const cachedPayload = this.tagGroupPayloadCache(tagGroup)
+    async tagGroupPayload (id: string): Promise<TagGroupPayload> {
+      const cachedPayload = this.tagGroupPayloadCache(id)
       if (cachedPayload) {
         return cachedPayload
       }
 
-      const payload = await this.tagGroupPayloadPuppet(tagGroup)
-      this.cache.tagGroup.set(tagGroup, payload)
-      log.silly('PuppetTagMixin', 'tagGroupPayload(%s) cache SET', tagGroup)
+      const payload = await this.tagGroupPayloadPuppet(id)
+      this.cache.tagGroup.set(id, payload)
+      log.silly('PuppetTagMixin', 'tagGroupPayload(%s) cache SET', id)
       return payload
     }
 
     async tagPayloadDirty (
-      tagKey: string,
+      id: string,
     ): Promise<void> {
-      log.verbose('PuppetTagMixin', 'tagPayloadDirty(%s)', tagKey)
+      log.verbose('PuppetTagMixin', 'tagPayloadDirty(%s)', id)
       await this.__dirtyPayloadAwait(
         DirtyType.Tag,
-        tagKey,
+        id,
       )
     }
 
@@ -115,10 +112,6 @@ const tagMixin = <MixinBase extends CacheMixin & typeof PuppetSkeleton>(mixinBas
   }
 
   return TagMixin
-}
-
-export const getTagKey = (tag: TagIdentifier): string => {
-  return (tag.groupId || '') + FOUR_PER_EM_SPACE + tag.id
 }
 
 type ProtectedPropertyTagMixin = never
