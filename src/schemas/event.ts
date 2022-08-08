@@ -102,18 +102,13 @@ export interface EventDirtyPayload {
 }
 
 export interface EventTagPayload {
-  tagEventType: TagEventType.TagCreate | TagEventType.TagDelete | TagEventType.TagRename,
-  tagEventPayload: {
-    tagId: string,
-    tagGroupId?: string,
-  }[]
+  type: TagEventType.TagCreate | TagEventType.TagDelete | TagEventType.TagRename,
+  idList: string[]
 }
 
 export interface EventTagGroupPayload {
-  tagEventType: TagGroupEventType.TagGroupCreate | TagGroupEventType.TagGroupDelete | TagGroupEventType.TagGroupRename,
-  tagEventPayload: {
-    tagGroupId: string,
-  }[]
+  type: TagGroupEventType.TagGroupCreate | TagGroupEventType.TagGroupDelete | TagGroupEventType.TagGroupRename,
+  idList: string[]
 }
 
 export type EventPayload =
