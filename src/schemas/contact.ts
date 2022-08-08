@@ -1,5 +1,3 @@
-import type { TagIdentifier } from './tag'
-
 enum ContactGender {
   Unknown = 0,
   Male    = 1,
@@ -60,7 +58,7 @@ interface ContactPayload {
    * a stringified JSON object to handle any IM specific data
    */
   additionalInfo?: string
-  tags?: TagIdentifier[]
+  tags?: string[]
 }
 
 /** @hidden */
