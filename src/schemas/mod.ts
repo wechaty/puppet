@@ -102,6 +102,8 @@ import type {
 import {
   type TagGroupPayload,
   type TagPayload,
+  type TagQueryFilter.
+  type TagGroupQueryFilter,
   TagType,
   TagEventType,
   TagGroupEventType,
@@ -190,6 +192,8 @@ export {
   type ChannelPayload,
   type TagGroupPayload,
   type TagPayload,
+  type TagQueryFilter,
+  type TagGroupQueryFilter,
   TagEventType,
   TagGroupEventType,
   YOU,
