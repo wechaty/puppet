@@ -65,7 +65,7 @@ class PuppetTest extends PUPPET.Puppet {
   }
 
   override async tagTagDelete (tagId: string): Promise<void> {
-    void { tag }
+    void { tagId }
   }
 
   override async tagGroupList (): Promise<string[]> {
