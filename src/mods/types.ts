@@ -4,6 +4,7 @@ import {
   type PuppetEventName,
   type ChatEventName,
   TagEventType,
+  TagGroupEventType,
   ContactGender,
   ContactType,
   DirtyType,
@@ -37,6 +38,7 @@ export {
   TagType             as Tag,
   sayableTypes        as Sayable,
   TagEventType        as TagEvent,
+  TagGroupEventType   as TagGroupEvent,
   /**
    * Huan(202201): `DirtyType as Payload` will be removed after Dec 31, 2023
    * @deprecated: use Dirty instead of Payload
