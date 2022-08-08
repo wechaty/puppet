@@ -11,7 +11,6 @@ import type { RoomPayloadFilterFunction }     from '../../../src/schemas/room.js
 import type { ContactPayloadFilterFunction }  from '../../../src/schemas/contact.js'
 import type { FriendshipAddOptions }          from '../../../src/schemas/friendship.js'
 import type { TagGroupPayload, TagPayload } from '../../../src/schemas/mod.js'
-import type { TagIdentifier } from '../../../src/schemas/tag.js'
 
 class PuppetTest extends PUPPET.Puppet {
 
@@ -45,12 +44,12 @@ class PuppetTest extends PUPPET.Puppet {
    *
    */
 
-  override async tagContactTagAdd (tags: TagIdentifier[], contactIds: string[]): Promise<void> {
-    void { tags, contactIds }
+  override async tagContactTagAdd (tagIds: string[], contactIds: string[]): Promise<void> {
+    void { tagIds, contactIds }
   }
 
-  override async tagContactTagRemove (tag: TagIdentifier[], contactIds: string[]): Promise<void> {
-    void { tag, contactIds }
+  override async tagContactTagRemove (tagIds: string[], contactIds: string[]): Promise<void> {
+    void { tagIds, contactIds }
   }
 
   override async tagGroupAdd (groupName: string): Promise<string | void> {
@@ -61,11 +60,11 @@ class PuppetTest extends PUPPET.Puppet {
     void { groupId }
   }
 
-  override async tagTagAdd (tagName: string, groupId?: string): Promise<TagIdentifier | void> {
+  override async tagTagAdd (tagName: string, groupId?: string): Promise<string | void> {
     void { groupId, tagName }
   }
 
-  override async tagTagDelete (tag: TagIdentifier): Promise<void> {
+  override async tagTagDelete (tag: string): Promise<void> {
     void { tag }
   }
 
@@ -73,7 +72,7 @@ class PuppetTest extends PUPPET.Puppet {
     return []
   }
 
-  override async tagGroupTagList (groupId?: string): Promise<TagIdentifier[]> {
+  override async tagGroupTagList (groupId?: string): Promise<string[]> {
     void { groupId  }
     return []
   }
@@ -82,22 +81,22 @@ class PuppetTest extends PUPPET.Puppet {
     return tagGroup as any
   }
 
-  override async tagTagList (): Promise<TagIdentifier[]> {
+  override async tagTagList (): Promise<string[]> {
     return []
   }
 
-  override async tagContactTagList (contactId: string): Promise<TagIdentifier[]> {
+  override async tagContactTagList (contactId: string): Promise<string[]> {
     void { contactId }
     return []
   }
 
-  override async tagTagContactList (tag: TagIdentifier): Promise<string[]> {
-    void { tag }
+  override async tagTagContactList (tagId: string): Promise<string[]> {
+    void { tagId }
     return []
   }
 
-  override async tagPayloadPuppet (tag: TagIdentifier): Promise<TagPayload> {
-    return tag as any
+  override async tagPayloadPuppet (tagId: string): Promise<TagPayload> {
+    return tagId as any
   }
 
   /**
