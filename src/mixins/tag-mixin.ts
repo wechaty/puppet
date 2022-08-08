@@ -43,8 +43,8 @@ const tagMixin = <MixinBase extends CacheMixin & typeof PuppetSkeleton>(mixinBas
     abstract tagTagAdd(tagName: string, groupId?: string): Promise<string | void>
     abstract tagTagDelete(tagId: string): Promise<void>
     abstract tagTagList(): Promise<string[]>
-    abstract tagTagContactList(tag: string): Promise<string[]>
-    abstract tagPayloadPuppet(tag: string): Promise<TagPayload>
+    abstract tagTagContactList(tagId: string): Promise<string[]>
+    abstract tagPayloadPuppet(tagId: string): Promise<TagPayload>
 
     tagPayloadCache (id: string): undefined | TagPayload {
       const cachedPayload = this.cache.tag.get(id)
