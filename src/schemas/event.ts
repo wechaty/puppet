@@ -103,12 +103,14 @@ export interface EventDirtyPayload {
 
 export interface EventTagPayload {
   type: TagEventType.TagCreate | TagEventType.TagDelete | TagEventType.TagRename,
-  idList: string[]
+  idList: string[],
+  timestamp?: number,
 }
 
 export interface EventTagGroupPayload {
   type: TagGroupEventType.TagGroupCreate | TagGroupEventType.TagGroupDelete | TagGroupEventType.TagGroupRename,
-  idList: string[]
+  idList: string[],
+  timestamp?: number,
 }
 
 export type EventPayload =
