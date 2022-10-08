@@ -16,6 +16,7 @@ import type {
 }                                 from '../schemas/pagination.js'
 
 import type { CacheMixin }        from './cache-mixin.js'
+import type { SayablePayload } from '../schemas/mod.js'
 
 const postMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(baseMixin: MinxinBase) => {
 
@@ -72,6 +73,9 @@ const postMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(baseMi
 
       return payload
     }
+
+    // get a sayable from server post (which comes with Id)
+    abstract postPayloadSayable (postId: string, sayableId: string): Promise<SayablePayload>
 
     /**
      * Publish a post
