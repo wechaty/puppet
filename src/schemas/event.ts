@@ -1,5 +1,5 @@
 import type { DirtyType } from './dirty.js'
-import type { TagEventType } from './mod.js'
+import type { TagEventType, TapType } from './mod.js'
 import type { TagGroupEventType } from './tag.js'
 
 /**
@@ -33,6 +33,18 @@ export interface EventMessagePayload {
 
 export interface EventPostPayload {
   postId: string,
+}
+
+export interface EventPostCommentPayload {
+  postId: string,
+  comment: string,
+  contactId: string,
+}
+
+export interface EventPostTapPayload {
+  postId: string,
+  tapType: TapType,
+  contactId: string,
 }
 
 export interface EventRoomInvitePayload {
@@ -131,3 +143,6 @@ export type EventPayload =
   | EventScanPayload
   | EventTagPayload
   | EventTagGroupPayload
+  | EventPostPayload
+  | EventPostCommentPayload
+  | EventPostTapPayload

@@ -251,6 +251,14 @@ class PuppetTest extends PUPPET.Puppet {
     return { payload } as any
   }
 
+  override momentCoverage (file: FileBoxInterface): Promise<void | FileBoxInterface> {
+    return { file } as any
+  }
+
+  override momentSignature (text: string): Promise<void | string> {
+    return { text } as any
+  }
+
   /**
    * Tap
    */
