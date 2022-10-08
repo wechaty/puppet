@@ -30,4 +30,11 @@ const momentMixin = <MixinBase extends typeof PuppetSkeleton & PostMixin>(mixinB
   return MomentMixin
 }
 
+type MomentMixin = ReturnType<typeof momentMixin>
+type ProtectedPropertyMomentMixin = never
+
+export type {
+  MomentMixin,
+  ProtectedPropertyMomentMixin,
+}
 export { momentMixin }

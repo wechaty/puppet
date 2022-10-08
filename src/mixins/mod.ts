@@ -62,6 +62,10 @@ import {
   validateMixin,
   ProtectedPropertyValidateMixin,
 }                                     from './validate-mixin.js'
+import {
+  momentMixin,
+  ProtectedPropertyMomentMixin,
+}                                     from './moment-mixin.js'
 
 /**
  * Issue #155 - Mixin: Property 'messageRawPayload' of exported class expression
@@ -89,6 +93,7 @@ type MixinProtectedProperty =
   | ProtectedPropertyTapMixin
   | ProtectedPropertySayableMixin
   | ProtectedPropertyValidateMixin
+  | ProtectedPropertyMomentMixin
 
 export {
   type MixinProtectedProperty,
@@ -109,4 +114,5 @@ export {
   tapMixin,
   sayableMixin,
   validateMixin,
+  momentMixin,
 }
