@@ -34,7 +34,7 @@ export type PuppetLogoutListener      = (payload: EventLogoutPayload)      => vo
 export type PuppetMessageListener     = (payload: EventMessagePayload)     => void | Promise<void>
 export type PuppetPostListener        = (payload: EventPostPayload)        => void | Promise<void>
 export type PuppetPostCommentListener = (payload: EventPostCommentPayload) => void | Promise<void>
-export type PuppetPostTapListener     = (payload: EventPostTapPayload) => void | Promise<void>
+export type PuppetPostTapListener     = (payload: EventPostTapPayload)     => void | Promise<void>
 export type PuppetReadyListener       = (payload: EventReadyPayload)       => void | Promise<void>
 export type PuppetResetListener       = (payload: EventResetPayload)       => void | Promise<void>
 export type PuppetRoomInviteListener  = (payload: EventRoomInvitePayload)  => void | Promise<void>
