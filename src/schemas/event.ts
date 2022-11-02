@@ -37,7 +37,6 @@ export interface EventPostPayload {
 
 export interface EventPostCommentPayload {
   postId: string,
-  comment: string,
   contactId: string,
 }
 
@@ -45,6 +44,8 @@ export interface EventPostTapPayload {
   postId: string,
   tapType: TapType,
   contactId: string,
+  tap: boolean,
+  timestamp: number,
 }
 
 export interface EventRoomInvitePayload {
