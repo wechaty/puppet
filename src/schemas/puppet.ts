@@ -27,6 +27,8 @@ export const CHAT_EVENT_DICT = {
   scan          : 'a QR Code scan is required',
   tag           : 'tag created, deleted or changed',
   'tag-group'   : 'tag group created, deleted or changed',
+  'post-comment': 'a post receives a new comment',
+  'post-tap'    : 'a post receives a new tap',
 }
 export type ChatEventName = keyof typeof CHAT_EVENT_DICT
 
