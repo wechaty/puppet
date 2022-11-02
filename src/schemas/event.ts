@@ -37,7 +37,7 @@ export interface EventPostPayload {
 
 export interface EventPostCommentPayload {
   postId: string,
-  contactId: string,
+  commentId: string,
 }
 
 export interface EventPostTapPayload {
