@@ -98,6 +98,8 @@ export interface MessagePayloadBase {
   timestamp     : number,       // Huan(202001): we support both seconds & milliseconds in Wechaty now.
   type          : MessageType,
   quoteId?      : string,
+
+  additionalInfo?: string,
 }
 
 /** @hidden */
