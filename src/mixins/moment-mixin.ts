@@ -25,6 +25,12 @@ const momentMixin = <MixinBase extends typeof PuppetSkeleton & PostMixin>(mixinB
     abstract momentSignature (text?: string): Promise<void | string>
     abstract momentCoverage (cover?: FileBoxInterface): Promise<void | FileBoxInterface>
 
+    /**
+     * get visible contact list
+     * @returns Array of contact ids
+     */
+    abstract momentVisibleList(): Promise<string[]>
+
   }
 
   return MomentMixin
