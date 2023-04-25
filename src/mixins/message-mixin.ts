@@ -147,7 +147,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
 
     messageList (): string[] {
       log.verbose('PuppetMessageMixin', 'messageList()')
-      return [...this.cache.message.keys()]
+      return [ ...this.cache.message.keys() ]
     }
 
     async messageSearch (
@@ -162,7 +162,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
         try {
           // make sure the room id has valid payload
           await this.messagePayload(query.id)
-          return [query.id]
+          return [ query.id ]
         } catch (e) {
           log.verbose('PuppetMessageMixin', 'messageSearch() payload not found for id "%s"', query.id)
           return []
