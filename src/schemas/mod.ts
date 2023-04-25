@@ -92,8 +92,9 @@ import type {
   ChatEventName,
 }                         from './puppet.js'
 
-import type {
-  ChannelPayload,
+import {
+  type ChannelPayload,
+  ChannelType,
 } from './channel.js'
 
 import {
@@ -125,6 +126,7 @@ export {
   sayableTypes,
   ScanStatus,
   TapType,
+  ChannelType,
   type ChatEventName,
   type ContactPayload,
   type ContactQueryFilter,

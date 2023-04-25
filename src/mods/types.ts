@@ -12,6 +12,7 @@ import {
   PostType,
   TapType,
   sayableTypes,
+  ChannelType,
 
   CHAT_EVENT_DICT,
   PUPPET_EVENT_DICT,
@@ -32,6 +33,7 @@ export {
   PostType            as Post,
   TapType             as Tap,
   sayableTypes        as Sayable,
+  ChannelType         as Channel,
   /**
    * Huan(202201): `DirtyType as Payload` will be removed after Dec 31, 2023
    * @deprecated: use Dirty instead of Payload
