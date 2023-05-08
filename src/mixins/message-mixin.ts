@@ -75,6 +75,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
     abstract messageSendMiniProgram (conversationId: string, miniProgramPayload: MiniProgramPayload) : Promise<void | string>
     abstract messageSendPost        (conversationId: string, postPayload: PostPayload)               : Promise<void | string>
     abstract messageSendText        (conversationId: string, text: string, mentionIdList?: string[]) : Promise<void | string>
+    abstract messageSendTextV2      (conversationId: string, text: string | string[], mentionIdList?: string[]) : Promise<void | string>
     abstract messageSendUrl         (conversationId: string, urlLinkPayload: UrlLinkPayload)         : Promise<void | string>
 
     abstract messageRecall (messageId: string) : Promise<boolean>
@@ -144,7 +145,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
 
     messageList (): string[] {
       log.verbose('PuppetMessageMixin', 'messageList()')
-      return [...this.cache.message.keys()]
+      return [ ...this.cache.message.keys() ]
     }
 
     async messageSearch (
@@ -159,7 +160,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
         try {
           // make sure the room id has valid payload
           await this.messagePayload(query.id)
-          return [query.id]
+          return [ query.id ]
         } catch (e) {
           log.verbose('PuppetMessageMixin', 'messageSearch() payload not found for id "%s"', query.id)
           return []
