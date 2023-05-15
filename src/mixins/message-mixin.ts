@@ -11,6 +11,8 @@ import type {
   ImageType,
 }                                 from '../schemas/image.js'
 import type {
+  BroadcastStatus,
+  BroadcastTargetStatus,
   MessagePayload,
   MessagePayloadFilterFunction,
   MessageQueryFilter,
@@ -76,6 +78,16 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
     abstract messageSendPost        (conversationId: string, postPayload: PostPayload)               : Promise<void | string>
     abstract messageSendText        (conversationId: string, text: string, mentionIdList?: string[]) : Promise<void | string>
     abstract messageSendUrl         (conversationId: string, urlLinkPayload: UrlLinkPayload)         : Promise<void | string>
+
+    abstract createMessageBroadcast(targets: string[], content: PostPayload): Promise<void | string>
+    abstract getMessageBroadcastStatus(id: string): Promise<{
+      status: BroadcastStatus,
+      detail: {
+        contactId?: string,
+        roomId?: string,
+        status: BroadcastTargetStatus,
+      }[]
+    }>
 
     abstract messageRecall (messageId: string) : Promise<boolean>
 
@@ -144,7 +156,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
 
     messageList (): string[] {
       log.verbose('PuppetMessageMixin', 'messageList()')
-      return [...this.cache.message.keys()]
+      return [ ...this.cache.message.keys() ]
     }
 
     async messageSearch (
@@ -159,7 +171,7 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
         try {
           // make sure the room id has valid payload
           await this.messagePayload(query.id)
-          return [query.id]
+          return [ query.id ]
         } catch (e) {
           log.verbose('PuppetMessageMixin', 'messageSearch() payload not found for id "%s"', query.id)
           return []
