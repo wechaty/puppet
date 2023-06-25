@@ -36,6 +36,7 @@ import type {
   TapPayload,
   UrlLinkPayload,
   SayablePayload,
+  ChannelPayload,
 }                           from '../schemas/mod.js'
 import {
   sayablePayloads,
@@ -81,6 +82,7 @@ export type {
   SayablePayload            as Sayable,
   TapPayload                as Tap,
   UrlLinkPayload            as UrlLink,
+  ChannelPayload            as Channel,
 }
 export {
   sayablePayloads as sayable, // Sayable payload creators

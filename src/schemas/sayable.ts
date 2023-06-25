@@ -6,6 +6,7 @@ import { MessageType }              from './message.js'
 import type { LocationPayload }     from './location.js'
 import type { UrlLinkPayload }      from './url-link.js'
 import type { MiniProgramPayload }  from './mini-program.js'
+import type { ChannelPayload }      from './channel.js'
 import type {
   PostPayload,
   SayablePayloadPost,
@@ -21,6 +22,7 @@ const payloadLocation    = (locationPayload: LocationPayload)       => ({ ...loc
 const payloadMiniProgram = (miniProgramPayload: MiniProgramPayload) => ({ ...miniProgramPayload })
 const payloadUrlLink     = (urlLinkPayload: UrlLinkPayload)         => ({ ...urlLinkPayload })
 const payloadPost        = (postPayload: PostPayload)               => ({ ...postPayload })
+const payloadChannel     = (channelPayload: ChannelPayload)         => ({ ...channelPayload })
 
 /**
  * using `types` as a static typed string name list for `createAction`
@@ -61,6 +63,7 @@ const location    = createAction(sayableTypes.Location,    payloadLocation)()
 const miniProgram = createAction(sayableTypes.MiniProgram, payloadMiniProgram)()
 const url         = createAction(sayableTypes.Url,         payloadUrlLink)()
 const post        = createAction(sayableTypes.Post,        payloadPost)()
+const channel     = createAction(sayableTypes.Channel,     payloadChannel)()
 
 /**
  * Huan(202201): Recursive type references
@@ -77,6 +80,7 @@ const sayablePayloadsNoPost = {
   text,
   url,
   video,
+  channel,
 } as const
 
 /**
