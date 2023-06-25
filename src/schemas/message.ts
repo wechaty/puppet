@@ -21,6 +21,7 @@ export enum MessageType {
   Video       = 15,   // Video(4), Video(43)
   Post        = 16,   // Moment, Channel, Tweet, etc
   Channel     = 17,   // Channel
+  System      = 18,   // System Message
 }
 
 /**
