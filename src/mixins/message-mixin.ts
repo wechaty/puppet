@@ -11,6 +11,8 @@ import type {
   ImageType,
 }                                 from '../schemas/image.js'
 import type {
+  BroadcastStatus,
+  BroadcastTargetStatus,
   MessagePayload,
   MessagePayloadFilterFunction,
   MessageQueryFilter,
@@ -76,6 +78,16 @@ const messageMixin = <MinxinBase extends typeof PuppetSkeleton & CacheMixin>(bas
     abstract messageSendPost        (conversationId: string, postPayload: PostPayload)               : Promise<void | string>
     abstract messageSendText        (conversationId: string, text: string, mentionIdList?: string[]) : Promise<void | string>
     abstract messageSendUrl         (conversationId: string, urlLinkPayload: UrlLinkPayload)         : Promise<void | string>
+
+    abstract createMessageBroadcast(targets: string[], content: PostPayload): Promise<void | string>
+    abstract getMessageBroadcastStatus(id: string): Promise<{
+      status: BroadcastStatus,
+      detail: {
+        contactId?: string,
+        roomId?: string,
+        status: BroadcastTargetStatus,
+      }[]
+    }>
 
     abstract messageRecall (messageId: string) : Promise<boolean>
 

@@ -9,6 +9,8 @@ import {
   FriendshipType,
   ImageType,
   MessageType,
+  BroadcastStatus,
+  BroadcastTargetStatus,
   PostType,
   TapType,
   sayableTypes,
@@ -42,6 +44,8 @@ export {
 
 export {
   ScanStatus,
+  BroadcastStatus,
+  BroadcastTargetStatus,
   type FriendshipAddOptions,
   YOU,
   CHAT_EVENT_DICT,

@@ -27,6 +27,8 @@ import {
   type MessagePayloadTo,
   type MessageQueryFilter,
   MessageType,
+  BroadcastStatus,
+  BroadcastTargetStatus,
 }                             from './message.js'
 import { DirtyType }         from './dirty.js'
 import {
@@ -114,6 +116,8 @@ export {
   isPostPayloadClient,
   isPostPayloadServer,
   MessageType,
+  BroadcastStatus,
+  BroadcastTargetStatus,
   PaginationRequest,
   PaginationResponse,
   PostType,

@@ -166,3 +166,16 @@ export type MessagePayloadFilterFunction = (payload: MessagePayload)    => boole
 
 /** @hidden */
 export type MessagePayloadFilterFactory  = (query: MessageQueryFilter)  => MessagePayloadFilterFunction
+
+export enum BroadcastStatus {
+  Unknown = 0,
+  Sending = 1,
+  Sent = 2
+}
+
+export enum BroadcastTargetStatus {
+  Unsent = 0,
+  Sent = 1,
+  NotFriend = 2,
+  Occupied = 3,
+}
